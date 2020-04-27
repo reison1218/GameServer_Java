@@ -1,0 +1,19 @@
+syntax = "proto2";
+
+option java_multiple_files = false;
+option java_package = "proto";
+option java_outer_classname = "AdvertProto";
+import "base.proto";
+
+// 广告请求
+//cmd:1015
+message AdvertReq {
+	required int32 advertId= 1;
+}
+
+// 广告返回
+//cmd:5015
+message AdvertRsp {
+	required bool isSucc = 1;//是否成功;
+	optional string errMess = 2;//错误信息;
+}

@@ -1,0 +1,191 @@
+[INFO ]:2020-04-24 11:43:04,901--0 [main]
+com.usercenter.main.UserCenterServer.stopServer(UserCenterServer.java:106)
+UserCenterServer停止成功，本次运行：1分钟 
+[INFO ]:2020-04-24 11:44:22,258--0 [main]
+com.usercenter.main.UserCenterServer.stopServer(UserCenterServer.java:106)
+UserCenterServer停止成功，本次运行：1分钟 
+[INFO ]:2020-04-24 11:46:23,151--0 [main]
+com.usercenter.base.config.Config.init(Config.java:82)
+/com/usercenter/config/config.json配置文件：
+{"game_server":"127.0.0.1","gate_port":"16801","login_port":"8108","game_port":"9091","room_server":"127.0.0.1","room_port":"9092","mysql":[{"port":3306,"pass":"root","db_log":"reison","host":"127.0.0.1","db_data":"user_center","user":"root"}],"server_id":1,"login_ip":"10.10.10.16","redis":"reison"} 
+[INFO ]:2020-04-24 11:46:23,369--218[main]
+com.usercenter.base.db.HikariDBPool.init(HikariDBPool.java:47)
+用户数据库连接池初始化成功~ 
+[INFO ]:2020-04-24 11:46:23,383--232[main]
+com.usercenter.base.executor.ExecutorMgr.init(ExecutorMgr.java:38)
+线程池初始化成功~ 
+[INFO ]:2020-04-24 11:46:23,469--318[main]
+com.usercenter.redis.RedisPool.init(RedisPool.java:38)
+redis连接池初始化成功~ 
+[INFO ]:2020-04-24 11:46:23,630--479[main]
+com.usercenter.main.UserCenterServer.start(UserCenterServer.java:71)
+用户中心启动完成，耗时：1504ms,监听端口：8888 
+[INFO ]:2020-04-24 16:40:10,222--0 [main]
+com.usercenter.base.config.Config.init(Config.java:82)
+/com/usercenter/config/config.json配置文件：
+{"game_server":"127.0.0.1","gate_port":"16801","login_port":"8108","game_port":"9091","room_server":"127.0.0.1","room_port":"9092","mysql":[{"port":3306,"pass":"root","db_log":"reison","host":"127.0.0.1","db_data":"user_center","user":"root"}],"server_id":1,"login_ip":"10.10.10.16","redis":"reison"} 
+[INFO ]:2020-04-24 16:40:10,457--235[main]
+com.usercenter.base.db.HikariDBPool.init(HikariDBPool.java:47)
+用户数据库连接池初始化成功~ 
+[INFO ]:2020-04-24 16:40:10,470--248[main]
+com.usercenter.base.executor.ExecutorMgr.init(ExecutorMgr.java:38)
+线程池初始化成功~ 
+[INFO ]:2020-04-24 16:40:10,554--332[main]
+com.usercenter.redis.RedisPool.init(RedisPool.java:38)
+redis连接池初始化成功~ 
+[INFO ]:2020-04-24 16:40:10,692--470[main]
+com.usercenter.main.UserCenterServer.start(UserCenterServer.java:71)
+用户中心启动完成，耗时：915ms,监听端口：8888 
+[INFO ]:2020-04-24 16:40:37,806--27584[qtp1642360923-38]
+com.usercenter.handler.UserLoginHandler.handle(UserLoginHandler.java:40)
+用户中心收得到登陆请求，查找用户id，信息:Request(POST //127.0.0.1:8888/center/getUserId)@422d7a42 
+[INFO ]:2020-04-24 16:41:33,455--0 [main]
+com.usercenter.base.config.Config.init(Config.java:82)
+/com/usercenter/config/config.json配置文件：
+{"game_server":"127.0.0.1","gate_port":"16801","login_port":"8108","game_port":"9091","room_server":"127.0.0.1","room_port":"9092","mysql":[{"port":3306,"pass":"root","db_log":"reison","host":"127.0.0.1","db_data":"user_center","user":"root"}],"server_id":1,"login_ip":"10.10.10.16","redis":"reison"} 
+[INFO ]:2020-04-24 16:41:33,901--446[main]
+com.usercenter.base.db.HikariDBPool.init(HikariDBPool.java:47)
+用户数据库连接池初始化成功~ 
+[INFO ]:2020-04-24 16:41:33,927--472[main]
+com.usercenter.base.executor.ExecutorMgr.init(ExecutorMgr.java:38)
+线程池初始化成功~ 
+[INFO ]:2020-04-24 16:41:34,125--670[main]
+com.usercenter.redis.RedisPool.init(RedisPool.java:38)
+redis连接池初始化成功~ 
+[INFO ]:2020-04-24 16:41:34,365--910[main]
+com.usercenter.main.UserCenterServer.start(UserCenterServer.java:71)
+用户中心启动完成，耗时：20752ms,监听端口：8888 
+[INFO ]:2020-04-24 16:43:32,691--119236[qtp561247961-41]
+com.usercenter.handler.UserLoginHandler.handle(UserLoginHandler.java:40)
+用户中心收得到登陆请求，查找用户id，信息:Request(POST //127.0.0.1:8888/center/getUserId)@55a38b16 
+[INFO ]:2020-04-24 16:43:45,364--131909[qtp561247961-36]
+com.usercenter.handler.UserLoginHandler.handle(UserLoginHandler.java:40)
+用户中心收得到登陆请求，查找用户id，信息:Request(POST //127.0.0.1:8888/center/getUserId)@6d1d72b6 
+[INFO ]:2020-04-24 16:44:02,457--149002[qtp561247961-37]
+com.usercenter.handler.UserLoginHandler.handle(UserLoginHandler.java:40)
+用户中心收得到登陆请求，查找用户id，信息:Request(POST //127.0.0.1:8888/center/getUserId)@4c6f002c 
+[INFO ]:2020-04-24 16:44:45,255--191800[qtp561247961-34]
+com.usercenter.handler.UserLoginHandler.handle(UserLoginHandler.java:40)
+用户中心收得到登陆请求，查找用户id，信息:Request(POST //127.0.0.1:8888/center/getUserId)@562b2b22 
+[INFO ]:2020-04-24 16:45:03,575--210120[qtp561247961-35]
+com.usercenter.handler.UserLoginHandler.handle(UserLoginHandler.java:40)
+用户中心收得到登陆请求，查找用户id，信息:Request(POST //127.0.0.1:8888/center/getUserId)@bd55809 
+[INFO ]:2020-04-24 16:48:00,167--386712[qtp561247961-35]
+com.usercenter.handler.UserLoginHandler.handle(UserLoginHandler.java:40)
+用户中心收得到登陆请求，查找用户id，信息:Request(POST //127.0.0.1:8888/center/getUserId)@57d41d30 
+[INFO ]:2020-04-24 16:48:12,685--399230[qtp561247961-35]
+com.usercenter.handler.UserLoginHandler.handle(UserLoginHandler.java:98)
+platformId:test 
+[INFO ]:2020-04-24 17:00:36,096--0 [main]
+com.usercenter.base.config.Config.init(Config.java:82)
+/com/usercenter/config/config.json配置文件：
+{"game_server":"127.0.0.1","gate_port":"16801","login_port":"8108","game_port":"9091","room_server":"127.0.0.1","room_port":"9092","mysql":[{"port":3306,"pass":"root","db_log":"reison","host":"127.0.0.1","db_data":"user_center","user":"root"}],"server_id":1,"login_ip":"10.10.10.16","redis":"reison"} 
+[INFO ]:2020-04-24 17:00:36,342--246[main]
+com.usercenter.base.db.HikariDBPool.init(HikariDBPool.java:47)
+用户数据库连接池初始化成功~ 
+[INFO ]:2020-04-24 17:00:36,354--258[main]
+com.usercenter.base.executor.ExecutorMgr.init(ExecutorMgr.java:38)
+线程池初始化成功~ 
+[INFO ]:2020-04-24 17:00:36,444--348[main]
+com.usercenter.redis.RedisPool.init(RedisPool.java:38)
+redis连接池初始化成功~ 
+[INFO ]:2020-04-24 17:00:36,595--499[main]
+com.usercenter.main.UserCenterServer.start(UserCenterServer.java:71)
+用户中心启动完成，耗时：970ms,监听端口：8888 
+[INFO ]:2020-04-24 17:03:30,628--174532[qtp1642360923-36]
+com.usercenter.handler.UserLoginHandler.handle(UserLoginHandler.java:40)
+用户中心收得到登陆请求，查找用户id，信息:Request(POST //127.0.0.1:8888/center/getUserId)@76136638 
+[INFO ]:2020-04-24 17:03:30,640--174544[qtp1642360923-36]
+com.usercenter.handler.UserLoginHandler.handle(UserLoginHandler.java:131)
+platformId:test 
+[INFO ]:2020-04-24 17:23:30,921--0 [main]
+com.usercenter.base.config.Config.init(Config.java:82)
+/com/usercenter/config/config.json配置文件：
+{"game_server":"127.0.0.1","gate_port":"16801","login_port":"8108","game_port":"9091","room_server":"127.0.0.1","room_port":"9092","mysql":[{"port":3306,"pass":"root","db_log":"reison","host":"127.0.0.1","db_data":"user_center","user":"root"}],"server_id":1,"login_ip":"10.10.10.16","redis":"reison"} 
+[INFO ]:2020-04-24 17:23:31,152--231[main]
+com.usercenter.base.db.HikariDBPool.init(HikariDBPool.java:47)
+用户数据库连接池初始化成功~ 
+[INFO ]:2020-04-24 17:23:31,169--248[main]
+com.usercenter.base.executor.ExecutorMgr.init(ExecutorMgr.java:38)
+线程池初始化成功~ 
+[INFO ]:2020-04-24 17:23:31,261--340[main]
+com.usercenter.redis.RedisPool.init(RedisPool.java:38)
+redis连接池初始化成功~ 
+[INFO ]:2020-04-24 17:23:31,404--483[main]
+com.usercenter.main.UserCenterServer.start(UserCenterServer.java:71)
+用户中心启动完成，耗时：890ms,监听端口：8888 
+[INFO ]:2020-04-24 17:24:57,947--87026[qtp1642360923-38]
+com.usercenter.handler.UserLoginHandler.handle(UserLoginHandler.java:43)
+用户中心收得到登陆请求，查找用户id，信息:Request(POST //127.0.0.1:8888/center/getUserId)@6a2bd8b8 
+[INFO ]:2020-04-24 17:24:57,960--87039[qtp1642360923-38]
+com.usercenter.handler.UserLoginHandler.handle(UserLoginHandler.java:144)
+platformId:test 
+[INFO ]:2020-04-24 17:40:07,162--0 [main]
+com.usercenter.base.config.Config.init(Config.java:82)
+/com/usercenter/config/config.json配置文件：
+{"game_server":"127.0.0.1","gate_port":"16801","login_port":"8108","game_port":"9091","room_server":"127.0.0.1","room_port":"9092","mysql":[{"port":3306,"pass":"root","db_log":"reison","host":"127.0.0.1","db_data":"user_center","user":"root"}],"server_id":1,"login_ip":"10.10.10.16","redis":"reison"} 
+[INFO ]:2020-04-24 17:40:07,390--228[main]
+com.usercenter.base.db.HikariDBPool.init(HikariDBPool.java:47)
+用户数据库连接池初始化成功~ 
+[INFO ]:2020-04-24 17:40:07,406--244[main]
+com.usercenter.base.executor.ExecutorMgr.init(ExecutorMgr.java:38)
+线程池初始化成功~ 
+[INFO ]:2020-04-24 17:40:07,492--330[main]
+com.usercenter.redis.RedisPool.init(RedisPool.java:38)
+redis连接池初始化成功~ 
+[INFO ]:2020-04-24 17:40:07,634--472[main]
+com.usercenter.main.UserCenterServer.start(UserCenterServer.java:71)
+用户中心启动完成，耗时：866ms,监听端口：8888 
+[INFO ]:2020-04-24 17:40:18,241--11079[qtp1642360923-38]
+com.usercenter.handler.UserLoginHandler.handle(UserLoginHandler.java:43)
+用户中心收得到登陆请求，查找用户id，信息:Request(POST //127.0.0.1:8888/center/getUserId)@cd3a70f 
+[INFO ]:2020-04-24 17:40:18,254--11092[qtp1642360923-38]
+com.usercenter.handler.UserLoginHandler.handle(UserLoginHandler.java:148)
+platformId:test 
+[INFO ]:2020-04-24 17:40:43,410--0 [main]
+com.usercenter.base.config.Config.init(Config.java:82)
+/com/usercenter/config/config.json配置文件：
+{"game_server":"127.0.0.1","gate_port":"16801","login_port":"8108","game_port":"9091","room_server":"127.0.0.1","room_port":"9092","mysql":[{"port":3306,"pass":"root","db_log":"reison","host":"127.0.0.1","db_data":"user_center","user":"root"}],"server_id":1,"login_ip":"10.10.10.16","redis":"reison"} 
+[INFO ]:2020-04-24 17:40:43,865--455[main]
+com.usercenter.base.db.HikariDBPool.init(HikariDBPool.java:47)
+用户数据库连接池初始化成功~ 
+[INFO ]:2020-04-24 17:40:43,908--498[main]
+com.usercenter.base.executor.ExecutorMgr.init(ExecutorMgr.java:38)
+线程池初始化成功~ 
+[INFO ]:2020-04-24 17:40:44,095--685[main]
+com.usercenter.redis.RedisPool.init(RedisPool.java:38)
+redis连接池初始化成功~ 
+[INFO ]:2020-04-24 17:40:44,344--934[main]
+com.usercenter.main.UserCenterServer.start(UserCenterServer.java:71)
+用户中心启动完成，耗时：4323ms,监听端口：8888 
+[INFO ]:2020-04-24 17:41:19,712--36302[qtp561247961-41]
+com.usercenter.handler.UserLoginHandler.handle(UserLoginHandler.java:43)
+用户中心收得到登陆请求，查找用户id，信息:Request(POST //127.0.0.1:8888/center/getUserId)@21ef0ce2 
+[INFO ]:2020-04-24 17:44:07,687--0 [main]
+com.usercenter.base.config.Config.init(Config.java:82)
+/com/usercenter/config/config.json配置文件：
+{"game_server":"127.0.0.1","gate_port":"16801","login_port":"8108","game_port":"9091","room_server":"127.0.0.1","room_port":"9092","mysql":[{"port":3306,"pass":"root","db_log":"reison","host":"127.0.0.1","db_data":"user_center","user":"root"}],"server_id":1,"login_ip":"10.10.10.16","redis":"reison"} 
+[INFO ]:2020-04-24 17:44:07,914--227[main]
+com.usercenter.base.db.HikariDBPool.init(HikariDBPool.java:47)
+用户数据库连接池初始化成功~ 
+[INFO ]:2020-04-24 17:44:07,925--238[main]
+com.usercenter.base.executor.ExecutorMgr.init(ExecutorMgr.java:38)
+线程池初始化成功~ 
+[INFO ]:2020-04-24 17:44:08,008--321[main]
+com.usercenter.redis.RedisPool.init(RedisPool.java:38)
+redis连接池初始化成功~ 
+[INFO ]:2020-04-24 17:44:08,138--451[main]
+com.usercenter.main.UserCenterServer.start(UserCenterServer.java:71)
+用户中心启动完成，耗时：805ms,监听端口：8888 
+[INFO ]:2020-04-24 17:44:13,288--5601[qtp1642360923-38]
+com.usercenter.handler.UserLoginHandler.handle(UserLoginHandler.java:43)
+用户中心收得到登陆请求，查找用户id，信息:Request(POST //127.0.0.1:8888/center/getUserId)@7d91cbd7 
+[INFO ]:2020-04-24 17:44:13,313--5626[qtp1642360923-38]
+com.usercenter.handler.UserLoginHandler.handle(UserLoginHandler.java:148)
+platformId:test 
+[INFO ]:2020-04-24 17:44:32,140--24453[qtp1642360923-33]
+com.usercenter.handler.UserLoginHandler.handle(UserLoginHandler.java:43)
+用户中心收得到登陆请求，查找用户id，信息:Request(POST //127.0.0.1:8888/center/getUserId)@3738d996 
+[INFO ]:2020-04-24 17:44:32,153--24466[qtp1642360923-33]
+com.usercenter.handler.UserLoginHandler.handle(UserLoginHandler.java:148)
+platformId:test 

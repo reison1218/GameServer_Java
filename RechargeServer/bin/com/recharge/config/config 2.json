@@ -1,0 +1,20 @@
+{
+	"login_ip": "10.10.10.16",
+	"login_port": "8108",
+	"game_server": "127.0.0.1",
+	"game_port": "9091",
+	"room_server": "127.0.0.1",
+	"room_port": "9092",
+	"gate_port": "16801",
+	"server_id": 1,
+	"mysql": [
+		{
+			"host": "120.77.214.215",
+			"port": 3306,
+			"user": "root",
+			"pass": "",
+			"db_data": "GameDB_web",
+			"db_log": "reison"
+		}
+	]
+}

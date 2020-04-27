@@ -1,0 +1,95 @@
+syntax = "proto2";
+
+option java_multiple_files = false;
+option java_package = "proto";
+option java_outer_classname = "HeatBallProto";
+import "base.proto";
+
+// 购买星球请求
+//cmd:1004
+message BuyHeatBallReq {
+	required int32 heatBallId = 1;//星球id
+}
+
+// 购买星球返回
+//cmd:5004
+message BuyHeatBallRsp {
+	required bool isSucc = 1;//是否成功;
+	optional string errMess = 2;//错误信息;
+    optional HeatBallPt heatBall = 3;//星球数据
+    optional int32 sysTime = 4;//服务器时间
+    optional int32 buyTimes = 5;//购买次数
+}
+
+//移动星球请求（如果目标index有星球，则是合成，如果没有，则是换个位置）
+//cmd:1005
+message MoveHeatBallReq{
+	required int32 sourceIndex = 1;//源index
+	required int32 targetIndex = 2;//目标index
+}
+
+//合成星球返回
+//cmd:5005
+message MoveHeatBallRsp{
+	required bool isSucc = 1;//是否成功;
+	optional string errMess = 2;//错误信息;
+	optional HeatBallPt heatBall = 3;//星球数据
+	optional int32 sysTime = 4;//服务器时间
+}
+
+//战斗位展示请求
+//cmd:1012
+message BattlePosReq{
+	required int32 heatBallId = 1;//星球id
+}
+
+//战斗位展示返回
+//cmd:5012
+message BattlePosRsp{
+	required bool isSucc = 1;//是否成功;
+	optional string errMess = 2;//错误信息;
+}
+
+//图鉴请求
+//cmd:1013
+message TuJianReq{
+}
+
+//图鉴返回
+//cmd:5013
+message TuJianRsp{
+	required bool isSucc = 1;//是否成功;
+	optional string errMess = 2;//错误信息;
+	optional int32 heatBallId = 3;//星球图鉴等级id
+	repeated int32 specialId = 4;//星球稀有皮肤id
+	
+}
+
+//星球删除请求
+//cmd:1014
+message RemoveReq{
+	required int32 index = 1;//需要删除的位置下标
+}
+
+//星球删除返回
+//cmd:5014
+message RemoveRsp{
+	required bool isSucc = 1;//是否成功;
+	optional string errMess = 2;//错误信息;
+}
+
+//碎片合成请求
+//cmd:1018
+message FragmentComposeReq{
+	required int32  heatBallId = 1;//要合成的星球id
+}
+
+
+//碎片合成返回
+//cmd:5018
+message FragmentComposeRsp{
+	required bool isSucc = 1;//是否成功;
+	optional string errMess = 2;//错误信息;
+	optional int32 heatBallId = 3;//星球图鉴等级id
+}
+

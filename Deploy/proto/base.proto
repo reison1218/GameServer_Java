@@ -1,0 +1,50 @@
+syntax = "proto2";
+
+option java_multiple_files = false;
+option java_package = "proto";
+option java_outer_classname = "BaseProto";
+
+//玩家信息
+message PlayerPt{
+	required string nickName = 1;//昵称
+	required string avatar = 2;//头像
+}
+
+// 资源封装
+message ResourcesPt{
+	required int32 type = 1;//类型（1：碎片 2：资源）
+    required int32 id = 2;//资源id
+    required double num = 3;//数量
+}
+
+//buff封装
+message BuffPt{
+	required int32 buffCategory = 1;//buff分类
+	required int32 buffStartTime = 2;//buff开始时间
+	required int32 buffEndTime = 3;//buff结束时间
+}
+
+//星球封装
+message HeatBallPt{
+	required int32 index = 1;//下标（0开始）
+	required int32 heatBallId = 2;//对应配置表的星球id
+}
+
+//星球购买次数封装
+message HeatBallBuyTimesPt{
+	required int32 heatBallId = 1;//对应配置表的星球id
+	required int32 buyTimes = 2;//购买次数
+}
+
+//排行榜数据
+message RankInfoPt{
+	required int32 index = 1;//排行榜下标
+	required string avatar = 2;//头像url
+	required string nickName = 3;//昵称
+	required int32 score = 4;//积分
+}
+
+//星球图鉴数据
+message HeatBallTuJiaonPt{
+	required int32 heatBallId = 1;//星球id
+}

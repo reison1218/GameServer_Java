@@ -1,0 +1,116 @@
+[INFO ]:2020-04-09 11:01:30,584--0 [main]
+com.game7.base.config.Config.init(Config.java:82)
+/com/game7/config/config.json配置文件：
+{"game_server":"127.0.0.1","gate_port":"16801","login_port":"8108","game_port":"9091","room_server":"127.0.0.1","room_port":"9092","mysql":[{"port":3306,"pass":"root","db_log":"reison","host":"127.0.0.1","db_data":"user_center","user":"root"}],"server_id":1,"login_ip":"10.10.10.16","redis":"reison"} 
+[INFO ]:2020-04-09 11:01:30,928--344[main]
+com.game7.base.db.HikariDBPool.init(HikariDBPool.java:47)
+用户数据库连接池初始化成功~ 
+[INFO ]:2020-04-09 11:01:30,945--361[main]
+com.game7.base.executor.ExecutorMgr.init(ExecutorMgr.java:38)
+线程池初始化成功~ 
+[INFO ]:2020-04-09 11:01:31,098--514[main]
+com.game7.redis.RedisPool.init(RedisPool.java:38)
+redis连接池初始化成功~ 
+[INFO ]:2020-04-09 11:01:31,296--712[main]
+com.game7.main.UserCenterServer.start(UserCenterServer.java:71)
+用户中心启动完成，耗时：1192ms,监听端口：8888 
+[INFO ]:2020-04-09 11:02:35,310--0 [main]
+com.game7.base.config.Config.init(Config.java:82)
+/com/game7/config/config.json配置文件：
+{"game_server":"127.0.0.1","gate_port":"16801","login_port":"8108","game_port":"9091","room_server":"127.0.0.1","room_port":"9092","mysql":[{"port":3306,"pass":"root","db_log":"reison","host":"127.0.0.1","db_data":"user_center","user":"root"}],"server_id":1,"login_ip":"10.10.10.16","redis":"reison"} 
+[INFO ]:2020-04-09 11:02:35,559--249[main]
+com.game7.base.db.HikariDBPool.init(HikariDBPool.java:47)
+用户数据库连接池初始化成功~ 
+[INFO ]:2020-04-09 11:02:35,573--263[main]
+com.game7.base.executor.ExecutorMgr.init(ExecutorMgr.java:38)
+线程池初始化成功~ 
+[INFO ]:2020-04-09 11:02:35,653--343[main]
+com.game7.redis.RedisPool.init(RedisPool.java:38)
+redis连接池初始化成功~ 
+[INFO ]:2020-04-09 11:02:35,795--485[main]
+com.game7.main.UserCenterServer.start(UserCenterServer.java:71)
+用户中心启动完成，耗时：811ms,监听端口：8888 
+[INFO ]:2020-04-09 11:09:44,575--429265[qtp1364335809-38]
+com.game7.handler.UserLoginHandler.handle(UserLoginHandler.java:43)
+用户中心收得到登陆请求，查找用户id，信息:Request(POST //[::1]:8888/center/getUserId)@5b531cf9 
+[ERROR]:2020-04-09 11:09:44,599--429289[qtp1364335809-38]
+com.game7.base.executor.CommonExecutor.enqueue(CommonExecutor.java:71)
+存在Action的队列为空，调用了强制设置Action队列为通用执行器默认队列！！！ 
+[INFO ]:2020-04-09 11:09:44,601--429291[qtp1364335809-38]
+com.game7.handler.UserLoginHandler.handle(UserLoginHandler.java:93)
+platformId:test1 
+[INFO ]:2020-04-09 11:12:28,910--0 [main]
+com.game7.base.config.Config.init(Config.java:82)
+/com/game7/config/config.json配置文件：
+{"game_server":"127.0.0.1","gate_port":"16801","login_port":"8108","game_port":"9091","room_server":"127.0.0.1","room_port":"9092","mysql":[{"port":3306,"pass":"root","db_log":"reison","host":"127.0.0.1","db_data":"user_center","user":"root"}],"server_id":1,"login_ip":"10.10.10.16","redis":"reison"} 
+[INFO ]:2020-04-09 11:12:29,146--236[main]
+com.game7.base.db.HikariDBPool.init(HikariDBPool.java:47)
+用户数据库连接池初始化成功~ 
+[INFO ]:2020-04-09 11:12:29,159--249[main]
+com.game7.base.executor.ExecutorMgr.init(ExecutorMgr.java:38)
+线程池初始化成功~ 
+[INFO ]:2020-04-09 11:12:29,241--331[main]
+com.game7.redis.RedisPool.init(RedisPool.java:38)
+redis连接池初始化成功~ 
+[INFO ]:2020-04-09 11:12:29,383--473[main]
+com.game7.main.UserCenterServer.start(UserCenterServer.java:71)
+用户中心启动完成，耗时：821ms,监听端口：8888 
+[INFO ]:2020-04-09 11:12:34,022--5112[qtp1364335809-38]
+com.game7.handler.UserLoginHandler.handle(UserLoginHandler.java:43)
+用户中心收得到登陆请求，查找用户id，信息:Request(POST //[::1]:8888/center/getUserId)@32358a64 
+[ERROR]:2020-04-09 11:12:34,044--5134[qtp1364335809-38]
+com.game7.base.executor.CommonExecutor.enqueue(CommonExecutor.java:71)
+存在Action的队列为空，调用了强制设置Action队列为通用执行器默认队列！！！ 
+[INFO ]:2020-04-09 11:12:34,046--5136[qtp1364335809-38]
+com.game7.handler.UserLoginHandler.handle(UserLoginHandler.java:93)
+platformId:test1 
+[INFO ]:2020-04-09 11:17:22,346--0 [main]
+com.game7.base.config.Config.init(Config.java:82)
+/com/game7/config/config.json配置文件：
+{"game_server":"127.0.0.1","gate_port":"16801","login_port":"8108","game_port":"9091","room_server":"127.0.0.1","room_port":"9092","mysql":[{"port":3306,"pass":"root","db_log":"reison","host":"127.0.0.1","db_data":"user_center","user":"root"}],"server_id":1,"login_ip":"10.10.10.16","redis":"reison"} 
+[INFO ]:2020-04-09 11:17:22,576--230[main]
+com.game7.base.db.HikariDBPool.init(HikariDBPool.java:47)
+用户数据库连接池初始化成功~ 
+[INFO ]:2020-04-09 11:17:22,589--243[main]
+com.game7.base.executor.ExecutorMgr.init(ExecutorMgr.java:38)
+线程池初始化成功~ 
+[INFO ]:2020-04-09 11:17:22,672--326[main]
+com.game7.redis.RedisPool.init(RedisPool.java:38)
+redis连接池初始化成功~ 
+[INFO ]:2020-04-09 11:17:22,827--481[main]
+com.game7.main.UserCenterServer.start(UserCenterServer.java:71)
+用户中心启动完成，耗时：821ms,监听端口：8888 
+[INFO ]:2020-04-09 11:17:26,372--4026[qtp1364335809-38]
+com.game7.handler.UserLoginHandler.handle(UserLoginHandler.java:43)
+用户中心收得到登陆请求，查找用户id，信息:Request(POST //[::1]:8888/center/getUserId)@32358a64 
+[ERROR]:2020-04-09 11:17:26,392--4046[qtp1364335809-38]
+com.game7.base.executor.CommonExecutor.enqueue(CommonExecutor.java:71)
+存在Action的队列为空，调用了强制设置Action队列为通用执行器默认队列！！！ 
+[INFO ]:2020-04-09 11:17:26,394--4048[qtp1364335809-38]
+com.game7.handler.UserLoginHandler.handle(UserLoginHandler.java:93)
+platformId:test1 
+[INFO ]:2020-04-09 11:28:23,851--0 [main]
+com.game7.base.config.Config.init(Config.java:82)
+/com/game7/config/config.json配置文件：
+{"game_server":"127.0.0.1","gate_port":"16801","login_port":"8108","game_port":"9091","room_server":"127.0.0.1","room_port":"9092","mysql":[{"port":3306,"pass":"root","db_log":"reison","host":"127.0.0.1","db_data":"user_center","user":"root"}],"server_id":1,"login_ip":"10.10.10.16","redis":"reison"} 
+[INFO ]:2020-04-09 11:28:24,089--238[main]
+com.game7.base.db.HikariDBPool.init(HikariDBPool.java:47)
+用户数据库连接池初始化成功~ 
+[INFO ]:2020-04-09 11:28:24,104--253[main]
+com.game7.base.executor.ExecutorMgr.init(ExecutorMgr.java:38)
+线程池初始化成功~ 
+[INFO ]:2020-04-09 11:28:24,183--332[main]
+com.game7.redis.RedisPool.init(RedisPool.java:38)
+redis连接池初始化成功~ 
+[INFO ]:2020-04-09 11:28:24,324--473[main]
+com.game7.main.UserCenterServer.start(UserCenterServer.java:71)
+用户中心启动完成，耗时：794ms,监听端口：8888 
+[INFO ]:2020-04-09 11:28:58,957--35106[qtp1364335809-38]
+com.game7.handler.UserLoginHandler.handle(UserLoginHandler.java:39)
+用户中心收得到登陆请求，查找用户id，信息:Request(POST //[::1]:8888/center/getUserId)@417af23c 
+[ERROR]:2020-04-09 11:28:58,980--35129[qtp1364335809-38]
+com.game7.base.executor.CommonExecutor.enqueue(CommonExecutor.java:71)
+存在Action的队列为空，调用了强制设置Action队列为通用执行器默认队列！！！ 
+[INFO ]:2020-04-09 11:28:58,982--35131[qtp1364335809-38]
+com.game7.handler.UserLoginHandler.handle(UserLoginHandler.java:89)
+platformId:test 

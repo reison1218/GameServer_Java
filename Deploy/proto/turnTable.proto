@@ -1,0 +1,35 @@
+syntax = "proto2";
+
+option java_multiple_files = false;
+option java_package = "proto";
+option java_outer_classname = "TurnTableProto";
+import "base.proto";
+
+// 转盘抽奖请求
+//cmd:1007
+message TurnTableReq {
+	
+}
+
+// 转盘抽奖返回
+//cmd:5007
+message TurnTableRsp {
+	required bool isSucc = 1;//是否成功;
+	optional string errMess = 2;//错误信息;
+    optional int32 id = 3;//抽中哪个id（客户端自己拿到奖励显示，让玩家选择该不该看广告增加收益）
+    optional int32 turnCount = 4;//转盘次数
+}
+
+//转盘领取请求
+//cmd:1016
+message TurnTableResultReq{
+	required int32  advertId= 1; //对应的广告id(如果看了就传广告id,不看就传0)
+}
+
+//转盘领取响应
+//cmd:5016
+message TurnTableResultRsp{
+	required bool isSucc = 1;//是否成功;
+	optional string errMess = 2;//错误信息;
+	repeated ResourcesPt resp = 3;//奖励资源
+}

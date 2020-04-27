@@ -1,0 +1,21 @@
+syntax = "proto2";
+
+option java_multiple_files = false;
+option java_package = "proto";
+option java_outer_classname = "BuffProto";
+import "base.proto";
+
+// buff请求
+//cmd:1011
+message BuffReq {
+    required int32 buffId = 1;//buffId
+}
+
+// buff返回
+//cmd:5011
+message BuffRsp {
+	required bool isSucc = 1;//是否成功;
+	optional string errMess = 2;//错误信息;
+	optional BuffPt buff = 3;//buff数据
+}
+

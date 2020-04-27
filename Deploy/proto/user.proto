@@ -1,0 +1,94 @@
+syntax = "proto2";
+
+option java_multiple_files = false;
+option java_package = "proto";
+option java_outer_classname = "UserProto";
+import "base.proto";
+
+// 登录
+//cmd:1002
+message LoginReq {
+   required int32 userId = 1;//玩家id
+   required string avatar = 2; // 头像URL
+   required string nickname = 3; // 昵称
+}
+
+// 登录返回
+//cmd:5003
+message LoginRsp {
+   required bool isSucc = 1;//是否成功;
+   optional string errMess = 2;//错误信息;
+   optional int32 userId = 3; // 用户ID
+   optional string avatar = 4; // 头像URL
+   optional string nickname = 5; // 昵称
+   optional int32 signIn = 6; //签到天数
+   optional int32 lastLoginTime = 7; // 当前登录的时间(服务器当前时间)
+   optional int32 battlePosSlime = 8; // 战斗展示位星球id
+   optional int32 lastLogOffTime = 9; // 最后一次退出时间
+   optional double offLineGold = 10; // 离线收益的金币数量
+   optional int32 signInTime = 11; //最近一次签到时间
+   optional string guideStr = 12;//新手引导
+   repeated ResourcesPt turnCountReward = 13; //玩家上次未领取的转盘奖励
+   repeated ResourcesPt resp= 14 [packed = false]; //玩家资源
+   repeated HeatBallPt sp= 15 [packed = false]; //星球数据
+   repeated BuffPt buff = 16 [packed = false];//收益buff
+   repeated HeatBallBuyTimesPt buyTimesBuff = 17 [packed = false];//收益buff
+   
+}
+
+//心跳包请求
+//cmd:5002
+message HeartBeatReq{
+	
+}
+
+//心跳包返回
+//cmd:5002
+message HeartBeatRsp{
+	required int32 sysTime = 1;//服务器当前时间
+}
+
+//签到请求
+//cmd:1006
+message SignInReq{
+	required int32 advertId = 1;//广告id(普通领取就传0)
+}
+
+//签到请求返回
+//cmd:5006
+message SignInRsp{
+	required bool isSucc = 1;//是否成功;
+	optional string errMess = 2;//错误信息;
+	optional int32 signIn = 3; //签到天数
+	repeated ResourcesPt resp= 4; //奖励资源
+}
+
+//资源请求
+//cmd:1009
+message ResourcesReq{
+
+}
+
+//资源返回
+//cmd:5009
+message ResoucesRsp{
+	required int32 sysTime = 1;//服务器当前时间
+	repeated ResourcesPt resp = 2; //奖励资源
+}
+
+
+//领取离线金币收益请求
+//cmd:1017
+message ReceiveLineOffGoldReq{
+	required int32 advertId = 1;//广告id,如果看广告翻倍就传广告id过来，普通领取就传0
+}
+
+//领取离线金币收益请求返回
+//cmd:5017
+message ReceiveLineOffGoldRsp{
+	required bool isSucc = 1;//是否成功;
+	optional string errMess = 2;//错误信息;
+	optional int32 sysTime = 3;//服务器当前时间
+	optional ResourcesPt resp = 4; //奖励资源
+}
+

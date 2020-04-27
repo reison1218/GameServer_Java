@@ -1,0 +1,27 @@
+syntax = "proto2";
+
+option java_multiple_files = false;
+option java_package = "proto";
+option java_outer_classname = "BattleProto";
+import "base.proto";
+
+
+//战斗结算
+//cmd:1010
+message BattleSettleReq{
+	required int32 type = 1;//1：竞标赛 2：经典模式
+	required int32 score = 2;//本局积分
+	required int32 checkPoint = 3;//本局关卡
+	required int32 multiple = 4;//倍数
+	required int32 jump = 5;//跳跃
+	required int32 jumpLevel = 6;//跳跃段数
+	required int32 advertId = 7;//广告id
+}
+
+//房间战斗结算
+//cmd:5010
+message BattleSettleRsp{
+	required bool isSucc = 1;//是否成功;
+	optional string errMess = 2;//错误信息;
+	repeated ResourcesPt resp = 3;//奖励资源
+}

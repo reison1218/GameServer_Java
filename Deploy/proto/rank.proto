@@ -1,0 +1,22 @@
+syntax = "proto2";
+
+option java_multiple_files = false;
+option java_package = "proto";
+option java_outer_classname = "RankProto";
+import "base.proto";
+
+// 排行榜请求
+//cmd:1008
+message RankReq {
+	required int32 type = 1;//排行榜类型（1：周榜，2：日榜）
+}
+
+// 排行榜返回
+//cmd:5008
+message RankRsp {
+	required bool isSucc = 1;//是否成功;
+	optional string errMess = 2;//错误信息;
+	required int32 type = 3;//排行榜类型（1：周榜，2：日榜）
+    optional RankInfoPt myRank = 4;//自己的排行信息，没入榜则不传
+    repeated RankInfoPt rankPt = 5;
+}
