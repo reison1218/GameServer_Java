@@ -1,0 +1,143 @@
+[INFO ]:2020-04-24 11:16:27,532--0 [main]
+com.base.config.Config.init(Config.java:82)
+/config/config.json配置文件：
+{"game_server":"127.0.0.1","gate_port":"16801","login_port":"8108","game_port":"9091","room_server":"127.0.0.1","room_port":"9092","mysql":[{"port":3306,"pass":"root","db_log":"reison","host":"127.0.0.1","db_data":"reison","user":"root"}],"server_id":34058,"login_ip":"10.10.10.16","http_port":9093,"redis":"reison"} 
+[INFO ]:2020-04-24 11:16:27,535--3 [main]
+com.base.template.mgr.TemplateMgr.init(TemplateMgr.java:51)
+开始加载json配置文件.../Users/tangjian/Desktop/work/javaserver/gameserver/Deploy/template 
+[INFO ]:2020-04-24 11:16:27,539--7 [main]
+com.game.mgr.GameMgr.stopSave(GameMgr.java:397)
+执行退出进程保存逻辑 
+[INFO ]:2020-04-24 11:16:27,539--7 [main]
+com.game.mgr.GameMgr.stopSave(GameMgr.java:401)
+执行退出进程保存完成，耗时:0ms 
+[INFO ]:2020-04-24 11:16:27,558--26[main]
+com.game.main.GameServer.stopServer(GameServer.java:185)
+GameServer停止成功，本次运行：1分钟 
+[INFO ]:2020-04-24 11:19:38,813--0 [main]
+com.base.config.Config.init(Config.java:82)
+/config/config.json配置文件：
+{"game_server":"127.0.0.1","gate_port":"16801","login_port":"8108","game_port":"9091","room_server":"127.0.0.1","room_port":"9092","mysql":[{"port":3306,"pass":"root","db_log":"reison","host":"127.0.0.1","db_data":"reison","user":"root"}],"server_id":34058,"login_ip":"10.10.10.16","http_port":9093,"redis":"reison"} 
+[INFO ]:2020-04-24 11:19:38,815--2 [main]
+com.base.template.mgr.TemplateMgr.init(TemplateMgr.java:51)
+开始加载json配置文件.../Users/tangjian/Desktop/work/javaserver/gameserver/Deploy/template 
+[INFO ]:2020-04-24 11:19:38,820--7 [main]
+com.game.mgr.GameMgr.stopSave(GameMgr.java:397)
+执行退出进程保存逻辑 
+[INFO ]:2020-04-24 11:19:38,820--7 [main]
+com.game.mgr.GameMgr.stopSave(GameMgr.java:401)
+执行退出进程保存完成，耗时:0ms 
+[INFO ]:2020-04-24 11:19:38,838--25[main]
+com.game.main.GameServer.stopServer(GameServer.java:185)
+GameServer停止成功，本次运行：1分钟 
+[INFO ]:2020-04-24 11:26:19,974--0 [main]
+com.base.config.Config.init(Config.java:82)
+/config/config.json配置文件：
+{"game_server":"127.0.0.1","gate_port":"16801","login_port":"8108","game_port":"9091","room_server":"127.0.0.1","room_port":"9092","mysql":[{"port":3306,"pass":"root","db_log":"reison","host":"127.0.0.1","db_data":"reison","user":"root"}],"server_id":34058,"login_ip":"10.10.10.16","http_port":9093,"redis":"reison"} 
+[INFO ]:2020-04-24 11:26:19,976--2 [main]
+com.base.template.mgr.TemplateMgr.init(TemplateMgr.java:51)
+开始加载json配置文件.../Users/tangjian/Desktop/work/javaserver/gameserver/Deploy/template 
+[INFO ]:2020-04-24 11:26:20,054--80[main]
+com.base.template.mgr.TemplateMgr.init(TemplateMgr.java:84)
+json配置加载成功！ 
+[ERROR]:2020-04-24 11:26:25,279--5305[main]
+com.base.dbpool.HikariDBPool.init(HikariDBPool.java:54)
+DB连接池初始化失败 
+com.zaxxer.hikari.pool.HikariPool$PoolInitializationException: Failed to initialize pool: Could not create connection to database server. Attempted reconnect 3 times. Giving up.
+	at com.zaxxer.hikari.pool.HikariPool.throwPoolInitializationException(HikariPool.java:536)
+	at com.zaxxer.hikari.pool.HikariPool.checkFailFast(HikariPool.java:528)
+	at com.zaxxer.hikari.pool.HikariPool.<init>(HikariPool.java:113)
+	at com.zaxxer.hikari.HikariDataSource.<init>(HikariDataSource.java:72)
+	at com.base.dbpool.HikariDBPool.initDataPool(HikariDBPool.java:100)
+	at com.base.dbpool.HikariDBPool.init(HikariDBPool.java:42)
+	at com.game.main.GameServer.start(GameServer.java:67)
+	at com.game.main.GameServer.main(GameServer.java:137)
+Caused by: java.sql.SQLNonTransientConnectionException: Could not create connection to database server. Attempted reconnect 3 times. Giving up.
+	at com.mysql.cj.jdbc.exceptions.SQLError.createSQLException(SQLError.java:110)
+	at com.mysql.cj.jdbc.exceptions.SQLError.createSQLException(SQLError.java:97)
+	at com.mysql.cj.jdbc.exceptions.SQLError.createSQLException(SQLError.java:89)
+	at com.mysql.cj.jdbc.exceptions.SQLError.createSQLException(SQLError.java:63)
+	at com.mysql.cj.jdbc.exceptions.SQLError.createSQLException(SQLError.java:73)
+	at com.mysql.cj.jdbc.ConnectionImpl.connectWithRetries(ConnectionImpl.java:905)
+	at com.mysql.cj.jdbc.ConnectionImpl.createNewIO(ConnectionImpl.java:830)
+	at com.mysql.cj.jdbc.ConnectionImpl.<init>(ConnectionImpl.java:455)
+	at com.mysql.cj.jdbc.ConnectionImpl.getInstance(ConnectionImpl.java:240)
+	at com.mysql.cj.jdbc.NonRegisteringDriver.connect(NonRegisteringDriver.java:199)
+	at com.zaxxer.hikari.util.DriverDataSource.getConnection(DriverDataSource.java:95)
+	at com.zaxxer.hikari.util.DriverDataSource.getConnection(DriverDataSource.java:101)
+	at com.zaxxer.hikari.pool.PoolBase.newConnection(PoolBase.java:346)
+	at com.zaxxer.hikari.pool.PoolBase.newPoolEntry(PoolBase.java:196)
+	at com.zaxxer.hikari.pool.HikariPool.createPoolEntry(HikariPool.java:442)
+	at com.zaxxer.hikari.pool.HikariPool.checkFailFast(HikariPool.java:505)
+	... 6 more
+Caused by: com.mysql.cj.exceptions.CJCommunicationsException: Communications link failure
+
+The last packet sent successfully to the server was 0 milliseconds ago. The driver has not received any packets from the server.
+	at java.base/jdk.internal.reflect.NativeConstructorAccessorImpl.newInstance0(Native Method)
+	at java.base/jdk.internal.reflect.NativeConstructorAccessorImpl.newInstance(NativeConstructorAccessorImpl.java:62)
+	at java.base/jdk.internal.reflect.DelegatingConstructorAccessorImpl.newInstance(DelegatingConstructorAccessorImpl.java:45)
+	at java.base/java.lang.reflect.Constructor.newInstance(Constructor.java:488)
+	at com.mysql.cj.exceptions.ExceptionFactory.createException(ExceptionFactory.java:61)
+	at com.mysql.cj.exceptions.ExceptionFactory.createException(ExceptionFactory.java:105)
+	at com.mysql.cj.exceptions.ExceptionFactory.createException(ExceptionFactory.java:151)
+	at com.mysql.cj.exceptions.ExceptionFactory.createCommunicationsException(ExceptionFactory.java:167)
+	at com.mysql.cj.protocol.a.NativeSocketConnection.connect(NativeSocketConnection.java:91)
+	at com.mysql.cj.NativeSession.connect(NativeSession.java:152)
+	at com.mysql.cj.jdbc.ConnectionImpl.connectWithRetries(ConnectionImpl.java:849)
+	... 16 more
+Caused by: java.net.ConnectException: Connection refused (Connection refused)
+	at java.base/java.net.PlainSocketImpl.socketConnect(Native Method)
+	at java.base/java.net.AbstractPlainSocketImpl.doConnect(AbstractPlainSocketImpl.java:400)
+	at java.base/java.net.AbstractPlainSocketImpl.connectToAddress(AbstractPlainSocketImpl.java:243)
+	at java.base/java.net.AbstractPlainSocketImpl.connect(AbstractPlainSocketImpl.java:225)
+	at java.base/java.net.SocksSocketImpl.connect(SocksSocketImpl.java:402)
+	at java.base/java.net.Socket.connect(Socket.java:591)
+	at com.mysql.cj.protocol.StandardSocketFactory.connect(StandardSocketFactory.java:155)
+	at com.mysql.cj.protocol.a.NativeSocketConnection.connect(NativeSocketConnection.java:65)
+	... 18 more
+[INFO ]:2020-04-24 11:26:25,283--5309[main]
+com.game.mgr.GameMgr.stopSave(GameMgr.java:397)
+执行退出进程保存逻辑 
+[INFO ]:2020-04-24 11:26:25,283--5309[main]
+com.game.mgr.GameMgr.stopSave(GameMgr.java:401)
+执行退出进程保存完成，耗时:0ms 
+[INFO ]:2020-04-24 11:26:25,295--5321[main]
+com.game.main.GameServer.stopServer(GameServer.java:185)
+GameServer停止成功，本次运行：1分钟 
+[INFO ]:2020-04-24 11:27:09,632--0 [main]
+com.base.config.Config.init(Config.java:82)
+/config/config.json配置文件：
+{"game_server":"127.0.0.1","gate_port":"16801","login_port":"8108","game_port":"9091","room_server":"127.0.0.1","room_port":"9092","mysql":[{"port":3306,"pass":"root","db_log":"reison","host":"127.0.0.1","db_data":"reison","user":"root"}],"server_id":34058,"login_ip":"10.10.10.16","http_port":9093,"redis":"reison"} 
+[INFO ]:2020-04-24 11:27:09,634--2 [main]
+com.base.template.mgr.TemplateMgr.init(TemplateMgr.java:51)
+开始加载json配置文件.../Users/tangjian/Desktop/work/javaserver/gameserver/Deploy/template 
+[INFO ]:2020-04-24 11:27:09,724--92[main]
+com.base.template.mgr.TemplateMgr.init(TemplateMgr.java:84)
+json配置加载成功！ 
+[INFO ]:2020-04-24 11:27:10,000--368[main]
+com.base.dbpool.HikariDBPool.init(HikariDBPool.java:46)
+用户数据库连接池初始化成功~ 
+[INFO ]:2020-04-24 11:27:10,169--537[main]
+com.base.redis.RedisPool.init(RedisPool.java:38)
+redis连接池初始化成功~ 
+[INFO ]:2020-04-24 11:27:10,224--592[main]
+com.game.code.CodeMgr.init(CodeMgr.java:66)
+协议号初始化成功，数量：16 
+[INFO ]:2020-04-24 11:27:10,318--686[main]
+com.base.module.ModuleMgr.init(ModuleMgr.java:103)
+带注解的模块初始化成功，数量：4 
+[INFO ]:2020-04-24 11:27:10,326--694[main]
+com.base.executor.ExecutorMgr.init(ExecutorMgr.java:52)
+线程池初始化成功~ 
+[INFO ]:2020-04-24 11:27:10,340--708[main]
+com.game.mgr.TimeTaskMgr.init(TimeTaskMgr.java:73)
+定时器初始化成功~ 
+[INFO ]:2020-04-24 11:27:10,475--843[main]
+com.base.netty.BaseNettyServer.init(BaseNettyServer.java:76)
+HttpServer监听端口：9093 
+[INFO ]:2020-04-24 11:27:10,481--849[main]
+com.base.netty.BaseNettyServer.init(BaseNettyServer.java:76)
+SocketServer监听端口：9091 
+[INFO ]:2020-04-24 11:27:10,482--850[main]
+com.game.main.GameServer.start(GameServer.java:119)
+GameServer start finish! take time:1158ms 

@@ -1,0 +1,183 @@
+[INFO ]:2020-04-16 18:05:33,730--0 [main]
+com.heatBall.base.config.Config.init(Config.java:82)
+/config/config.json配置文件：
+{"game_server":"127.0.0.1","gate_port":"16801","login_port":"8108","game_port":"9091","room_server":"127.0.0.1","room_port":"9092","mysql":[{"port":3306,"pass":"root","db_log":"reison","host":"127.0.0.1","db_data":"reison","user":"root"}],"server_id":34058,"login_ip":"10.10.10.16","http_port":9093,"redis":"cwredis"} 
+[INFO ]:2020-04-16 18:05:33,734--4 [main]
+com.heatBall.base.template.mgr.TemplateMgr.init(TemplateMgr.java:51)
+开始加载json配置文件...E:\workspace\Deploy\template 
+[INFO ]:2020-04-16 18:05:33,739--9 [main]
+com.heatBall.game.mgr.GameMgr.stopSave(GameMgr.java:397)
+执行退出进程保存逻辑 
+[INFO ]:2020-04-16 18:05:33,740--10[main]
+com.heatBall.game.mgr.GameMgr.stopSave(GameMgr.java:401)
+执行退出进程保存完成，耗时:0ms 
+[INFO ]:2020-04-16 18:05:33,761--31[main]
+com.heatBall.game.main.GameServer.stopServer(GameServer.java:185)
+GameServer停止成功，本次运行：1分钟 
+[INFO ]:2020-04-16 18:06:17,706--0 [main]
+com.heatBall.base.config.Config.init(Config.java:82)
+/config/config.json配置文件：
+{"game_server":"127.0.0.1","gate_port":"16801","login_port":"8108","game_port":"9091","room_server":"127.0.0.1","room_port":"9092","mysql":[{"port":3306,"pass":"root","db_log":"reison","host":"127.0.0.1","db_data":"reison","user":"root"}],"server_id":34058,"login_ip":"10.10.10.16","http_port":9093,"redis":"cwredis"} 
+[INFO ]:2020-04-16 18:06:17,709--3 [main]
+com.heatBall.base.template.mgr.TemplateMgr.init(TemplateMgr.java:51)
+开始加载json配置文件.../Users/tangjian/Desktop/work/javaserver/gameserver/Deploy/template 
+[INFO ]:2020-04-16 18:06:17,799--93[main]
+com.heatBall.base.template.mgr.TemplateMgr.init(TemplateMgr.java:84)
+json配置加载成功！ 
+[INFO ]:2020-04-16 18:06:18,150--444[main]
+com.heatBall.base.dbpool.HikariDBPool.init(HikariDBPool.java:46)
+用户数据库连接池初始化成功~ 
+[ERROR]:2020-04-16 18:06:18,348--642[main]
+com.heatBall.base.redis.RedisPool.init(RedisPool.java:40)
+Could not get a resource from the pool 
+[INFO ]:2020-04-16 18:06:18,349--643[main]
+com.heatBall.game.mgr.GameMgr.stopSave(GameMgr.java:397)
+执行退出进程保存逻辑 
+[INFO ]:2020-04-16 18:06:18,349--643[main]
+com.heatBall.game.mgr.GameMgr.stopSave(GameMgr.java:401)
+执行退出进程保存完成，耗时:0ms 
+[INFO ]:2020-04-16 18:06:18,369--663[main]
+com.heatBall.game.main.GameServer.stopServer(GameServer.java:185)
+GameServer停止成功，本次运行：1分钟 
+[INFO ]:2020-04-16 18:06:49,797--0 [main]
+com.heatBall.base.config.Config.init(Config.java:82)
+/config/config.json配置文件：
+{"game_server":"127.0.0.1","gate_port":"16801","login_port":"8108","game_port":"9091","room_server":"127.0.0.1","room_port":"9092","mysql":[{"port":3306,"pass":"reison","db_log":"reison","host":"127.0.0.1","db_data":"reison","user":"root"}],"server_id":34058,"login_ip":"10.10.10.16","http_port":9093,"redis":"reison"} 
+[INFO ]:2020-04-16 18:06:49,800--3 [main]
+com.heatBall.base.template.mgr.TemplateMgr.init(TemplateMgr.java:51)
+开始加载json配置文件.../Users/tangjian/Desktop/work/javaserver/gameserver/Deploy/template 
+[INFO ]:2020-04-16 18:06:49,886--89[main]
+com.heatBall.base.template.mgr.TemplateMgr.init(TemplateMgr.java:84)
+json配置加载成功！ 
+[ERROR]:2020-04-16 18:06:55,222--5425[main]
+com.heatBall.base.dbpool.HikariDBPool.init(HikariDBPool.java:54)
+DB连接池初始化失败 
+com.zaxxer.hikari.pool.HikariPool$PoolInitializationException: Failed to initialize pool: Could not create connection to database server. Attempted reconnect 3 times. Giving up.
+	at com.zaxxer.hikari.pool.HikariPool.throwPoolInitializationException(HikariPool.java:536)
+	at com.zaxxer.hikari.pool.HikariPool.checkFailFast(HikariPool.java:528)
+	at com.zaxxer.hikari.pool.HikariPool.<init>(HikariPool.java:113)
+	at com.zaxxer.hikari.HikariDataSource.<init>(HikariDataSource.java:72)
+	at com.heatBall.base.dbpool.HikariDBPool.initDataPool(HikariDBPool.java:100)
+	at com.heatBall.base.dbpool.HikariDBPool.init(HikariDBPool.java:42)
+	at com.heatBall.game.main.GameServer.start(GameServer.java:67)
+	at com.heatBall.game.main.GameServer.main(GameServer.java:137)
+Caused by: java.sql.SQLNonTransientConnectionException: Could not create connection to database server. Attempted reconnect 3 times. Giving up.
+	at com.mysql.cj.jdbc.exceptions.SQLError.createSQLException(SQLError.java:110)
+	at com.mysql.cj.jdbc.exceptions.SQLError.createSQLException(SQLError.java:97)
+	at com.mysql.cj.jdbc.exceptions.SQLError.createSQLException(SQLError.java:89)
+	at com.mysql.cj.jdbc.exceptions.SQLError.createSQLException(SQLError.java:63)
+	at com.mysql.cj.jdbc.exceptions.SQLError.createSQLException(SQLError.java:73)
+	at com.mysql.cj.jdbc.ConnectionImpl.connectWithRetries(ConnectionImpl.java:905)
+	at com.mysql.cj.jdbc.ConnectionImpl.createNewIO(ConnectionImpl.java:830)
+	at com.mysql.cj.jdbc.ConnectionImpl.<init>(ConnectionImpl.java:455)
+	at com.mysql.cj.jdbc.ConnectionImpl.getInstance(ConnectionImpl.java:240)
+	at com.mysql.cj.jdbc.NonRegisteringDriver.connect(NonRegisteringDriver.java:199)
+	at com.zaxxer.hikari.util.DriverDataSource.getConnection(DriverDataSource.java:95)
+	at com.zaxxer.hikari.util.DriverDataSource.getConnection(DriverDataSource.java:101)
+	at com.zaxxer.hikari.pool.PoolBase.newConnection(PoolBase.java:346)
+	at com.zaxxer.hikari.pool.PoolBase.newPoolEntry(PoolBase.java:196)
+	at com.zaxxer.hikari.pool.HikariPool.createPoolEntry(HikariPool.java:442)
+	at com.zaxxer.hikari.pool.HikariPool.checkFailFast(HikariPool.java:505)
+	... 6 more
+Caused by: com.mysql.cj.exceptions.CJException: Access denied for user 'root'@'localhost' (using password: YES)
+	at java.base/jdk.internal.reflect.NativeConstructorAccessorImpl.newInstance0(Native Method)
+	at java.base/jdk.internal.reflect.NativeConstructorAccessorImpl.newInstance(NativeConstructorAccessorImpl.java:62)
+	at java.base/jdk.internal.reflect.DelegatingConstructorAccessorImpl.newInstance(DelegatingConstructorAccessorImpl.java:45)
+	at java.base/java.lang.reflect.Constructor.newInstance(Constructor.java:488)
+	at com.mysql.cj.exceptions.ExceptionFactory.createException(ExceptionFactory.java:61)
+	at com.mysql.cj.exceptions.ExceptionFactory.createException(ExceptionFactory.java:105)
+	at com.mysql.cj.exceptions.ExceptionFactory.createException(ExceptionFactory.java:151)
+	at com.mysql.cj.exceptions.ExceptionFactory.createException(ExceptionFactory.java:129)
+	at com.mysql.cj.protocol.a.NativeProtocol.checkErrorMessage(NativeProtocol.java:816)
+	at com.mysql.cj.protocol.a.NativeProtocol.checkErrorMessage(NativeProtocol.java:741)
+	at com.mysql.cj.protocol.a.NativeProtocol.checkErrorMessage(NativeProtocol.java:709)
+	at com.mysql.cj.protocol.a.NativeProtocol.checkErrorMessage(NativeProtocol.java:132)
+	at com.mysql.cj.protocol.a.NativeAuthenticationProvider.proceedHandshakeWithPluggableAuthentication(NativeAuthenticationProvider.java:540)
+	at com.mysql.cj.protocol.a.NativeAuthenticationProvider.connect(NativeAuthenticationProvider.java:202)
+	at com.mysql.cj.protocol.a.NativeProtocol.connect(NativeProtocol.java:1449)
+	at com.mysql.cj.NativeSession.connect(NativeSession.java:165)
+	at com.mysql.cj.jdbc.ConnectionImpl.connectWithRetries(ConnectionImpl.java:849)
+	... 16 more
+[INFO ]:2020-04-16 18:06:55,231--5434[main]
+com.heatBall.game.mgr.GameMgr.stopSave(GameMgr.java:397)
+执行退出进程保存逻辑 
+[INFO ]:2020-04-16 18:06:55,232--5435[main]
+com.heatBall.game.mgr.GameMgr.stopSave(GameMgr.java:401)
+执行退出进程保存完成，耗时:0ms 
+[INFO ]:2020-04-16 18:06:55,241--5444[main]
+com.heatBall.game.main.GameServer.stopServer(GameServer.java:185)
+GameServer停止成功，本次运行：1分钟 
+[INFO ]:2020-04-16 18:07:43,155--0 [main]
+com.heatBall.base.config.Config.init(Config.java:82)
+/config/config.json配置文件：
+{"game_server":"127.0.0.1","gate_port":"16801","login_port":"8108","game_port":"9091","room_server":"127.0.0.1","room_port":"9092","mysql":[{"port":3306,"pass":"root","db_log":"reison","host":"127.0.0.1","db_data":"reison","user":"root"}],"server_id":34058,"login_ip":"10.10.10.16","http_port":9093,"redis":"reison"} 
+[INFO ]:2020-04-16 18:07:43,158--3 [main]
+com.heatBall.base.template.mgr.TemplateMgr.init(TemplateMgr.java:51)
+开始加载json配置文件.../Users/tangjian/Desktop/work/javaserver/gameserver/Deploy/template 
+[INFO ]:2020-04-16 18:07:43,256--101[main]
+com.heatBall.base.template.mgr.TemplateMgr.init(TemplateMgr.java:84)
+json配置加载成功！ 
+[INFO ]:2020-04-16 18:07:43,593--438[main]
+com.heatBall.base.dbpool.HikariDBPool.init(HikariDBPool.java:46)
+用户数据库连接池初始化成功~ 
+[INFO ]:2020-04-16 18:07:43,745--590[main]
+com.heatBall.base.redis.RedisPool.init(RedisPool.java:38)
+redis连接池初始化成功~ 
+[INFO ]:2020-04-16 18:07:43,807--652[main]
+com.heatBall.game.code.CodeMgr.init(CodeMgr.java:66)
+协议号初始化成功，数量：16 
+[INFO ]:2020-04-16 18:07:44,003--848[main]
+com.heatBall.base.module.ModuleMgr.init(ModuleMgr.java:103)
+带注解的模块初始化成功，数量：4 
+[INFO ]:2020-04-16 18:07:44,011--856[main]
+com.heatBall.base.executor.ExecutorMgr.init(ExecutorMgr.java:52)
+线程池初始化成功~ 
+[INFO ]:2020-04-16 18:07:44,025--870[main]
+com.heatBall.game.mgr.TimeTaskMgr.init(TimeTaskMgr.java:73)
+定时器初始化成功~ 
+[INFO ]:2020-04-16 18:07:44,206--1051[main]
+com.heatBall.base.netty.BaseNettyServer.init(BaseNettyServer.java:76)
+HttpServer监听端口：9093 
+[INFO ]:2020-04-16 18:07:44,213--1058[main]
+com.heatBall.base.netty.BaseNettyServer.init(BaseNettyServer.java:76)
+SocketServer监听端口：9091 
+[INFO ]:2020-04-16 18:07:44,215--1060[main]
+com.heatBall.game.main.GameServer.start(GameServer.java:119)
+GameServer start finish! take time:1373ms 
+[INFO ]:2020-04-16 18:15:16,418--0 [main]
+com.heatBall.base.config.Config.init(Config.java:82)
+/config/config.json配置文件：
+{"game_server":"127.0.0.1","gate_port":"16801","login_port":"8108","game_port":"9091","room_server":"127.0.0.1","room_port":"9092","mysql":[{"port":3306,"pass":"root","db_log":"reison","host":"127.0.0.1","db_data":"reison","user":"root"}],"server_id":34058,"login_ip":"10.10.10.16","http_port":9093,"redis":"reison"} 
+[INFO ]:2020-04-16 18:15:16,420--2 [main]
+com.heatBall.base.template.mgr.TemplateMgr.init(TemplateMgr.java:51)
+开始加载json配置文件.../Users/tangjian/Desktop/work/javaserver/gameserver/Deploy/template 
+[INFO ]:2020-04-16 18:15:16,504--86[main]
+com.heatBall.base.template.mgr.TemplateMgr.init(TemplateMgr.java:84)
+json配置加载成功！ 
+[INFO ]:2020-04-16 18:15:16,835--417[main]
+com.heatBall.base.dbpool.HikariDBPool.init(HikariDBPool.java:46)
+用户数据库连接池初始化成功~ 
+[INFO ]:2020-04-16 18:15:16,972--554[main]
+com.heatBall.base.redis.RedisPool.init(RedisPool.java:38)
+redis连接池初始化成功~ 
+[INFO ]:2020-04-16 18:15:17,040--622[main]
+com.heatBall.game.code.CodeMgr.init(CodeMgr.java:66)
+协议号初始化成功，数量：16 
+[INFO ]:2020-04-16 18:15:17,163--745[main]
+com.heatBall.base.module.ModuleMgr.init(ModuleMgr.java:103)
+带注解的模块初始化成功，数量：4 
+[INFO ]:2020-04-16 18:15:17,172--754[main]
+com.heatBall.base.executor.ExecutorMgr.init(ExecutorMgr.java:52)
+线程池初始化成功~ 
+[INFO ]:2020-04-16 18:15:17,182--764[main]
+com.heatBall.game.mgr.TimeTaskMgr.init(TimeTaskMgr.java:73)
+定时器初始化成功~ 
+[INFO ]:2020-04-16 18:15:17,338--920[main]
+com.heatBall.base.netty.BaseNettyServer.init(BaseNettyServer.java:76)
+HttpServer监听端口：9093 
+[INFO ]:2020-04-16 18:15:17,343--925[main]
+com.heatBall.base.netty.BaseNettyServer.init(BaseNettyServer.java:76)
+SocketServer监听端口：9091 
+[INFO ]:2020-04-16 18:15:17,346--928[main]
+com.heatBall.game.main.GameServer.start(GameServer.java:119)
+GameServer start finish! take time:1230ms 
