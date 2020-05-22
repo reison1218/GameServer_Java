@@ -6,6 +6,7 @@
 	"room_server": "127.0.0.1",
 	"room_port": "9092",
 	"gate_port": "16801",
+	"http":8888,
 	"redis":"reison",
 	"server_id": 1,
 	"mysql": [

@@ -3,23 +3,19 @@ package com.usercenter.entity;
 import java.sql.Connection;
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
-import java.util.Date;
+import java.util.ArrayList;
+import java.util.List;
 import java.util.Map;
 import java.util.concurrent.ConcurrentHashMap;
 
 import com.usercenter.base.db.HikariDBPool;
 
+public class ServerInfoDao {
 
-/**
- * 游戏dao
- * @author reison
- *
- */
-public class GameInfoDao {
 	
-	private static final GameInfoDao instance = new GameInfoDao();
+	private static final ServerInfoDao instance = new ServerInfoDao();
 
-	public static final GameInfoDao getInstance() {
+	public static final ServerInfoDao getInstance() {
 		return instance;
 	}
 	
@@ -28,30 +24,35 @@ public class GameInfoDao {
 	 * @param gameId
 	 * @return
 	 */
-	public Map<Integer, GameInfo> findGameInfos() {
-		Map<Integer, GameInfo> map = new ConcurrentHashMap<>();
+	public Map<Integer, List<ServerInfo>> findServerInfos() {
+		
+		Map<Integer, List<ServerInfo>> map = new ConcurrentHashMap<>();
 		Connection conn = HikariDBPool.getDataConn();
-		String sql = "select * from t_games";
+		String sql = "select * from t_servers";
 		PreparedStatement ps = null;
 		ResultSet rs = null;
 		try {
 			ps = conn.prepareStatement(sql);
 			rs = ps.executeQuery(sql);
+			List<ServerInfo> list = null;
 			while (rs.next()) {
+				int id = rs.getInt("id");
 				int gameId = rs.getInt("game_id");
 				String name = rs.getString("name");
-				Date createTime = rs.getDate("create_time");
-				Date releaseTime = rs.getDate("release_time");
-				Date updateTime = rs.getDate("update_time");
-				GameInfo gi = new GameInfo();
+				String ip = rs.getString("ip");
+				int port = rs.getInt("port");
+				ServerInfo gi = new ServerInfo();
+				gi.setId(id);
 				gi.setGame_id(gameId);
 				gi.setName(name);
-				gi.setCreate_time(createTime);
-				gi.setRelease_time(releaseTime);
-				gi.setUpdate_time(updateTime);
-				map.put(gi.getGame_id(), gi);
+				gi.setIp(ip);
+				gi.setPort(port);
+				if (!map.containsKey(gameId)) {
+					map.put(gameId, new ArrayList<ServerInfo>());
+				}
+				list = map.get(gameId);
+				list.add(gi);
 			}
-			
 			return map;
 		} catch (Exception e) {
 			e.printStackTrace();
@@ -67,4 +68,5 @@ public class GameInfoDao {
 		}
 		return null;
 	}
+
 }

@@ -114,9 +114,9 @@ public final class HikariDBPool {
 		// 获取连接超时ms
 		config.setConnectionTimeout(5000);
 		// 最小空闲连接数
-		config.setMinimumIdle(4);
+		config.setMinimumIdle(8);
 		// 最大连接数(与MinimumIdle表示固定连接数)
-		config.setMaximumPoolSize(4);
+		config.setMaximumPoolSize(8);
 		// 初始化用户数据连接池
 		logPool = new HikariDataSource(config);
 	}

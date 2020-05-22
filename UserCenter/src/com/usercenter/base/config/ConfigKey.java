@@ -39,8 +39,10 @@ public class ConfigKey {
 	public final static String CRO_SERVER_IDX = "crosvridx";// 连接crossip机器的第几个跨服进程
 	public final static String GRP_CONF = "grpconf";// 活动分组配置的可以
 	public static int tver;// 登录服当前版本号
-	
+
 	public final static String REDIS_PASS = "redis";
+
+	public final static String HTTP = "http";
 
 	public final static HashSet<String> groupSet = new HashSet<>();
 

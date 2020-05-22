@@ -32,7 +32,40 @@ public class UserInfoDao {
 		PreparedStatement ps = null;
 		int result = 0;
 		try {
-			String sql = "insert into t_users(user_id,game_id,nick_name,real_name,phone_no,register_ip,create_time,register_platform,platform_id) values(?,?,?,?,?,?,?,?,?)";
+			String sql = "insert into t_users(nick_name,real_name,avatar,phone_no,register_ip,create_time,register_platform,platform_id,last_login_time,on_line,user_id,game_id) values(?,?,?,?,?,?,?,?,?,?,?,?)";
+			ps = conn.prepareStatement(sql);
+			Object[] oj = userInfo.toObjectArray();
+			for(int i = 0;i<oj.length;i++) {
+				ps.setObject(i+1, oj[i]);
+			}
+			result = ps.executeUpdate();
+			return result;
+		} catch (Exception e) {
+			e.printStackTrace();
+		}finally {
+			try {
+				ps.close();
+				conn.close();
+			} catch (Exception e) {
+				e.printStackTrace();
+			}
+			
+		}
+		return 0;
+	}
+	
+	
+	/**
+	 * 新增用户
+	 * @param userInfo
+	 * @return
+	 */
+	public int updateUserInfo(UserInfo userInfo) {
+		Connection conn = HikariDBPool.getDataConn();
+		PreparedStatement ps = null;
+		int result = 0;
+		try {
+			String sql = "update t_users set nick_name=?,real_name=?,avatar=?,phone_no=?,register_ip=?,create_time=?,register_platform=?,platform_id=?,last_login_time=?,on_line=? where user_id=? and game_id=?";
 			ps = conn.prepareStatement(sql);
 			Object[] oj = userInfo.toObjectArray();
 			for(int i = 0;i<oj.length;i++) {
@@ -41,15 +74,19 @@ public class UserInfoDao {
 			
 			result = ps.executeUpdate();
 			
-			ps.close();
-			conn.close();
 			return result;
 		} catch (Exception e) {
 			e.printStackTrace();
+		}finally {
+			try {
+				ps.close();
+				conn.close();
+			} catch (Exception e) {
+				e.printStackTrace();
+			}
+			
 		}
 		return 0;
-	
-	
 	}
 	
 	/**
@@ -71,11 +108,82 @@ public class UserInfoDao {
 				AtomicInteger userId=new AtomicInteger(rs.getInt("user_id")); 
 				gameUserMap.put(gameId, userId);
 			}
-			ps.close();
-			rs.close();
+			
 			return gameUserMap;
 		} catch (Exception e) {
 			e.printStackTrace();
+		}finally {
+			try {
+				ps.close();
+				rs.close();
+				conn.close();
+			} catch (Exception e) {
+				e.printStackTrace();
+			}
+			
+		}
+		return null;
+	}
+	
+	/**
+	 * 通过游戏id和玩家id找玩家数据
+	 * @param _gameId
+	 * @param _userId
+	 * @return
+	 */
+	public UserInfo findUserByGameIdAndUserId(int _gameId,int _userId) {
+		Connection conn = HikariDBPool.getDataConn();
+		StringBuilder sb = new StringBuilder("select * from t_users");
+		sb.append(" where game_id = ");
+		sb.append("'"+_gameId+"'");
+		sb.append(" and user_id = ");
+		sb.append(_userId);
+		PreparedStatement ps = null;
+		ResultSet rs = null;
+		try {
+			String sql = sb.toString();
+			ps = conn.prepareStatement(sql);
+			rs = ps.executeQuery(sql);
+			UserInfo po = null;
+			while (rs.next()) {
+				po = new UserInfo();
+				int userId = rs.getInt("user_id");
+				int gameId = rs.getInt("game_id");
+				String nickName = rs.getString("nick_name");
+				String realName = rs.getString("real_name");
+				String avatar = rs.getString("avatar");
+				String phoneNo = rs.getString("phone_no");
+				String registerIp = rs.getString("register_ip");
+				Date createTime = rs.getDate("create_time");
+				String registerPlatform = rs.getString("register_platform");
+				String platformId = rs.getString("platform_id");
+				Date lastLoginTime = rs.getDate("last_login_time");
+				boolean onLine = rs.getBoolean("on_line");
+				po.setUser_id(userId);
+				po.setGame_id(gameId);
+				po.setNick_name(nickName);
+				po.setReal_name(realName);
+				po.setAvatar(avatar);
+				po.setPhone_no(phoneNo);
+				po.setRegister_ip(registerIp);
+				po.setCreate_time(createTime);
+				po.setRegister_platform(registerPlatform);
+				po.setPlatform_id(platformId);
+				po.setLast_login_time(lastLoginTime);
+				po.setOn_line(onLine);
+			}
+			return po;
+		} catch (Exception e) {
+			e.printStackTrace();
+		}finally {
+			try {
+				ps.close();
+				rs.close();
+				conn.close();
+			} catch (Exception e) {
+				e.printStackTrace();
+			}
+			
 		}
 		return null;
 	}
@@ -98,32 +206,47 @@ public class UserInfoDao {
 			String sql = sb.toString();
 			ps = conn.prepareStatement(sql);
 			rs = ps.executeQuery(sql);
+			UserInfo po = null;
 			while (rs.next()) {
-				UserInfo po = new UserInfo();
+				po = new UserInfo();
 				int userId = rs.getInt("user_id");
 				int gameId = rs.getInt("game_id");
 				String nickName = rs.getString("nick_name");
 				String realName = rs.getString("real_name");
+				String avatar = rs.getString("avatar");
 				String phoneNo = rs.getString("phone_no");
 				String registerIp = rs.getString("register_ip");
 				Date createTime = rs.getDate("create_time");
 				String registerPlatform = rs.getString("register_platform");
 				String platformId = rs.getString("platform_id");
-				po.setUserId(userId);
-				po.setGameId(gameId);
-				po.setNickName(nickName);
-				po.setRealName(realName);
-				po.setPhoneNo(phoneNo);
-				po.setRegisterIp(registerIp);
-				po.setCreateTime(createTime);
-				po.setRegisterPlatform(registerPlatform);
-				po.setPlatformId(platformId);
-				ps.close();
-				rs.close();
-				return po;
+				Date lastLoginTime = rs.getDate("last_login_time");
+				boolean onLine = rs.getBoolean("on_line");
+				po.setUser_id(userId);
+				po.setGame_id(gameId);
+				po.setNick_name(nickName);
+				po.setReal_name(realName);
+				po.setAvatar(avatar);
+				po.setPhone_no(phoneNo);
+				po.setRegister_ip(registerIp);
+				po.setCreate_time(createTime);
+				po.setRegister_platform(registerPlatform);
+				po.setPlatform_id(platformId);
+				po.setLast_login_time(lastLoginTime);
+				po.setOn_line(onLine);
 			}
+			
+			return po;
 		} catch (Exception e) {
 			e.printStackTrace();
+		}finally {
+			try {
+				ps.close();
+				rs.close();
+				conn.close();
+			} catch (Exception e) {
+				e.printStackTrace();
+			}
+			
 		}
 		return null;
 	}

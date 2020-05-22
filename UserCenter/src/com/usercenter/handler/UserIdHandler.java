@@ -1,6 +1,7 @@
 package com.usercenter.handler;
 
 import java.io.IOException;
+import java.util.Date;
 import java.util.concurrent.atomic.AtomicInteger;
 
 import javax.servlet.ServletException;
@@ -26,7 +27,7 @@ import com.usercenter.mgr.UserCenterMgr;
 import com.usercenter.redis.RedisKey;
 import com.usercenter.redis.RedisPool;
 
-public class UserLoginHandler extends AbstractHandler {
+public class UserIdHandler extends AbstractHandler {
 	/**成功的状态码**/
 	public static int SUCCESS = 200;
 	/**一天的秒数**/
@@ -35,8 +36,8 @@ public class UserLoginHandler extends AbstractHandler {
 	@Override
 	public void handle(String target, Request baseRequest, HttpServletRequest request, HttpServletResponse response)
 			throws IOException, ServletException {
-		if (!"/center/getUserId".equals(target)) {
-			Log.info("target!=/center/getUserId");
+		if (!"/center/user_id".equals(target)) {
+			Log.info("target!=/center/user_id");
 			return;
 		}
 		String platformId = null;
@@ -44,6 +45,7 @@ public class UserLoginHandler extends AbstractHandler {
 		JSONObject jsObject = new JSONObject();
 		int resultUserId = 0;
 		boolean result = false;
+		UserInfo userInfo = null;
 		try {
 			response.setHeader("Content-Type","text/html;charset=utf-8");
 			response.setContentType("application/json");
@@ -55,7 +57,7 @@ public class UserLoginHandler extends AbstractHandler {
 				}
 				platformId = request.getParameter("platform_id");
 			}else {
-				byte[] bytes = new byte[126];
+				byte[] bytes = new byte[512];
 				request.getInputStream().read(bytes);
 				String str = new String(bytes);
 				JSONObject js = (JSONObject) JsonUtil.parse(str.trim());
@@ -84,6 +86,7 @@ public class UserLoginHandler extends AbstractHandler {
 				String registerPlatform = js.getString("register_platform");
 				String nickName = js.getString("nick_name");
 				String phoneNo = js.getString("phone_no");
+				String avatar = js.getString("avatar");
 				//校验platformId
 				if(StringUtils.isEmpty(platformId)) {
 					response.setStatus(500, "no data");
@@ -121,6 +124,15 @@ public class UserLoginHandler extends AbstractHandler {
 					return;
 				}
 				
+				if(StringUtils.isEmpty(avatar)) {
+					response.setStatus(500, "no data");
+					jsObject.put("err_mess", "avatar is empty!");
+					jsObject.put("status", "fail!");
+					response.getOutputStream().write(jsObject.toJSONString().getBytes());
+					Log.error("phone_no is empty!");
+					return;
+				}
+				
 				if(gameId <=0) {
 					response.setStatus(500, "no data");
 					jsObject.put("err_mess", "game_id is invalid!");
@@ -139,44 +151,52 @@ public class UserLoginHandler extends AbstractHandler {
 					Log.error("this game is not exist for game_id:"+gameId);
 					return;
 				}
+				
 				//校验玩家数据是否存在
-				String value = RedisPool.hget(RedisKey.USERS, platformId);
+				String value = RedisPool.hgetWithIndex(0,RedisKey.USERS, platformId);
 				if(StringUtils.isEmpty(value)) {
-					result = RedisPool.exists(RedisKey.USERS);
-					UserInfo userInfo = UserInfoDao.getInstance().findUserInfoByPlatformIdAndGameId(platformId,gameId);
 					//代表新号,创建新号
-					if(userInfo == null) {
-						AtomicInteger userId = UserCenterMgr.getMaxUserId(gameId,true);
-						resultUserId = userId.incrementAndGet();
-						userInfo = new UserInfo();
-						userInfo.setCreateTime(TimeUtil.getSysteCurTime());
-						userInfo.setUserId(resultUserId);
-						userInfo.setGameId(gameId);
-						userInfo.setNickName("test");
-						userInfo.setPhoneNo("no");
-						userInfo.setPlatformId(platformId);
-						userInfo.setRealName("test");
-						userInfo.setRegisterIp(request.getRemoteAddr());
-						userInfo.setRegisterPlatform(registerPlatform);
-						ExecutorMgr.getOrderExecutor().enqueue(new SaveUserInfoAction(null, userInfo));
-					}else {
-						resultUserId = userInfo.getGameId();
-					}
+					AtomicInteger userId = UserCenterMgr.getMaxUserId(gameId,true);
+					resultUserId = userId.incrementAndGet();
+					userInfo = new UserInfo();
+					Date date = TimeUtil.getSysteCurTime();
+					userInfo.setCreate_time(date);
+					userInfo.setUser_id(resultUserId);
+					userInfo.setGame_id(gameId);
+					userInfo.setNick_name(nickName);
+					userInfo.setReal_name(nickName);
+					userInfo.setAvatar(avatar);
+					userInfo.setPhone_no(phoneNo);
+					userInfo.setPlatform_id(platformId);
+					userInfo.setRegister_ip(request.getRemoteAddr());
+					userInfo.setRegister_platform(registerPlatform);
+					userInfo.setLast_login_time(date);
+					userInfo.setOn_line(false);
+					ExecutorMgr.getOrderExecutor().enqueue(new SaveUserInfoAction(null, userInfo));
 					value = JsonUtil.stringify(userInfo);
-					int deleteTime = 0;
-					if(!result) {
-						deleteTime = DAY_SEC*7;
-					}
-					RedisPool.hset(RedisKey.USERS, platformId, value,deleteTime);
-				}else {
-					UserInfo userInfo = JsonUtil.parse(value, UserInfo.class);
-					resultUserId = userInfo.getGameId();
+					//int deleteTime = DAY_SEC*7;;
+					RedisPool.hsetWithIndex(0,RedisKey.USERS,platformId, value,0);
+					String ruId = Integer.toString(resultUserId);
+					RedisPool.hsetWithIndex(1,RedisKey.UID_2_PID, ruId, platformId,0);
+				}
+				
+				userInfo = JsonUtil.parse(value, UserInfo.class);
+				//判断是否在线
+				if(userInfo.isOn_line()) {
+					response.setStatus(500, "this account already login!");
+					jsObject.put("err_mess", "this account already login!");
+					jsObject.put("status", "fail!");
+					response.getOutputStream().write(jsObject.toJSONString().getBytes());
+					Log.error("repeat login for pid:"+platformId);
+					return;
 				}
 			}
 			
+			
+			
 			Log.info("platformId:"+platformId);
 			jsObject.put("status", "OK");
-			jsObject.put("user_id", resultUserId);
+			jsObject.put("user_id", userInfo.getUser_id());
 			response.setStatus(SUCCESS, "OK");
 			response.setHeader("Content-Type","text/html;charset=utf-8");
 			response.setContentType("application/json");

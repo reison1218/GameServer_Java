@@ -9,9 +9,12 @@ import org.eclipse.jetty.server.handler.HandlerList;
 
 import com.utils.Log;
 import com.usercenter.base.config.Config;
+import com.usercenter.base.config.ConfigKey;
 import com.usercenter.base.db.HikariDBPool;
 import com.usercenter.base.executor.ExecutorMgr;
-import com.usercenter.handler.UserLoginHandler;
+import com.usercenter.handler.ServerInfoListHandler;
+import com.usercenter.handler.UserIdHandler;
+import com.usercenter.handler.UserStateHandler;
 import com.usercenter.mgr.UserCenterMgr;
 import com.usercenter.redis.RedisPool;
 
@@ -61,10 +64,11 @@ public class UserCenterServer {
 		// 初始化jetty
 		try {
 			ServerConnector connector = new ServerConnector(rs);
-			connector.setPort(8888);
+			int port = Config.getConfig(ConfigKey.HTTP);
+			connector.setPort(port);
 			rs.setConnectors(new Connector[] { connector });
 			HandlerList handlers = new HandlerList();
-			handlers.setHandlers(new Handler[] { new UserLoginHandler(), new DefaultHandler() });
+			handlers.setHandlers(new Handler[] { new UserIdHandler(), new ServerInfoListHandler(),new UserStateHandler(),new DefaultHandler() });
 			rs.setHandler(handlers);
 			// 启动服务器
 			rs.start();

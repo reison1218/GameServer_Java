@@ -186,6 +186,22 @@ public class RedisPool {
 		return tId;
 	}
 	
+	public static String hgetWithIndex(int index,String key, String filed) {
+		Jedis jedis = jedisPool.getResource();
+		String tId = null;
+		try {
+			jedis.select(index);
+			tId = jedis.hget(key, filed);
+		} catch (Exception e) {
+			e.printStackTrace();
+		} finally {
+			jedis.select(0);
+			recyleClient(jedis);
+		}
+
+		return tId;
+	}
+	
 	/**
 	 * 判断是否存在key
 	 * @param key
@@ -244,6 +260,29 @@ public class RedisPool {
 			e.printStackTrace();
 
 		} finally {
+			recyleClient(jedis);
+		}
+	}
+	
+	public static void hsetWithIndex(int index,String key, String filed, String value,int lazyDropTime) {
+		Jedis jedis = jedisPool.getResource();
+		try {
+			jedis.select(index);
+			boolean exist = jedis.exists(key);
+			jedis.hset(key, filed, value);
+			if(lazyDropTime <=0) {
+				return;
+			}
+			if(exist) {
+				return;
+			}
+			long result = jedis.expire(key, lazyDropTime);
+			System.out.println("result:"+result);
+		} catch (Exception e) {
+			e.printStackTrace();
+
+		} finally {
+			jedis.select(0);
 			recyleClient(jedis);
 		}
 	}

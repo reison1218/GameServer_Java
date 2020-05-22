@@ -22,6 +22,9 @@ import org.apache.poi.ss.usermodel.Workbook;
 import org.apache.poi.xssf.usermodel.XSSFDataFormat;
 import org.apache.poi.xssf.usermodel.XSSFWorkbook;
 
+import com.alibaba.fastjson.JSONArray;
+import com.alibaba.fastjson.JSONObject;
+
 /**
  * 
  * @author reison excel转json工具类
@@ -40,7 +43,7 @@ public class ExcelUtils {
 	 */
 	public static void excel2json(String path) {
 
-		File file = new File("E:/heatBall/config/配置表");
+		File file = new File("/Users/tangjian/Desktop/templates");
 		if (file == null || file.listFiles().length == 0) {
 			System.out.println("路径错误！没有可以读取的excel文件");
 			return;
@@ -91,7 +94,7 @@ public class ExcelUtils {
 					sheet = wb.getSheetAt(i);
 					start = System.currentTimeMillis();
 					Iterator<Row> rowIter = sheet.rowIterator();
-					fileWriter = new FileWriter("F:/template/" + sheet.getSheetName().trim() + ".json");
+					fileWriter = new FileWriter("/Users/tangjian/Desktop/test/" + sheet.getSheetName().trim() + ".json");
 					// 第一行缓存下来
 					Row firstRow = null;
 					Row typeRow = null;
@@ -135,7 +138,7 @@ public class ExcelUtils {
 							}
 							
 							String dataType = typeRow.getCell(cellIndex).getStringCellValue();
-							
+							JSONArray jsonArray = null;
 							Object data = null;
 							switch (dataType) {
 							case "int":
@@ -149,8 +152,15 @@ public class ExcelUtils {
 							case "double":
 								data = cell.getNumericCellValue();
 								break;
+							case "float":
+								data = cell.getNumericCellValue();
+								break;
+							case "int[]":
+								jsonArray = (JSONArray)JsonUtil.parse(cell.toString());
+								data = jsonArray;
+								break;
 							}
-
+							
 							jsonList.get(rowIndex - 3).put(firstRow.getCell(cellIndex).getStringCellValue(), data);
 							cellIndex++;
 						}

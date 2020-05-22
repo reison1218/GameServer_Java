@@ -68,11 +68,11 @@ public final class CommonExecutor {
 		}
 		if (action.getActionQueue() == null) {
 			action.setActionQueue(executor.getDefaultQueue());
-			Log.error("存在Action的队列为空，调用了强制设置Action队列为通用执行器默认队列！！！");
+			Log.warn("存在Action的队列为空，调用了强制设置Action队列为通用执行器默认队列！！！");
 		}
 		if (action.getActionQueue() != executor.getDefaultQueue()) {
 			action.setActionQueue(executor.getDefaultQueue());
-			Log.error("Action队列和执行器默认队列不一致，调用了强制设置action队列为通用执行器默认队列！！！");
+			Log.warn("Action队列和执行器默认队列不一致，调用了强制设置action队列为通用执行器默认队列！！！");
 		}
 		executor.enDefaultQueue(action);
 		int size = executor.getDefaultQueue().getQueue().size();
