@@ -32,7 +32,7 @@ public class UserInfoDao {
 		PreparedStatement ps = null;
 		int result = 0;
 		try {
-			String sql = "insert into t_users(nick_name,phone_no,register_ip,create_time,register_platform,platform_id,last_login_time,on_line,user_id,game_id) values(?,?,?,?,?,?,?,?,?,?)";
+			String sql = "insert into t_users(nick_name,phone_no,register_ip,create_time,register_platform,platform_id,last_login_time,on_line,last_login_server,user_id,game_id) values(?,?,?,?,?,?,?,?,?,?,?)";
 			ps = conn.prepareStatement(sql);
 			Object[] oj = userInfo.toObjectArray();
 			for(int i = 0;i<oj.length;i++) {
@@ -65,7 +65,7 @@ public class UserInfoDao {
 		PreparedStatement ps = null;
 		int result = 0;
 		try {
-			String sql = "update t_users set nick_name=?,phone_no=?,register_ip=?,create_time=?,register_platform=?,platform_id=?,last_login_time=?,on_line=? where user_id=? and game_id=?";
+			String sql = "update t_users set nick_name=?,phone_no=?,register_ip=?,create_time=?,register_platform=?,platform_id=?,last_login_time=?,on_line=?,last_login_server=?  where user_id=? and game_id=?";
 			ps = conn.prepareStatement(sql);
 			Object[] oj = userInfo.toObjectArray();
 			for(int i = 0;i<oj.length;i++) {
@@ -154,6 +154,8 @@ public class UserInfoDao {
 				String platformId = rs.getString("platform_id");
 				Date lastLoginTime = rs.getDate("last_login_time");
 				boolean onLine = rs.getBoolean("on_line");
+				String lastLoginServer = rs.getString("last_login_server");
+				
 				po.setUser_id(userId);
 				po.setGame_id(gameId);
 				po.setNick_name(nickName);
@@ -164,6 +166,7 @@ public class UserInfoDao {
 				po.setPlatform_id(platformId);
 				po.setLast_login_time(lastLoginTime);
 				po.setOn_line(onLine);
+				po.setLast_login_server(lastLoginServer);
 			}
 			return po;
 		} catch (Exception e) {
@@ -212,6 +215,7 @@ public class UserInfoDao {
 				String platformId = rs.getString("platform_id");
 				Date lastLoginTime = rs.getDate("last_login_time");
 				boolean onLine = rs.getBoolean("on_line");
+				String lastLoginServer = rs.getString("last_login_server");
 				po.setUser_id(userId);
 				po.setGame_id(gameId);
 				po.setNick_name(nickName);
@@ -222,6 +226,7 @@ public class UserInfoDao {
 				po.setPlatform_id(platformId);
 				po.setLast_login_time(lastLoginTime);
 				po.setOn_line(onLine);
+				po.setLast_login_server(lastLoginServer);
 			}
 			
 			return po;

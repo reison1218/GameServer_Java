@@ -30,13 +30,15 @@ public class UserInfo {
 	private Date last_login_time;
 	/**是否在线**/
 	private boolean on_line;
+	/**最近登陆的服务器**/
+	private String last_login_server;
 	
 	/**
 	 * 转换成object数组
 	 * @return
 	 */
 	public Object[] toObjectArray() {
-		Object[] oj = new Object[10];
+		Object[] oj = new Object[11];
 		oj[0] = nick_name;
 		oj[1] = phone_no;
 		oj[2] = register_ip;
@@ -45,8 +47,9 @@ public class UserInfo {
 		oj[5] = platform_id;
 		oj[6] = TimeUtil.getDateFormat(last_login_time);;
 		oj[7] = on_line;
-		oj[8] = user_id;
-		oj[9] = game_id;
+		oj[8] = last_login_server;
+		oj[9] = user_id;
+		oj[10] = game_id;
 		return oj;
 	}
 	
@@ -82,6 +85,9 @@ public class UserInfo {
 		sb.append(",");
 		sb.append("on_line:");
 		sb.append(isOn_line());
+		sb.append(",");
+		sb.append("last_login_server:");
+		sb.append(last_login_server);
 		return sb.toString();
 	}
 
@@ -164,4 +170,13 @@ public class UserInfo {
 	public void setOn_line(boolean on_line) {
 		this.on_line = on_line;
 	}
+
+	public String getLast_login_server() {
+		return last_login_server;
+	}
+
+	public void setLast_login_server(String last_login_server) {
+		this.last_login_server = last_login_server;
+	}
+	
 }
