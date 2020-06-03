@@ -86,7 +86,6 @@ public class UserIdHandler extends AbstractHandler {
 				String registerPlatform = js.getString("register_platform");
 				String nickName = js.getString("nick_name");
 				String phoneNo = js.getString("phone_no");
-				String avatar = js.getString("avatar");
 				//校验platformId
 				if(StringUtils.isEmpty(platformId)) {
 					response.setStatus(500, "no data");
@@ -124,15 +123,6 @@ public class UserIdHandler extends AbstractHandler {
 					return;
 				}
 				
-				if(StringUtils.isEmpty(avatar)) {
-					response.setStatus(500, "no data");
-					jsObject.put("err_mess", "avatar is empty!");
-					jsObject.put("status", "fail!");
-					response.getOutputStream().write(jsObject.toJSONString().getBytes());
-					Log.error("phone_no is empty!");
-					return;
-				}
-				
 				if(gameId <=0) {
 					response.setStatus(500, "no data");
 					jsObject.put("err_mess", "game_id is invalid!");
@@ -164,8 +154,6 @@ public class UserIdHandler extends AbstractHandler {
 					userInfo.setUser_id(resultUserId);
 					userInfo.setGame_id(gameId);
 					userInfo.setNick_name(nickName);
-					userInfo.setReal_name(nickName);
-					userInfo.setAvatar(avatar);
 					userInfo.setPhone_no(phoneNo);
 					userInfo.setPlatform_id(platformId);
 					userInfo.setRegister_ip(request.getRemoteAddr());
@@ -191,9 +179,6 @@ public class UserIdHandler extends AbstractHandler {
 					return;
 				}
 			}
-			
-			
-			
 			Log.info("platformId:"+platformId);
 			jsObject.put("status", "OK");
 			jsObject.put("user_id", userInfo.getUser_id());

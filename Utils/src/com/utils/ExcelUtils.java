@@ -159,6 +159,9 @@ public class ExcelUtils {
 								jsonArray = (JSONArray)JsonUtil.parse(cell.toString());
 								data = jsonArray;
 								break;
+							case "json":
+								data = JSONObject.parse(cell.toString());;
+								break;
 							}
 							
 							jsonList.get(rowIndex - 3).put(firstRow.getCell(cellIndex).getStringCellValue(), data);

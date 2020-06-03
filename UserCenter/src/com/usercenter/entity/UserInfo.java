@@ -16,10 +16,6 @@ public class UserInfo {
 	private int game_id;
 	/**用户昵称**/
 	private String nick_name;
-	/**用户头像**/
-	private String avatar;
-	/**用户真实姓名**/
-	private String real_name;
 	/**用户手机号**/
 	private String phone_no;
 	/**用户注册ip**/
@@ -40,19 +36,17 @@ public class UserInfo {
 	 * @return
 	 */
 	public Object[] toObjectArray() {
-		Object[] oj = new Object[12];
+		Object[] oj = new Object[10];
 		oj[0] = nick_name;
-		oj[1] = real_name;
-		oj[2] = avatar;
-		oj[3] = phone_no;
-		oj[4] = register_ip;
-		oj[5] = TimeUtil.getDateFormat(create_time);
-		oj[6] = register_platform;
-		oj[7] = platform_id;
-		oj[8] = TimeUtil.getDateFormat(last_login_time);;
-		oj[9] = on_line;
-		oj[10] = user_id;
-		oj[11] = game_id;
+		oj[1] = phone_no;
+		oj[2] = register_ip;
+		oj[3] = TimeUtil.getDateFormat(create_time);
+		oj[4] = register_platform;
+		oj[5] = platform_id;
+		oj[6] = TimeUtil.getDateFormat(last_login_time);;
+		oj[7] = on_line;
+		oj[8] = user_id;
+		oj[9] = game_id;
 		return oj;
 	}
 	
@@ -67,12 +61,6 @@ public class UserInfo {
 		sb.append(",");
 		sb.append("nick_name:");
 		sb.append(nick_name);
-		sb.append(",");
-		sb.append("avatar:");
-		sb.append(avatar);
-		sb.append(",");
-		sb.append("real_name:");
-		sb.append(real_name);
 		sb.append(",");
 		sb.append("phone_no:");
 		sb.append(phone_no);
@@ -119,22 +107,6 @@ public class UserInfo {
 
 	public void setNick_name(String nick_name) {
 		this.nick_name = nick_name;
-	}
-
-	public String getAvatar() {
-		return avatar;
-	}
-
-	public void setAvatar(String avatar) {
-		this.avatar = avatar;
-	}
-
-	public String getReal_name() {
-		return real_name;
-	}
-
-	public void setReal_name(String real_name) {
-		this.real_name = real_name;
 	}
 
 	public String getPhone_no() {

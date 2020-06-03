@@ -32,7 +32,7 @@ public class UserInfoDao {
 		PreparedStatement ps = null;
 		int result = 0;
 		try {
-			String sql = "insert into t_users(nick_name,real_name,avatar,phone_no,register_ip,create_time,register_platform,platform_id,last_login_time,on_line,user_id,game_id) values(?,?,?,?,?,?,?,?,?,?,?,?)";
+			String sql = "insert into t_users(nick_name,phone_no,register_ip,create_time,register_platform,platform_id,last_login_time,on_line,user_id,game_id) values(?,?,?,?,?,?,?,?,?,?)";
 			ps = conn.prepareStatement(sql);
 			Object[] oj = userInfo.toObjectArray();
 			for(int i = 0;i<oj.length;i++) {
@@ -65,15 +65,13 @@ public class UserInfoDao {
 		PreparedStatement ps = null;
 		int result = 0;
 		try {
-			String sql = "update t_users set nick_name=?,real_name=?,avatar=?,phone_no=?,register_ip=?,create_time=?,register_platform=?,platform_id=?,last_login_time=?,on_line=? where user_id=? and game_id=?";
+			String sql = "update t_users set nick_name=?,phone_no=?,register_ip=?,create_time=?,register_platform=?,platform_id=?,last_login_time=?,on_line=? where user_id=? and game_id=?";
 			ps = conn.prepareStatement(sql);
 			Object[] oj = userInfo.toObjectArray();
 			for(int i = 0;i<oj.length;i++) {
 				ps.setObject(i+1, oj[i]);
 			}
-			
 			result = ps.executeUpdate();
-			
 			return result;
 		} catch (Exception e) {
 			e.printStackTrace();
@@ -84,7 +82,6 @@ public class UserInfoDao {
 			} catch (Exception e) {
 				e.printStackTrace();
 			}
-			
 		}
 		return 0;
 	}
@@ -150,8 +147,6 @@ public class UserInfoDao {
 				int userId = rs.getInt("user_id");
 				int gameId = rs.getInt("game_id");
 				String nickName = rs.getString("nick_name");
-				String realName = rs.getString("real_name");
-				String avatar = rs.getString("avatar");
 				String phoneNo = rs.getString("phone_no");
 				String registerIp = rs.getString("register_ip");
 				Date createTime = rs.getDate("create_time");
@@ -162,8 +157,6 @@ public class UserInfoDao {
 				po.setUser_id(userId);
 				po.setGame_id(gameId);
 				po.setNick_name(nickName);
-				po.setReal_name(realName);
-				po.setAvatar(avatar);
 				po.setPhone_no(phoneNo);
 				po.setRegister_ip(registerIp);
 				po.setCreate_time(createTime);
@@ -212,8 +205,6 @@ public class UserInfoDao {
 				int userId = rs.getInt("user_id");
 				int gameId = rs.getInt("game_id");
 				String nickName = rs.getString("nick_name");
-				String realName = rs.getString("real_name");
-				String avatar = rs.getString("avatar");
 				String phoneNo = rs.getString("phone_no");
 				String registerIp = rs.getString("register_ip");
 				Date createTime = rs.getDate("create_time");
@@ -224,8 +215,6 @@ public class UserInfoDao {
 				po.setUser_id(userId);
 				po.setGame_id(gameId);
 				po.setNick_name(nickName);
-				po.setReal_name(realName);
-				po.setAvatar(avatar);
 				po.setPhone_no(phoneNo);
 				po.setRegister_ip(registerIp);
 				po.setCreate_time(createTime);
