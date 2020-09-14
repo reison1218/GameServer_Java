@@ -67,6 +67,9 @@ public class ExcelUtils {
 		try {
 			// 如果是2007及以上版本，则使用想要的Workbook以及CellStyle
 			for (File _file : file.listFiles()) {
+				if(_file.getName().equals(".DS_Store")) {
+					continue;
+				}
 				f = _file;
 				in = new FileInputStream(_file);
 				// 是2007及以上版本 xlsx
@@ -102,7 +105,7 @@ public class ExcelUtils {
 						Row row = rowIter.next();
 						if(row.getCell(0)==null||StringUtils.isEmpty(row.getCell(0).toString()))
 							continue;
-						if (rowIndex > 2) {
+						if (rowIndex > 1) {
 							jsonList.add(new HashMap<String, Object>());
 						}
 							
@@ -111,14 +114,14 @@ public class ExcelUtils {
 							rowIndex++;
 							continue;
 						}
-						// 缓存数据类型行
+						// 第二行缓存数据类型行
 						if (rowIndex == 1) {
 							typeRow = row;
 							rowIndex++;
 							continue;
 						}
-						// 前三行都跳过
-						if (rowIndex <= 2) {
+						// 前两行都跳过
+						if (rowIndex < 2) {
 							rowIndex++;
 							continue;
 						}
@@ -136,6 +139,7 @@ public class ExcelUtils {
 								cellIndex++;
 								continue;
 							}
+							
 							
 							String dataType = typeRow.getCell(cellIndex).getStringCellValue();
 							JSONArray jsonArray = null;
@@ -164,7 +168,7 @@ public class ExcelUtils {
 								break;
 							}
 							
-							jsonList.get(rowIndex - 3).put(firstRow.getCell(cellIndex).getStringCellValue(), data);
+							jsonList.get(rowIndex - 2).put(firstRow.getCell(cellIndex).getStringCellValue(), data);
 							cellIndex++;
 						}
 						rowIndex++;
