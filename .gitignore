@@ -4,3 +4,4 @@
 *.log
 *.class
 Utils/bin/com/utils/BinaryUtil 2.class
+*.class
