@@ -6,16 +6,14 @@
 	"room_server": "127.0.0.1",
 	"room_port": "9092",
 	"gate_port": "16801",
-	"http":8888,
-	"redis":"reison",
 	"server_id": 1,
 	"mysql": [
 		{
-			"host": "127.0.0.1",
+			"host": "120.77.214.215",
 			"port": 3306,
 			"user": "root",
-			"pass": "reison11",
-			"db_data": "user_center",
+			"pass": "",
+			"db_data": "GameDB_web",
 			"db_log": "reison"
 		}
 	]

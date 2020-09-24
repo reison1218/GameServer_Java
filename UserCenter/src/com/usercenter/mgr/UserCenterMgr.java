@@ -7,12 +7,16 @@ import java.util.concurrent.ConcurrentHashMap;
 import java.util.concurrent.LinkedBlockingDeque;
 import java.util.concurrent.atomic.AtomicInteger;
 
+import org.apache.commons.collections4.map.HashedMap;
+
 import com.usercenter.entity.GameInfo;
 import com.usercenter.entity.GameInfoDao;
 import com.usercenter.entity.ServerInfo;
 import com.usercenter.entity.ServerInfoDao;
 import com.usercenter.entity.UserInfo;
 import com.usercenter.entity.UserInfoDao;
+import com.usercenter.entity.config.GameConfig;
+import com.usercenter.entity.config.GameConfigDao;
 import com.utils.Log;
 
 /**
@@ -105,6 +109,11 @@ public class UserCenterMgr {
 		return gameMap.containsKey(gameId);
 	}
 	
-	
-	
+	/**
+	 * 获取所有游戏配置
+	 * @return
+	 */
+	public static Map<Integer,GameConfig> getAllGameConfigs(){
+		return gameConfigMap;
+	}
 }

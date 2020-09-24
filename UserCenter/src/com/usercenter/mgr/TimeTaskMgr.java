@@ -4,11 +4,14 @@
 package com.usercenter.mgr;
 
 import java.util.Timer;
+
 import java.util.TimerTask;
 
 import com.utils.Log;
 import com.utils.RandomUtil;
 import com.utils.TimeUtil;
+import com.usercenter.entity.GameInfoDao;
+import com.usercenter.entity.GameInfo;
 
 /**
  * <pre>
@@ -39,6 +42,11 @@ public final class TimeTaskMgr {
 
 		// =======重置类逻辑start================///
 		try {
+			resetTimer = new Timer("resetTimeer");
+			// 0点重置定时任务
+			resetTimer.scheduleAtFixedRate(new ZeroTask(), TimeUtil.getNextDate(), MINUTE * 60 * 24);
+			// 赛季定时任务
+			resetTimer.scheduleAtFixedRate(new SeasonTask(), 0, MINUTE * 60 * 24);
 			// // 每天10:30定时任务
 			// SimpleDateFormat sdf1030 = new SimpleDateFormat("yyyy-MM-dd '10:30:00'");
 			// Date time1030 = new SimpleDateFormat("yyyy-MM-dd
@@ -59,9 +67,9 @@ public final class TimeTaskMgr {
 			// scanTimer.scheduleAtFixedRate(new Time2230ExecTask(), time2230, MINUTE * 60 *
 			// 24);
 			//
-			// // 整点的任务
-			// scanTimer.scheduleAtFixedRate(new IntegerHourExecTask(),
-			// TimeUtil.getTheRecentNextHour(), MINUTE * 60);
+			 // 整点的任务
+//			 scanTimer.scheduleAtFixedRate(new IntegerHourExecTask(),
+//			 TimeUtil.getTheRecentNextHour(), MINUTE * 60);
 			Log.info("定时器初始化成功~");
 		} catch (Exception e) {
 			Log.error("", e);
@@ -120,4 +128,52 @@ class SaveUserDataTask extends Task {
 		UserCenterMgr.save();
 	}
 
+}
+
+
+class ZeroTask extends Task {
+
+	public ZeroTask() {
+	}
+
+	/**
+	 * 执行函数
+	 */
+	@Override
+	public void exec() {
+		try {
+			
+			//通知所有游戏服务器更新赛季
+			//Log.fatal("GameMgr_DayReset_CostTime：" + (t2 - t1) + "ms");
+		} catch (Throwable e) {
+			Log.error("", e);
+		} finally {
+			
+		}
+	}
+}
+
+class SeasonTask extends Task {
+
+	public SeasonTask() {
+	}
+
+	/**
+	 * 执行函数
+	 */
+	@Override
+	public void exec() {
+		try {
+			int dayOfWeek = TimeUtil.getDayOfWeekIndex();
+			if (dayOfWeek != 1){
+				return;
+			}
+			//通知所有游戏服务器更新赛季
+			//Log.fatal("GameMgr_DayReset_CostTime：" + (t2 - t1) + "ms");
+		} catch (Throwable e) {
+			Log.error("", e);
+		} finally {
+			
+		}
+	}
 }
