@@ -6,16 +6,18 @@ package com.usercenter.entity;
  *
  */
 public class ServerInfo {
-	
+	/**id**/
 	private int id;
-	
+	/**游戏id**/
 	private int game_id;
-	
+	/**游戏名字**/
 	private String name;
-	
+	/**服务器ip地址**/
 	private String ip;
-	
+	/**tcp端口**/
 	private int port;
+	/**http端口**/
+	private int http_port;
 
 	/**
 	 * 获取id
@@ -91,11 +93,19 @@ public class ServerInfo {
 		this.port = port;
 	}
 
+	public int getHttp_port() {
+		return http_port;
+	}
+
+	public void setHttp_port(int http_port) {
+		this.http_port = http_port;
+	}
+
 	@Override
 	public String toString() {
 		StringBuffer sb = new StringBuffer();
 		sb.append("id:");
-		sb.append(""+id);
+		sb.append(id);
 		sb.append(",");
 		sb.append("game_id:");
 		sb.append(""+game_id);
@@ -107,9 +117,9 @@ public class ServerInfo {
 		sb.append(ip);
 		sb.append(",");
 		sb.append("port:");
-		sb.append(""+port);
+		sb.append(port);
+		sb.append("http_port:");
+		sb.append(http_port);
 		return sb.toString();
 	}
-	
-	
 }

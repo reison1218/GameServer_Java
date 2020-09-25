@@ -2,6 +2,8 @@ package com.usercenter.entity;
 
 import java.util.Date;
 
+import com.utils.TimeUtil;
+
 /**
  * 赛季动态数据
  * 
@@ -10,29 +12,32 @@ import java.util.Date;
  */
 public class SeasonInfo {
 	/** 游戏id **/
-	private int gameId;
+	private int game_id;
 	/** 赛季id **/
-	private int seasonId;
+	private int season_id;
 	/** 上次更新赛季时间 **/
-	private Date lasUpdateTime;
+	private Date last_update_time;
 	
+	public int getGame_id() {
+		return game_id;
+	}
+	public void setGame_id(int game_id) {
+		this.game_id = game_id;
+	}
+	public int getSeason_id() {
+		return season_id;
+	}
+	public void setSeason_id(int season_id) {
+		this.season_id = season_id;
+	}
+	public String getLast_update_time() {
+		String str = TimeUtil.getDateFormat(last_update_time);
+		return str;
+	}
+	public void setLast_update_time(Date last_update_time) {
+		this.last_update_time = last_update_time;
+	}
 	
-	public int getGameId() {
-		return gameId;
-	}
-	public void setGameId(int gameId) {
-		this.gameId = gameId;
-	}
-	public int getSeasonId() {
-		return seasonId;
-	}
-	public void setSeasonId(int seasonId) {
-		this.seasonId = seasonId;
-	}
-	public Date getLasUpdateTime() {
-		return lasUpdateTime;
-	}
-	public void setLasUpdateTime(Date lasUpdateTime) {
-		this.lasUpdateTime = lasUpdateTime;
-	}
+
+	
 }

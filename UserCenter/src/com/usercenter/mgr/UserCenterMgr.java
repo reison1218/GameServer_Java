@@ -108,12 +108,4 @@ public class UserCenterMgr {
 	public static boolean hasGame(int gameId) {
 		return gameMap.containsKey(gameId);
 	}
-	
-	/**
-	 * 获取所有游戏配置
-	 * @return
-	 */
-	public static Map<Integer,GameConfig> getAllGameConfigs(){
-		return gameConfigMap;
-	}
 }

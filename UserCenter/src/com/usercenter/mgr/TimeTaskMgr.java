@@ -3,6 +3,8 @@
  */
 package com.usercenter.mgr;
 
+import java.util.Calendar;
+import java.util.Date;
 import java.util.Timer;
 
 import java.util.TimerTask;
@@ -168,8 +170,12 @@ class SeasonTask extends Task {
 			if (dayOfWeek != 1){
 				return;
 			}
+			long t1 = System.currentTimeMillis();
+			//更新赛季
+			SeasonMgr.getInstance().updateSeason();
+			long t2 = System.currentTimeMillis();
 			//通知所有游戏服务器更新赛季
-			//Log.fatal("GameMgr_DayReset_CostTime：" + (t2 - t1) + "ms");
+			Log.fatal("GameMgr_UpdateSeason_CostTime：" + (t2 - t1) + "ms");
 		} catch (Throwable e) {
 			Log.error("", e);
 		} finally {

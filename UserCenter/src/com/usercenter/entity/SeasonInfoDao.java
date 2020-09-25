@@ -8,6 +8,7 @@ import java.util.Map;
 import java.util.concurrent.ConcurrentHashMap;
 
 import com.usercenter.base.db.HikariDBPool;
+import com.utils.TimeUtil;
 
 public class SeasonInfoDao {
 	
@@ -35,10 +36,10 @@ public class SeasonInfoDao {
 				int seasonId = rs.getInt("season_id");
 				Date lastUpdateTime = rs.getDate("last_update_time");
 				SeasonInfo si = new SeasonInfo();
-				si.setGameId(gameId);
-				si.setSeasonId(seasonId);
-				si.setLasUpdateTime(lastUpdateTime);
-				map.put(si.getGameId(), si);
+				si.setGame_id(gameId);
+				si.setSeason_id(seasonId);
+				si.setLast_update_time(lastUpdateTime);
+				map.put(si.getGame_id(), si);
 			}
 			
 			return map;
@@ -56,5 +57,33 @@ public class SeasonInfoDao {
 		return null;
 	}
 	
-
+	/**
+	 * 新增用户
+	 * @param userInfo
+	 * @return
+	 */
+	public int updateSeasonInfo(SeasonInfo seasonInfo) {
+		Connection conn = HikariDBPool.getDataConn();
+		PreparedStatement ps = null;
+		int result = 0;
+		try {
+			String sql = "update t_season set season_id=?,last_update_time=?  where game_id=?";
+			ps = conn.prepareStatement(sql);
+			ps.setObject(0, seasonInfo.getSeason_id());
+			ps.setObject(1, seasonInfo.getLast_update_time());
+			ps.setObject(2, seasonInfo.getGame_id());
+			result = ps.executeUpdate();
+			return result;
+		} catch (Exception e) {
+			e.printStackTrace();
+		}finally {
+			try {
+				ps.close();
+				conn.close();
+			} catch (Exception e) {
+				e.printStackTrace();
+			}
+		}
+		return 0;
+	}
 }

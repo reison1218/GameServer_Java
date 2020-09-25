@@ -7,7 +7,7 @@ import com.usercenter.template.base.BaseTemplate;
  * @author reison
  *
  */
-public class SeasonTemplate extends BaseTemplate{
+public class SeasonTemplate extends BaseTemplate implements Comparable<Integer>{
 	
 	/**赛季id**/
 	private int id;
@@ -35,5 +35,10 @@ public class SeasonTemplate extends BaseTemplate{
 
 	public void setId(int id) {
 		this.id = id;
+	}
+
+	@Override
+	public int compareTo(Integer o) {
+		return id>=o?1:0;
 	}
 }

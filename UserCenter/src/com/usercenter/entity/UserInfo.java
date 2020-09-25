@@ -45,7 +45,7 @@ public class UserInfo {
 		oj[3] = TimeUtil.getDateFormat(create_time);
 		oj[4] = register_platform;
 		oj[5] = platform_id;
-		oj[6] = TimeUtil.getDateFormat(last_login_time);;
+		oj[6] = TimeUtil.getDateFormat(last_login_time);
 		oj[7] = on_line;
 		oj[8] = last_login_server;
 		oj[9] = user_id;
