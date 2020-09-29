@@ -27,36 +27,42 @@ import com.utils.TimeUtil;
  */
 public class SeasonMgr {
 
-	private static SeasonMgr instance = new SeasonMgr();
-	
-	public static final SeasonMgr getInstance() {
-		return instance;
-	}
-	
 	/**赛季管理器**/
-	private Map<Integer,SeasonInfo> seasonMap = new HashedMap<>();
+	private static Map<Integer,SeasonInfo> seasonMap = new HashedMap<>();
 
-	public boolean init() {
+	/**
+	 * 初始化函数
+	 * @return
+	 */
+	public static boolean init() {
 		seasonMap = SeasonInfoDao.getInstance().findSeasonInfos();
-		Map<Integer,GameConfig> map = ConfigMgr.getInstance().getAllGameConfigs();
+		Map<Integer,GameConfig> map = ConfigMgr.getAllGameConfigs();
 		for(GameConfig gc:map.values()) {
 			if(gc.getDefault_season() == 0) {
 				continue;
 			}
-			if(seasonMap.containsKey(gc.getGame_id())) {
+			if(!seasonMap.containsKey(gc.getGame_id())) {
 				seasonMap.put(gc.getGame_id(), new SeasonInfo());
-			}
-			SeasonInfo si = seasonMap.get(gc.getGame_id());
-			if(si.getSeason_id() == 0) {
-				si.setSeason_id(gc.getDefault_season());
-				si.setGame_id(gc.getGame_id());
-				si.setLast_update_time(new Date());
+				SeasonInfo si = seasonMap.get(gc.getGame_id());
+				if(si.getSeason_id() == 0) {
+					si.setSeason_id(gc.getDefault_season());
+					si.setGame_id(gc.getGame_id());
+					si.setLast_update_time(new Date());
+					si.setNext_update_time(getNextUpdateTime());
+				}
+				//更新到redis
+				RedisPool.hsetWithIndex(2, RedisKey.GAME_SEASON, String.valueOf(si.getGame_id()), JsonUtil.stringify(si), 0);
+				//持久化到数据库
+				SeasonInfoDao.getInstance().insertSeasonInfo(si);
 			}
 		}
-		return false;
+		return true;
 	}
 	
-	public void updateSeason() {
+	/**
+	 * 更新赛季
+	 */
+	public static void updateSeason() {
 		Calendar calendar = Calendar.getInstance();
 		int year = calendar.get(Calendar.YEAR);
 		int month = calendar.get(Calendar.MONTH);
@@ -100,5 +106,17 @@ public class SeasonMgr {
 				System.out.println(res);
 			}
 		}
+	}
+
+	public static Date getNextUpdateTime() {
+		Calendar calendar = Calendar.getInstance();
+		int year = calendar.get(Calendar.YEAR);
+		int week_day = calendar.get(Calendar.DAY_OF_WEEK);
+		int addDay = 7-week_day+2;
+		calendar.add(Calendar.DAY_OF_WEEK, addDay);
+		int month = calendar.get(Calendar.MONTH);
+		int day = calendar.get(Calendar.DAY_OF_MONTH);
+		calendar.set(year, month, day, 0, 0, 0);
+		return calendar.getTime();
 	}
 }

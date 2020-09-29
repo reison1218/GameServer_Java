@@ -18,6 +18,8 @@ import com.usercenter.base.executor.ExecutorMgr;
 import com.usercenter.handler.ServerInfoListHandler;
 import com.usercenter.handler.UserIdHandler;
 import com.usercenter.handler.UserStateHandler;
+import com.usercenter.mgr.ConfigMgr;
+import com.usercenter.mgr.SeasonMgr;
 import com.usercenter.mgr.TimeTaskMgr;
 import com.usercenter.mgr.UserCenterMgr;
 import com.usercenter.redis.RedisPool;
@@ -50,12 +52,16 @@ public class UserCenterServer {
 		if (!Config.init("")) {
 			return false;
 		}
-		//初始化配置
-		if(!TemplateMgr.init()) {
-			return false;
-		}
 		// 初始化db
 		if (!HikariDBPool.init()) {
+			return false;
+		}
+		// 初始化配置
+		if (!TemplateMgr.init()) {
+			return false;
+		}
+		// 初始化数据库配置表
+		if (!ConfigMgr.init()) {
 			return false;
 		}
 		// 初始化线程池
@@ -70,8 +76,12 @@ public class UserCenterServer {
 		if (!UserCenterMgr.init()) {
 			return false;
 		}
-		//定时器初始化
-		if(!TimeTaskMgr.init()) {
+		// 定时器初始化
+		if (!TimeTaskMgr.init()) {
+			return false;
+		}
+		// 初始化赛季
+		if (!SeasonMgr.init()) {
 			return false;
 		}
 		// 初始化jetty
@@ -81,7 +91,8 @@ public class UserCenterServer {
 			connector.setPort(port);
 			rs.setConnectors(new Connector[] { connector });
 			HandlerList handlers = new HandlerList();
-			handlers.setHandlers(new Handler[] { new UserIdHandler(), new ServerInfoListHandler(),new UserStateHandler(),new DefaultHandler() });
+			handlers.setHandlers(new Handler[] { new UserIdHandler(), new ServerInfoListHandler(),
+					new UserStateHandler(), new DefaultHandler() });
 			rs.setHandler(handlers);
 			// 启动服务器
 			rs.start();

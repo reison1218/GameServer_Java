@@ -90,6 +90,7 @@ public class ExcelUtils {
 
 				// sheet表个数
 				int sheetsCounts = wb.getNumberOfSheets();
+				String name;
 				// 遍历每一个sheet
 				for (int i = 0; i < sheetsCounts; i++) {
 					jsonList = new ArrayList<Map<String, Object>>();
@@ -148,7 +149,6 @@ public class ExcelUtils {
 							case "int":
 								data = Integer.parseInt(cell.toString().replace(".0", ""));
 								break;
-
 							case "string":
 								data = new String(cell.toString());
 								break;
@@ -167,7 +167,11 @@ public class ExcelUtils {
 								data = JSONObject.parse(cell.toString());;
 								break;
 							}
-							
+							name = firstRow.getCell(cellIndex).getStringCellValue();
+							if (name.endsWith("client")){
+								cellIndex++;
+								continue;
+							}
 							jsonList.get(rowIndex - 2).put(firstRow.getCell(cellIndex).getStringCellValue(), data);
 							cellIndex++;
 						}

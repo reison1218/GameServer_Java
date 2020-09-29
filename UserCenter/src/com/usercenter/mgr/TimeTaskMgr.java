@@ -172,7 +172,7 @@ class SeasonTask extends Task {
 			}
 			long t1 = System.currentTimeMillis();
 			//更新赛季
-			SeasonMgr.getInstance().updateSeason();
+			SeasonMgr.updateSeason();
 			long t2 = System.currentTimeMillis();
 			//通知所有游戏服务器更新赛季
 			Log.fatal("GameMgr_UpdateSeason_CostTime：" + (t2 - t1) + "ms");

@@ -17,6 +17,8 @@ public class SeasonInfo {
 	private int season_id;
 	/** 上次更新赛季时间 **/
 	private Date last_update_time;
+	/** 上次更新赛季时间 **/
+	private Date next_update_time;
 	
 	public int getGame_id() {
 		return game_id;
@@ -36,6 +38,13 @@ public class SeasonInfo {
 	}
 	public void setLast_update_time(Date last_update_time) {
 		this.last_update_time = last_update_time;
+	}
+	public String getNext_update_time() {
+		String str = TimeUtil.getDateFormat(next_update_time);
+		return str;
+	}
+	public void setNext_update_time(Date next_update_time) {
+		this.next_update_time = next_update_time;
 	}
 	
 

@@ -29,7 +29,7 @@ public class GameConfigDao {
 	public Map<Integer, GameConfig> findGameConfigs() {
 		Map<Integer, GameConfig> map = new ConcurrentHashMap<>();
 		Connection conn = HikariDBPool.getDataConn();
-		String sql = "select * from t_games";
+		String sql = "select * from t_games_config";
 		PreparedStatement ps = null;
 		ResultSet rs = null;
 		try {
