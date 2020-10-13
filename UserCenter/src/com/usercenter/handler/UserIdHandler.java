@@ -24,6 +24,7 @@ import com.usercenter.base.executor.ExecutorMgr;
 import com.usercenter.entity.UserInfo;
 import com.usercenter.entity.UserInfoDao;
 import com.usercenter.mgr.UserCenterMgr;
+import com.usercenter.redis.RedisIndex;
 import com.usercenter.redis.RedisKey;
 import com.usercenter.redis.RedisPool;
 
@@ -143,7 +144,7 @@ public class UserIdHandler extends AbstractHandler {
 				}
 				
 				//校验玩家数据是否存在
-				String value = RedisPool.hgetWithIndex(0,RedisKey.USERS, platformId);
+				String value = RedisPool.hgetWithIndex(RedisIndex.USERS,RedisKey.USERS, platformId);
 				if(StringUtils.isEmpty(value)) {
 					//代表新号,创建新号
 					AtomicInteger userId = UserCenterMgr.getMaxUserId(gameId,true);
@@ -163,9 +164,9 @@ public class UserIdHandler extends AbstractHandler {
 					ExecutorMgr.getOrderExecutor().enqueue(new SaveUserInfoAction(null, userInfo));
 					value = JsonUtil.stringify(userInfo);
 					//int deleteTime = DAY_SEC*7;;
-					RedisPool.hsetWithIndex(0,RedisKey.USERS,platformId, value,0);
+					RedisPool.hsetWithIndex(RedisIndex.USERS,RedisKey.USERS,platformId, value,0);
 					String ruId = Integer.toString(resultUserId);
-					RedisPool.hsetWithIndex(1,RedisKey.UID_2_PID, ruId, platformId,0);
+					RedisPool.hsetWithIndex(RedisIndex.USERS,RedisKey.UID_2_PID, ruId, platformId,0);
 				}
 				
 				userInfo = JsonUtil.parse(value, UserInfo.class);

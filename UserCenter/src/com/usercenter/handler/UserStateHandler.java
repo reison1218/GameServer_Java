@@ -18,6 +18,7 @@ import com.usercenter.base.executor.ExecutorMgr;
 import com.usercenter.entity.UserInfo;
 import com.usercenter.entity.UserInfoDao;
 import com.usercenter.mgr.UserCenterMgr;
+import com.usercenter.redis.RedisIndex;
 import com.usercenter.redis.RedisKey;
 import com.usercenter.redis.RedisPool;
 import com.utils.JsonUtil;
@@ -123,12 +124,12 @@ public class UserStateHandler extends AbstractHandler {
 				UserInfo userInfo = null;
 				// 校验玩家数据是否存在
 				String uIdString = Integer.toString(userId);
-				String pId = RedisPool.hgetWithIndex(1, RedisKey.UID_2_PID, uIdString);
+				String pId = RedisPool.hgetWithIndex(RedisIndex.USERS, RedisKey.UID_2_PID, uIdString);
 				if(StringUtils.isEmpty(pId)) {
 					Log.error("pId is null for uid:"+uIdString);
 					return;
 				}
-				value = RedisPool.hgetWithIndex(0,RedisKey.USERS, pId);
+				value = RedisPool.hgetWithIndex(RedisIndex.USERS,RedisKey.USERS, pId);
 				userInfo = JsonUtil.parse(value, UserInfo.class);
 				if (userInfo == null) {
 					Log.error("UserInfo is null for uid:"+uIdString);
