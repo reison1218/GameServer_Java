@@ -34,8 +34,8 @@ public class SeasonInfoDao {
 			while (rs.next()) {
 				int gameId = rs.getInt("game_id");
 				int seasonId = rs.getInt("season_id");
-				Date lastUpdateTime = rs.getDate("last_update_time");
-				Date nextUpdateTime = rs.getDate("next_update_time");
+				Date lastUpdateTime = TimeUtil.format(rs.getString("last_update_time"));
+				Date nextUpdateTime = TimeUtil.format(rs.getString("next_update_time"));
 				SeasonInfo si = new SeasonInfo();
 				si.setGame_id(gameId);
 				si.setSeason_id(seasonId);

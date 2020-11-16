@@ -45,8 +45,10 @@ public class SeasonMgr {
 		Date lastTime = null;
 		Date nextTime = null;
 		boolean isContinue = false;
+		boolean update = false;
 		for (GameConfig gc : map.values()) {
 			isContinue = false;
+			update = false;
 			if (gc.getDefault_season() == 0) {
 				continue;
 			}
@@ -58,6 +60,7 @@ public class SeasonMgr {
 				nextTime = TimeUtil.format(si.getNext_update_time());
 				if(nowTime<lastTime.getTime() || nowTime>nextTime.getTime()) {
 					isInsert = false;
+					update = true;
 				}else {
 					isContinue = true;
 				}
@@ -87,7 +90,7 @@ public class SeasonMgr {
 			// 持久化到数据库
 			if(isInsert) {
 				SeasonInfoDao.getInstance().insertSeasonInfo(si);
-			}else if(!isInsert) {
+			}else if(update) {
 				SeasonInfoDao.getInstance().updateSeasonInfo(si);
 			}
 		}
