@@ -52,7 +52,6 @@ public class UserStateHandler extends AbstractHandler {
 					Log.error("参数为null!");
 					return;
 				}
-
 			} else {
 				byte[] bytes = new byte[512];
 				request.getInputStream().read(bytes);
