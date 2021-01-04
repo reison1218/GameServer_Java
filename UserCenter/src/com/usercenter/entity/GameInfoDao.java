@@ -43,12 +43,16 @@ public class GameInfoDao {
 				Date createTime = rs.getDate("create_time");
 				Date releaseTime = rs.getDate("release_time");
 				Date updateTime = rs.getDate("update_time");
+				int defaultSeason = rs.getInt("default_season");
+				String centerHttp = rs.getString("center_http"); 
 				GameInfo gi = new GameInfo();
 				gi.setGame_id(gameId);
 				gi.setName(name);
 				gi.setCreate_time(createTime);
 				gi.setRelease_time(releaseTime);
 				gi.setUpdate_time(updateTime);
+				gi.setDefault_season(defaultSeason);
+				gi.setCenter_http(centerHttp);
 				map.put(gi.getGame_id(), gi);
 			}
 			

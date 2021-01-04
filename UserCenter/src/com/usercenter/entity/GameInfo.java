@@ -19,6 +19,10 @@ public class GameInfo {
 	private Date create_time;
 	/**发布时间**/
 	private Date release_time;
+	/**默认赛季**/
+	private int default_season;
+	/**中心服接口**/
+	private String center_http;
 	/**更新时间**/
 	private Date update_time;
 	
@@ -40,6 +44,12 @@ public class GameInfo {
 		sb.append(",");
 		sb.append("update_time:");
 		sb.append(TimeUtil.getDateFormat(update_time));
+		sb.append(",");
+		sb.append("default_season:");
+		sb.append(default_season);
+		sb.append(",");
+		sb.append("center_http:");
+		sb.append(center_http);
 		return sb.toString();
 	}
 
@@ -93,5 +103,23 @@ public class GameInfo {
 		this.update_time = update_time;
 	}
 
-	
+
+	public int getDefault_season() {
+		return default_season;
+	}
+
+
+	public void setDefault_season(int default_season) {
+		this.default_season = default_season;
+	}
+
+
+	public String getCenter_http() {
+		return center_http;
+	}
+
+
+	public void setCenter_http(String center_http) {
+		this.center_http = center_http;
+	}
 }

@@ -15,7 +15,6 @@ import com.usercenter.entity.ServerInfo;
 import com.usercenter.mgr.UserCenterMgr;
 import com.utils.JsonUtil;
 import com.utils.Log;
-import com.utils.StringUtils;
 
 public class ServerInfoListHandler  extends AbstractHandler {
 	/** 成功的状态码 **/

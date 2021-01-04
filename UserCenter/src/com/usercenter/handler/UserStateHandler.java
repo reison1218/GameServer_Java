@@ -1,8 +1,6 @@
 package com.usercenter.handler;
 
 import java.io.IOException;
-import java.util.Date;
-import java.util.concurrent.atomic.AtomicInteger;
 
 import javax.servlet.ServletException;
 import javax.servlet.http.HttpServletRequest;
@@ -12,11 +10,7 @@ import org.eclipse.jetty.server.Request;
 import org.eclipse.jetty.server.handler.AbstractHandler;
 
 import com.alibaba.fastjson.JSONObject;
-import com.usercenter.action.SaveUserInfoAction;
-import com.usercenter.action.UpdateUserInfoAction;
-import com.usercenter.base.executor.ExecutorMgr;
 import com.usercenter.entity.UserInfo;
-import com.usercenter.entity.UserInfoDao;
 import com.usercenter.mgr.UserCenterMgr;
 import com.usercenter.redis.RedisIndex;
 import com.usercenter.redis.RedisKey;

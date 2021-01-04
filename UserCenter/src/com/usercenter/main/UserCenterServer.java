@@ -1,7 +1,5 @@
 package com.usercenter.main;
 
-import java.util.Date;
-
 import org.eclipse.jetty.server.Connector;
 import org.eclipse.jetty.server.Handler;
 import org.eclipse.jetty.server.Server;
@@ -9,8 +7,6 @@ import org.eclipse.jetty.server.ServerConnector;
 import org.eclipse.jetty.server.handler.DefaultHandler;
 import org.eclipse.jetty.server.handler.HandlerList;
 
-import com.utils.Log;
-import com.utils.TimeUtil;
 import com.usercenter.base.config.Config;
 import com.usercenter.base.config.ConfigKey;
 import com.usercenter.base.db.HikariDBPool;
@@ -18,12 +14,12 @@ import com.usercenter.base.executor.ExecutorMgr;
 import com.usercenter.handler.ServerInfoListHandler;
 import com.usercenter.handler.UserIdHandler;
 import com.usercenter.handler.UserStateHandler;
-import com.usercenter.mgr.ConfigMgr;
 import com.usercenter.mgr.SeasonMgr;
 import com.usercenter.mgr.TimeTaskMgr;
 import com.usercenter.mgr.UserCenterMgr;
 import com.usercenter.redis.RedisPool;
 import com.usercenter.template.mgr.TemplateMgr;
+import com.utils.Log;
 
 /**
  * 充值服务器
@@ -58,10 +54,6 @@ public class UserCenterServer {
 		}
 		// 初始化配置
 		if (!TemplateMgr.init()) {
-			return false;
-		}
-		// 初始化数据库配置表
-		if (!ConfigMgr.init()) {
 			return false;
 		}
 		// 初始化线程池

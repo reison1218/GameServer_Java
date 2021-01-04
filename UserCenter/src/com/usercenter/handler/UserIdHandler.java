@@ -12,21 +12,17 @@ import org.eclipse.jetty.server.Request;
 import org.eclipse.jetty.server.handler.AbstractHandler;
 
 import com.alibaba.fastjson.JSONObject;
-import com.utils.JsonUtil;
-import com.utils.Log;
-import com.utils.StringUtils;
-import com.utils.TimeUtil;
-
-import io.netty.util.internal.StringUtil;
-
 import com.usercenter.action.SaveUserInfoAction;
 import com.usercenter.base.executor.ExecutorMgr;
 import com.usercenter.entity.UserInfo;
-import com.usercenter.entity.UserInfoDao;
 import com.usercenter.mgr.UserCenterMgr;
 import com.usercenter.redis.RedisIndex;
 import com.usercenter.redis.RedisKey;
 import com.usercenter.redis.RedisPool;
+import com.utils.JsonUtil;
+import com.utils.Log;
+import com.utils.StringUtils;
+import com.utils.TimeUtil;
 
 public class UserIdHandler extends AbstractHandler {
 	/**成功的状态码**/

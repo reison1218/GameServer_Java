@@ -7,16 +7,12 @@ import java.util.concurrent.ConcurrentHashMap;
 import java.util.concurrent.LinkedBlockingDeque;
 import java.util.concurrent.atomic.AtomicInteger;
 
-import org.apache.commons.collections4.map.HashedMap;
-
 import com.usercenter.entity.GameInfo;
 import com.usercenter.entity.GameInfoDao;
 import com.usercenter.entity.ServerInfo;
 import com.usercenter.entity.ServerInfoDao;
 import com.usercenter.entity.UserInfo;
 import com.usercenter.entity.UserInfoDao;
-import com.usercenter.entity.config.GameConfig;
-import com.usercenter.entity.config.GameConfigDao;
 import com.utils.Log;
 
 /**
@@ -44,6 +40,23 @@ public class UserCenterMgr {
 	 */
 	public static void addUserInfo(UserInfo userInfo) {
 		userQue.push(userInfo);
+	}
+	
+	/**
+	 * 根据游戏id获得游戏信息
+	 * @param gameId
+	 * @return
+	 */
+	public static GameInfo getGameInfo(int gameId) {
+		return gameMap.get(gameId);
+	}
+	
+	/**
+	 * 返回所有游戏信息
+	 * @return
+	 */
+	public static Map<Integer,GameInfo> getGameInfos(){
+		return gameMap;
 	}
 	
 	

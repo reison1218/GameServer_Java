@@ -2,15 +2,14 @@ package com.usercenter.mgr;
 
 import java.util.Calendar;
 import java.util.Date;
-import java.util.List;
+import java.util.HashMap;
 import java.util.Map;
 
 import org.apache.commons.collections4.map.HashedMap;
 
+import com.usercenter.entity.GameInfo;
 import com.usercenter.entity.SeasonInfo;
 import com.usercenter.entity.SeasonInfoDao;
-import com.usercenter.entity.ServerInfo;
-import com.usercenter.entity.config.GameConfig;
 import com.usercenter.redis.RedisIndex;
 import com.usercenter.redis.RedisKey;
 import com.usercenter.redis.RedisPool;
@@ -39,20 +38,22 @@ public class SeasonMgr {
 	 */
 	public static boolean init() {
 		seasonMap = SeasonInfoDao.getInstance().findSeasonInfos();
-		Map<Integer, GameConfig> map = ConfigMgr.getAllGameConfigs();
+		Map<Integer, GameInfo> map = UserCenterMgr.getGameInfos();
 		long nowTime = System.currentTimeMillis();
 		boolean isInsert = false;
 		Date lastTime = null;
 		Date nextTime = null;
 		boolean isContinue = false;
 		boolean update = false;
-		for (GameConfig gc : map.values()) {
+		for (GameInfo gi : map.values()) {
+			int gameId = gi.getGame_id();
+			int defaultSeason = gi.getDefault_season();
 			isContinue = false;
 			update = false;
-			if (gc.getDefault_season() == 0) {
+			if (defaultSeason == 0) {
 				continue;
 			}
-			SeasonInfo si = seasonMap.get(gc.getGame_id());
+			SeasonInfo si = seasonMap.get(gameId);
 			if (si == null) {
 				isInsert = true;
 			}else  {
@@ -70,12 +71,12 @@ public class SeasonMgr {
 			}
 			
 			if(isInsert) {
-				seasonMap.put(gc.getGame_id(), new SeasonInfo());
+				seasonMap.put(gameId, new SeasonInfo());
 			}
-			si = seasonMap.get(gc.getGame_id());
+			si = seasonMap.get(gameId);
 			if (si.getSeason_id() == 0) {
-				si.setSeason_id(gc.getDefault_season());
-				si.setGame_id(gc.getGame_id());
+				si.setSeason_id(defaultSeason);
+				si.setGame_id(gameId);
 			}else {
 				SeasonTemplateMgr stMgr = (SeasonTemplateMgr)TemplateMgr.getTemlateMgr(SeasonTemplateMgr.class);			
 				int seasonId = stMgr.getNextSeasonId(si.getSeason_id());
@@ -110,10 +111,13 @@ public class SeasonMgr {
 		calendar.add(Calendar.DAY_OF_MONTH, 7);
 		Date next_update_time = calendar.getTime();
 		SeasonTemplateMgr stm = (SeasonTemplateMgr) TemplateMgr.getTemlateMgr(SeasonTemplateMgr.class);
+		StringBuffer sb ;
+		Map<String,Object> map=new HashMap<>();
 		for (SeasonInfo si : seasonMap.values()) {
 			int nextId = stm.getNextSeasonId(si.getSeason_id());
+			int gameId = si.getGame_id();
 			if (nextId == 0) {
-				StringBuffer sb = new StringBuffer();
+				sb = new StringBuffer();
 				sb.append("gameId:");
 				sb.append(si.getGame_id());
 				sb.append(" do not has next seasonId!pls check!");
@@ -128,21 +132,20 @@ public class SeasonMgr {
 			// 持久化到数据库
 			SeasonInfoDao.getInstance().updateSeasonInfo(si);
 			// 通知所有游戏服务器更新赛季信息
-			List<ServerInfo> serverList = UserCenterMgr.getServerList(101);
-			StringBuffer sb = null;
-			Map<String, Object> map = new HashedMap<String, Object>();
-			for (ServerInfo serverInfo : serverList) {
-				sb = new StringBuffer();
-				sb.append("http://");
-				sb.append(serverInfo.getIp());
-				sb.append("/");
-				sb.append(serverInfo.getHttp_port());
-				map.put("season_id", si.getSeason_id());
-				map.put("last_update_time", si.getLast_update_time());
-				map.put("next_update_time", TimeUtil.getDateFormat(next_update_time));
-				String res = HttpUtil.doPost(sb.toString(), map, true);
-				System.out.println(res);
+			
+			GameInfo gi = UserCenterMgr.getGameInfo(gameId);
+			if(gi == null) {
+				Log.warn("could not find GameInfo,gameId:"+gameId);
+				continue;
 			}
+			
+			sb= new StringBuffer();
+			sb.append(gi.getCenter_http());
+			map.put("season_id", si.getSeason_id());
+			map.put("last_update_time", si.getLast_update_time());
+			map.put("next_update_time", TimeUtil.getDateFormat(next_update_time));
+			String res = HttpUtil.doPost(sb.toString(), map, true);
+			System.out.println(res);
 		}
 	}
 
