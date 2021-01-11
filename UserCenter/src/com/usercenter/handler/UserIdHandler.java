@@ -111,7 +111,7 @@ public class UserIdHandler extends AbstractHandler {
 					return;
 				}
 				
-				if(StringUtils.isEmpty(phoneNo)) {
+				if(phoneNo == null) {
 					response.setStatus(500, "no data");
 					jsObject.put("err_mess", "phone_no is empty!");
 					jsObject.put("status", "fail!");
