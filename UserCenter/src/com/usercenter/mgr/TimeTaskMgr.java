@@ -166,6 +166,7 @@ class SeasonTask extends Task {
 	@Override
 	public void exec() {
 		try {
+			Log.info("开始执行SeasonTask定时器任务!");
 			int dayOfWeek = TimeUtil.getDayOfWeekIndex();
 			if (dayOfWeek != 1){
 				return;

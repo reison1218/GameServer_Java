@@ -56,42 +56,42 @@ public class SeasonMgr {
 			SeasonInfo si = seasonMap.get(gameId);
 			if (si == null) {
 				isInsert = true;
-			}else  {
+			} else {
 				lastTime = TimeUtil.format(si.getLast_update_time());
 				nextTime = TimeUtil.format(si.getNext_update_time());
-				if(nowTime<lastTime.getTime() || nowTime>nextTime.getTime()) {
+				if (nowTime < lastTime.getTime() || nowTime > nextTime.getTime()) {
 					isInsert = false;
 					update = true;
-				}else {
+				} else {
 					isContinue = true;
 				}
 			}
-			if(isContinue) {
+			if (isContinue) {
 				continue;
 			}
-			
-			if(isInsert) {
+
+			if (isInsert) {
 				seasonMap.put(gameId, new SeasonInfo());
 			}
 			si = seasonMap.get(gameId);
 			if (si.getSeason_id() == 0) {
 				si.setSeason_id(defaultSeason);
 				si.setGame_id(gameId);
-			}else {
-				SeasonTemplateMgr stMgr = (SeasonTemplateMgr)TemplateMgr.getTemlateMgr(SeasonTemplateMgr.class);			
+			} else {
+				SeasonTemplateMgr stMgr = (SeasonTemplateMgr) TemplateMgr.getTemlateMgr(SeasonTemplateMgr.class);
 				int seasonId = stMgr.getNextSeasonId(si.getSeason_id());
 				si.setSeason_id(seasonId);
 			}
-			
+
 			si.setLast_update_time(new Date());
 			si.setNext_update_time(getNextUpdateTime());
 			// 更新到redis
 			RedisPool.hsetWithIndex(RedisIndex.GAME_SEASON, RedisKey.GAME_SEASON, String.valueOf(si.getGame_id()),
 					JsonUtil.stringify(si), 0);
 			// 持久化到数据库
-			if(isInsert) {
+			if (isInsert) {
 				SeasonInfoDao.getInstance().insertSeasonInfo(si);
-			}else if(update) {
+			} else if (update) {
 				SeasonInfoDao.getInstance().updateSeasonInfo(si);
 			}
 		}
@@ -102,17 +102,11 @@ public class SeasonMgr {
 	 * 更新赛季
 	 */
 	public static void updateSeason() {
-		Calendar calendar = Calendar.getInstance();
-		int year = calendar.get(Calendar.YEAR);
-		int month = calendar.get(Calendar.MONTH);
-		int day = calendar.get(Calendar.DAY_OF_MONTH);
-		calendar.set(year, month, day, 0, 0, 0);
-		Date time = calendar.getTime();
-		calendar.add(Calendar.DAY_OF_MONTH, 7);
-		Date next_update_time = calendar.getTime();
+		Date now = new Date();
+		Date next_update_time = getNextUpdateTime();
 		SeasonTemplateMgr stm = (SeasonTemplateMgr) TemplateMgr.getTemlateMgr(SeasonTemplateMgr.class);
-		StringBuffer sb ;
-		Map<String,Object> map=new HashMap<>();
+		StringBuffer sb;
+		Map<String, Object> map = new HashMap<>();
 		for (SeasonInfo si : seasonMap.values()) {
 			int nextId = stm.getNextSeasonId(si.getSeason_id());
 			int gameId = si.getGame_id();
@@ -124,26 +118,27 @@ public class SeasonMgr {
 				Log.error(sb.toString());
 				continue;
 			}
-			si.setLast_update_time(time);
+			si.setLast_update_time(now);
+			si.setNext_update_time(next_update_time);
 			si.setSeason_id(nextId);
 			String jsonStr = JsonUtil.stringify(si);
 			// 持久化到redis
-			RedisPool.hsetWithIndex(RedisIndex.GAME_SEASON, RedisKey.GAME_SEASON, String.valueOf(si.getGame_id()), jsonStr, 0);
+			RedisPool.hsetWithIndex(RedisIndex.GAME_SEASON, RedisKey.GAME_SEASON, String.valueOf(si.getGame_id()),
+					jsonStr, 0);
 			// 持久化到数据库
 			SeasonInfoDao.getInstance().updateSeasonInfo(si);
 			// 通知所有游戏服务器更新赛季信息
-			
+
 			GameInfo gi = UserCenterMgr.getGameInfo(gameId);
-			if(gi == null) {
-				Log.warn("could not find GameInfo,gameId:"+gameId);
+			if (gi == null) {
+				Log.warn("could not find GameInfo,gameId:" + gameId);
 				continue;
 			}
-			
-			sb= new StringBuffer();
+
+			sb = new StringBuffer();
 			sb.append(gi.getCenter_http());
 			map.put("season_id", si.getSeason_id());
-			map.put("last_update_time", si.getLast_update_time());
-			map.put("next_update_time", TimeUtil.getDateFormat(next_update_time));
+			map.put("next_update_time", next_update_time.getTime());
 			String res = HttpUtil.doPost(sb.toString(), map, true);
 			System.out.println(res);
 		}
@@ -159,5 +154,16 @@ public class SeasonMgr {
 		int day = calendar.get(Calendar.DAY_OF_MONTH);
 		calendar.set(year, month, day, 0, 0, 0);
 		return calendar.getTime();
+	}
+	
+	public static void main(String[] aa) {
+		String str = "2021-01-25 00:00:00";
+		Date date = TimeUtil.format(str);
+		date.UTC(2021, 1, 25, 0, 0, 0);
+		System.out.println(date.getTime());
+		System.out.println(date.getTimezoneOffset());
+		System.out.println(TimeUtil.getDateFormat(date));
+		
+		System.out.println(System.currentTimeMillis());
 	}
 }

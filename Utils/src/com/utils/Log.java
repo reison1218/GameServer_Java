@@ -105,7 +105,7 @@ public class Log {
 			final String className = stackTrace[i].getClassName();
 			if (thisClazz.equals(className)) {
 				last = stackTrace[i + 1];
-				return last == null ? "no stack" : last.toString() + NEW_LINE + msg.toString();
+				return last == null ? "no stack" : last.toString() + "-" + msg.toString();
 			}
 		}
 		return "";

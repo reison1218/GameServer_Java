@@ -150,7 +150,8 @@ public class ExcelUtils {
 								data = Integer.parseInt(cell.toString().replace(".0", ""));
 								break;
 							case "string":
-								data = new String(cell.toString());
+								String tmp = new String(cell.toString());
+								data = tmp.toString().replace(".0", "");
 								break;
 
 							case "double":

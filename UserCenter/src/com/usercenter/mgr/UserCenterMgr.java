@@ -66,12 +66,15 @@ public class UserCenterMgr {
 	 * </pre>
 	 */
 	public static void save() {
+		int size = 0;
 		while(!userQue.isEmpty()) {
 			UserInfo userInfo = userQue.pop();
 			if(userInfo == null)
 				continue;
 			UserInfoDao.getInstance().updateUserInfo(userInfo);
+			size++;
 		}
+		Log.info("定时器:SaveUserDataTask执行完毕!update玩家size:"+size);
 	}
 	
 	/**
