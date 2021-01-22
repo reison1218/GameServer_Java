@@ -72,8 +72,8 @@ public class SeasonInfoDao {
 			String sql = "update t_season set season_id=?,last_update_time=?,next_update_time=?  where game_id=?";
 			ps = conn.prepareStatement(sql);
 			ps.setObject(1, seasonInfo.getSeason_id());
-			ps.setObject(2, seasonInfo.getLast_update_time());
-			ps.setObject(3, seasonInfo.getNext_update_time());
+			ps.setObject(2, seasonInfo.getLast_update_time_str());
+			ps.setObject(3, seasonInfo.getNext_update_time_str());
 			ps.setObject(4, seasonInfo.getGame_id());
 			result = ps.executeUpdate();
 			return result;
@@ -104,8 +104,8 @@ public class SeasonInfoDao {
 			ps = conn.prepareStatement(sql);
 			ps.setObject(1, seasonInfo.getGame_id());
 			ps.setObject(2, seasonInfo.getSeason_id());
-			ps.setObject(3, seasonInfo.getLast_update_time());
-			ps.setObject(4, seasonInfo.getNext_update_time());
+			ps.setObject(3, seasonInfo.getLast_update_time_str());
+			ps.setObject(4, seasonInfo.getNext_update_time_str());
 			result = ps.executeUpdate();
 			return result;
 		} catch (Exception e) {

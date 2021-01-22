@@ -57,8 +57,8 @@ public class SeasonMgr {
 			if (si == null) {
 				isInsert = true;
 			} else {
-				lastTime = TimeUtil.format(si.getLast_update_time());
-				nextTime = TimeUtil.format(si.getNext_update_time());
+				lastTime = TimeUtil.format(si.getLast_update_time_str());
+				nextTime = TimeUtil.format(si.getNext_update_time_str());
 				if (nowTime < lastTime.getTime() || nowTime > nextTime.getTime()) {
 					isInsert = false;
 					update = true;

@@ -32,14 +32,20 @@ public class SeasonInfo {
 	public void setSeason_id(int season_id) {
 		this.season_id = season_id;
 	}
-	public String getLast_update_time() {
+	public long getLast_update_time() {
+		return last_update_time.getTime()/1000;
+	}
+	public String getLast_update_time_str() {
 		String str = TimeUtil.getDateFormat(last_update_time);
 		return str;
 	}
 	public void setLast_update_time(Date last_update_time) {
 		this.last_update_time = last_update_time;
 	}
-	public String getNext_update_time() {
+	public long getNext_update_time() {
+		return next_update_time.getTime()/1000;
+	}
+	public String getNext_update_time_str() {
 		String str = TimeUtil.getDateFormat(next_update_time);
 		return str;
 	}
