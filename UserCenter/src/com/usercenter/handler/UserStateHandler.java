@@ -54,7 +54,7 @@ public class UserStateHandler extends AbstractHandler {
 
 				result = js.containsKey("game_id");
 				if (!result) {
-					response.setStatus(500, "no data");
+					response.setStatus(500);
 					jsObject.put("err_mess", "game_id param not find!");
 					jsObject.put("status", "fail!");
 					response.getOutputStream().write(jsObject.toJSONString().getBytes());
@@ -65,7 +65,7 @@ public class UserStateHandler extends AbstractHandler {
 				result = js.containsKey("user_id");
 
 				if (!result) {
-					response.setStatus(500, "no data");
+					response.setStatus(500);
 					jsObject.put("err_mess", "user_id param not find!");
 					jsObject.put("status", "fail!");
 					response.getOutputStream().write(jsObject.toJSONString().getBytes());
@@ -75,7 +75,7 @@ public class UserStateHandler extends AbstractHandler {
 
 				result = js.containsKey("type");
 				if (!result) {
-					response.setStatus(500, "no data");
+					response.setStatus(500);
 					jsObject.put("err_mess", "type param not find!");
 					jsObject.put("status", "fail!");
 					response.getOutputStream().write(jsObject.toJSONString().getBytes());
@@ -85,9 +85,10 @@ public class UserStateHandler extends AbstractHandler {
 
 				int userId = js.getInteger("user_id");
 				int gameId = js.getInteger("game_id");
-				String type = js.getString("type");
+				
+				boolean type = js.getBoolean("type");
 				if (gameId <= 0) {
-					response.setStatus(500, "no data");
+					response.setStatus(500);
 					jsObject.put("err_mess", "game_id is invalid!");
 					jsObject.put("status", "fail!");
 					response.getOutputStream().write(jsObject.toJSONString().getBytes());
@@ -97,22 +98,14 @@ public class UserStateHandler extends AbstractHandler {
 				// 判断是否存在这个游戏
 				result = UserCenterMgr.hasGame(gameId);
 				if (!result) {
-					response.setStatus(500, "no data");
+					response.setStatus(500);
 					jsObject.put("err_mess", "this game is not exist for game_id:" + gameId);
 					jsObject.put("status", "fail!");
 					response.getOutputStream().write(jsObject.toJSONString().getBytes());
 					Log.error("this game is not exist for game_id:" + gameId);
 					return;
 				}
-
-				if (StringUtils.isEmpty(type)) {
-					response.setStatus(500, "no data");
-					jsObject.put("err_mess", "type is not find!");
-					jsObject.put("status", "fail!");
-					response.getOutputStream().write(jsObject.toJSONString().getBytes());
-					Log.error("this game is not exist for game_id:" + gameId);
-					return;
-				}
+				
 				String value = null;
 				UserInfo userInfo = null;
 				// 校验玩家数据是否存在
@@ -129,20 +122,22 @@ public class UserStateHandler extends AbstractHandler {
 					return;
 				}
 				resultUserId = userInfo.getGame_id();
-				
-				if(type.equals("login")) {
+				if (type){
 					userInfo.setLast_login_time(TimeUtil.getSysteCurTime());
 					userInfo.setOn_line(true);
-				}else if(type.equals("off_line")) {
+				}else {
 					userInfo.setOn_line(false);
 				}
+				//更新redis数据库
+				value = JsonUtil.stringify(userInfo);
+				RedisPool.hsetWithIndex(RedisIndex.USERS,RedisKey.USERS,userInfo.getPlatform_id(), value,0);
 				//异步持久化userinfo
 				UserCenterMgr.addUserInfo(userInfo);
 			}
 
 			jsObject.put("status", "OK");
 			jsObject.put("user_id", resultUserId);
-			response.setStatus(SUCCESS, "OK");
+			response.setStatus(SUCCESS);
 			response.setHeader("Content-Type", "text/html;charset=utf-8");
 			response.setContentType("application/json");
 			response.setCharacterEncoding("utf-8");

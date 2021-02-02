@@ -60,7 +60,7 @@ public class UserIdHandler extends AbstractHandler {
 				JSONObject js = (JSONObject) JsonUtil.parse(str.trim());
 				result = js.containsKey("platform_id");
 				if(!result) {
-					response.setStatus(500, "no data");
+					response.setStatus(500);
 					jsObject.put("err_mess", "platform_id param not find!");
 					jsObject.put("status", "fail!");
 					response.getOutputStream().write(jsObject.toJSONString().getBytes());
@@ -70,7 +70,7 @@ public class UserIdHandler extends AbstractHandler {
 				
 				result = js.containsKey("game_id");
 				if(!result) {
-					response.setStatus(500, "no data");
+					response.setStatus(500);
 					jsObject.put("err_mess", "game_id param not find!");
 					jsObject.put("status", "fail!");
 					response.getOutputStream().write(jsObject.toJSONString().getBytes());
@@ -85,7 +85,7 @@ public class UserIdHandler extends AbstractHandler {
 				String phoneNo = js.getString("phone_no");
 				//校验platformId
 				if(StringUtils.isEmpty(platformId)) {
-					response.setStatus(500, "no data");
+					response.setStatus(500);
 					jsObject.put("err_mess", "platform_id is empty!");
 					jsObject.put("status", "fail!");
 					response.getOutputStream().write(jsObject.toJSONString().getBytes());
@@ -94,7 +94,7 @@ public class UserIdHandler extends AbstractHandler {
 				}
 				
 				if(StringUtils.isEmpty(registerPlatform)) {
-					response.setStatus(500, "no data");
+					response.setStatus(500);
 					jsObject.put("err_mess", "register_platform is empty!");
 					jsObject.put("status", "fail!");
 					response.getOutputStream().write(jsObject.toJSONString().getBytes());
@@ -103,7 +103,7 @@ public class UserIdHandler extends AbstractHandler {
 				}
 				
 				if(StringUtils.isEmpty(nickName)) {
-					response.setStatus(500, "no data");
+					response.setStatus(500);
 					jsObject.put("err_mess", "nick_name is empty!");
 					jsObject.put("status", "fail!");
 					response.getOutputStream().write(jsObject.toJSONString().getBytes());
@@ -112,7 +112,7 @@ public class UserIdHandler extends AbstractHandler {
 				}
 				
 				if(phoneNo == null) {
-					response.setStatus(500, "no data");
+					response.setStatus(500);
 					jsObject.put("err_mess", "phone_no is empty!");
 					jsObject.put("status", "fail!");
 					response.getOutputStream().write(jsObject.toJSONString().getBytes());
@@ -121,7 +121,7 @@ public class UserIdHandler extends AbstractHandler {
 				}
 				
 				if(gameId <=0) {
-					response.setStatus(500, "no data");
+					response.setStatus(500);
 					jsObject.put("err_mess", "game_id is invalid!");
 					jsObject.put("status", "fail!");
 					response.getOutputStream().write(jsObject.toJSONString().getBytes());
@@ -131,7 +131,7 @@ public class UserIdHandler extends AbstractHandler {
 				//判断是否存在这个游戏
 				result = UserCenterMgr.hasGame(gameId);
 				if(!result) {
-					response.setStatus(500, "no data");
+					response.setStatus(500);
 					jsObject.put("err_mess", "this game is not exist for game_id:"+gameId);
 					jsObject.put("status", "fail!");
 					response.getOutputStream().write(jsObject.toJSONString().getBytes());
@@ -168,7 +168,7 @@ public class UserIdHandler extends AbstractHandler {
 				userInfo = JsonUtil.parse(value, UserInfo.class);
 				//判断是否在线
 				if(userInfo.isOn_line()) {
-					response.setStatus(500, "this account already login!");
+					response.setStatus(500);
 					jsObject.put("err_mess", "this account already login!");
 					jsObject.put("status", "fail!");
 					response.getOutputStream().write(jsObject.toJSONString().getBytes());
@@ -179,7 +179,7 @@ public class UserIdHandler extends AbstractHandler {
 			Log.info("platformId:"+platformId);
 			jsObject.put("status", "OK");
 			jsObject.put("user_id", userInfo.getUser_id());
-			response.setStatus(SUCCESS, "OK");
+			response.setStatus(SUCCESS);
 			response.setHeader("Content-Type","text/html;charset=utf-8");
 			response.setContentType("application/json");
 			response.setCharacterEncoding("utf-8");

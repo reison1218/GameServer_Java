@@ -3,17 +3,12 @@
  */
 package com.usercenter.mgr;
 
-import java.util.Calendar;
-import java.util.Date;
 import java.util.Timer;
-
 import java.util.TimerTask;
 
 import com.utils.Log;
 import com.utils.RandomUtil;
 import com.utils.TimeUtil;
-import com.usercenter.entity.GameInfoDao;
-import com.usercenter.entity.GameInfo;
 
 /**
  * <pre>

@@ -50,7 +50,7 @@ public class ServerInfoListHandler  extends AbstractHandler {
 
 				result = js.containsKey("game_id");
 				if (!result) {
-					response.setStatus(500, "no data");
+					response.setStatus(500);
 					jsObject.put("err_mess", "game_id param not find!");
 					jsObject.put("status", "fail!");
 					response.getOutputStream().write(jsObject.toJSONString().getBytes());
@@ -61,7 +61,7 @@ public class ServerInfoListHandler  extends AbstractHandler {
 				int gameId = js.getInteger("game_id");
 				
 				if (gameId <= 0) {
-					response.setStatus(500, "no data");
+					response.setStatus(500);
 					jsObject.put("err_mess", "game_id is invalid!");
 					jsObject.put("status", "fail!");
 					response.getOutputStream().write(jsObject.toJSONString().getBytes());
@@ -71,7 +71,7 @@ public class ServerInfoListHandler  extends AbstractHandler {
 				// 判断是否存在这个游戏
 				result = UserCenterMgr.hasGame(gameId);
 				if (!result) {
-					response.setStatus(500, "no data");
+					response.setStatus(500);
 					jsObject.put("err_mess", "this game is not exist for game_id:" + gameId);
 					jsObject.put("status", "fail!");
 					response.getOutputStream().write(jsObject.toJSONString().getBytes());
@@ -86,7 +86,7 @@ public class ServerInfoListHandler  extends AbstractHandler {
 			}
 
 			jsObject.put("status", "OK");
-			response.setStatus(SUCCESS, "OK");
+			response.setStatus(SUCCESS);
 			response.setHeader("Content-Type", "text/html;charset=utf-8");
 			response.setContentType("application/json");
 			response.setCharacterEncoding("utf-8");
