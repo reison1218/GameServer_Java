@@ -69,8 +69,10 @@ public class UserCenterMgr {
 		int size = 0;
 		while(!userQue.isEmpty()) {
 			UserInfo userInfo = userQue.pop();
-			if(userInfo == null)
+			if(userInfo == null) {
+				Log.warn("userInfo is null!");
 				continue;
+			}
 			UserInfoDao.getInstance().updateUserInfo(userInfo);
 			size++;
 		}
