@@ -60,14 +60,16 @@ public class ExcelUtils {
 		List<Map<String, Object>> jsonList = null;
 		int rowIndex = 0;
 		int cellIndex = 0;
+		int continueIndex = -1;
 		Sheet sheet = null;
 		long start = 0;
 		long end = 0;
 		File f = null;
+		Cell exception_cell = null;
 		try {
 			// 如果是2007及以上版本，则使用想要的Workbook以及CellStyle
 			for (File _file : file.listFiles()) {
-				if(_file.getName().equals(".DS_Store")) {
+				if (_file.getName().equals(".DS_Store")) {
 					continue;
 				}
 				f = _file;
@@ -93,26 +95,39 @@ public class ExcelUtils {
 				String name;
 				// 遍历每一个sheet
 				for (int i = 0; i < sheetsCounts; i++) {
+					continueIndex = -1;
 					jsonList = new ArrayList<Map<String, Object>>();
 					rowIndex = 0;
 					sheet = wb.getSheetAt(i);
 					start = System.currentTimeMillis();
 					Iterator<Row> rowIter = sheet.rowIterator();
-					fileWriter = new FileWriter("/Users/tangjian/Desktop/test/" + sheet.getSheetName().trim() + ".json");
+					fileWriter = new FileWriter(
+							"/Users/tangjian/Desktop/test/" + sheet.getSheetName().trim() + ".json");
 					// 第一行缓存下来
 					Row firstRow = null;
 					Row typeRow = null;
 					while (rowIter.hasNext()) {
 						Row row = rowIter.next();
-						if(row.getCell(0)==null||StringUtils.isEmpty(row.getCell(0).toString()))
+						if (row.getCell(0) == null || StringUtils.isEmpty(row.getCell(0).toString()))
 							continue;
 						if (rowIndex > 1) {
 							jsonList.add(new HashMap<String, Object>());
 						}
-							
+
 						if (rowIndex == 0) {
 							firstRow = row;
 							rowIndex++;
+							Iterator<Cell> cellIter = row.cellIterator();
+							cellIndex = 0;
+							while (cellIter.hasNext()) {
+								Cell cell = cellIter.next();
+								name = cell.getStringCellValue();
+								if (StringUtils.isEmpty(name) && continueIndex < 0) {
+									continueIndex = cellIndex;
+									break;
+								}
+								cellIndex++;
+							}
 							continue;
 						}
 						// 第二行缓存数据类型行
@@ -131,17 +146,20 @@ public class ExcelUtils {
 						cellIndex = 0;
 						while (cellIter.hasNext()) {
 							Cell cell = cellIter.next();
+							if (continueIndex >= 0 && cellIndex >= continueIndex) {
+								continue;
+							}
+							exception_cell = cell;
 							if (StringUtils.isEmpty(cell.toString())) {
 								cellIndex++;
 								continue;
 							}
-							
-							if(typeRow.getCell(cellIndex) == null) {
+							// 如果字符串是空的，直接跳过
+							if (typeRow.getCell(cellIndex) == null) {
 								cellIndex++;
 								continue;
 							}
-							
-							
+
 							String dataType = typeRow.getCell(cellIndex).getStringCellValue();
 							JSONArray jsonArray = null;
 							Object data = null;
@@ -153,7 +171,6 @@ public class ExcelUtils {
 								String tmp = new String(cell.toString());
 								data = tmp.toString().replace(".0", "");
 								break;
-
 							case "double":
 								data = cell.getNumericCellValue();
 								break;
@@ -161,15 +178,16 @@ public class ExcelUtils {
 								data = cell.getNumericCellValue();
 								break;
 							case "int[]":
-								jsonArray = (JSONArray)JsonUtil.parse(cell.toString());
+								jsonArray = (JSONArray) JsonUtil.parse(cell.toString());
 								data = jsonArray;
 								break;
 							case "json":
-								data = JSONObject.parse(cell.toString());;
+								data = JSONObject.parse(cell.toString());
+								;
 								break;
 							}
 							name = firstRow.getCell(cellIndex).getStringCellValue();
-							if (name.endsWith("client")){
+							if (name.endsWith("client")) {
 								cellIndex++;
 								continue;
 							}
@@ -178,7 +196,7 @@ public class ExcelUtils {
 						}
 						rowIndex++;
 					}
-					
+
 					// 写json
 					byte[] bytes = JsonUtil.binaryify(jsonList);
 					String s = new String(bytes);
@@ -191,8 +209,11 @@ public class ExcelUtils {
 		} catch (Exception e) {
 			e.printStackTrace();
 			System.out.println("文件：" + f.getName() + "，sheet:" + sheet.getSheetName());
-			System.out.println("rowIndex:"+rowIndex);
-			System.out.println("cellIndex:"+cellIndex);
+			System.out.println("rowIndex:" + rowIndex);
+			System.out.println("cellIndex:" + cellIndex);
+			System.out.println("continueIndex:" + continueIndex);
+			System.out.println("exception_cell:" + exception_cell.toString());
+
 		}
 
 		System.out.println("excel2json方法结束....");
