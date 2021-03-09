@@ -65,7 +65,7 @@ public class UserCenterMgr {
 	 * 保存数据
 	 * </pre>
 	 */
-	public static void save() {
+	public static int save() {
 		int size = 0;
 		while(!userQue.isEmpty()) {
 			UserInfo userInfo = userQue.pop();
@@ -76,7 +76,15 @@ public class UserCenterMgr {
 			UserInfoDao.getInstance().updateUserInfo(userInfo);
 			size++;
 		}
-		Log.info("定时器:SaveUserDataTask执行完毕!update玩家size:"+size);
+		return size;
+	}
+	
+	/**
+	 * 停服
+	 */
+	public static void stop() {
+		int size = save();
+		Log.info("停服执行完毕!save玩家size:"+size);
 	}
 	
 	/**

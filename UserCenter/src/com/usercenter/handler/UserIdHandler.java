@@ -34,7 +34,6 @@ public class UserIdHandler extends AbstractHandler {
 	public void handle(String target, Request baseRequest, HttpServletRequest request, HttpServletResponse response)
 			throws IOException, ServletException {
 		if (!"/center/user_id".equals(target)) {
-			Log.info("target!=/center/user_id");
 			return;
 		}
 		String platformId = null;

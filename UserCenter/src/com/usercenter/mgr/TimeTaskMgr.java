@@ -122,7 +122,8 @@ class SaveUserDataTask extends Task {
 		if (TimeUtil.during0ResetTime()) {
 			return;
 		}
-		UserCenterMgr.save();
+		int size = UserCenterMgr.save();
+		Log.info("定时器:SaveUserDataTask执行完毕!save玩家size:"+size);
 	}
 
 }

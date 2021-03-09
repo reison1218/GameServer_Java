@@ -30,7 +30,6 @@ public class UserStateHandler extends AbstractHandler {
 	public void handle(String target, Request baseRequest, HttpServletRequest request, HttpServletResponse response)
 			throws IOException, ServletException {
 		if (!"/center/user_state".equals(target)) {
-			Log.info("target!=/center/user_state");
 			return;
 		}
 		Log.info("用户中心收得到状态请求，查找用户id，信息:" + request);

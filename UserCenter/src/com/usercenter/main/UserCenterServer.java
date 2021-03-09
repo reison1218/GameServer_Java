@@ -12,6 +12,7 @@ import com.usercenter.base.config.ConfigKey;
 import com.usercenter.base.db.HikariDBPool;
 import com.usercenter.base.executor.ExecutorMgr;
 import com.usercenter.handler.ServerInfoListHandler;
+import com.usercenter.handler.StopHandler;
 import com.usercenter.handler.UserIdHandler;
 import com.usercenter.handler.UserStateHandler;
 import com.usercenter.mgr.SeasonMgr;
@@ -84,7 +85,7 @@ public class UserCenterServer {
 			rs.setConnectors(new Connector[] { connector });
 			HandlerList handlers = new HandlerList();
 			handlers.setHandlers(new Handler[] { new UserIdHandler(), new ServerInfoListHandler(),
-					new UserStateHandler(), new DefaultHandler() });
+					new UserStateHandler(), new StopHandler(),new DefaultHandler()});
 			rs.setHandler(handlers);
 			// 启动服务器
 			rs.start();
