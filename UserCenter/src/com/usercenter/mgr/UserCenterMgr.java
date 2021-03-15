@@ -68,7 +68,7 @@ public class UserCenterMgr {
 	public static int save() {
 		int size = 0;
 		while(!userQue.isEmpty()) {
-			UserInfo userInfo = userQue.pop();
+			UserInfo userInfo = userQue.pollLast();
 			if(userInfo == null) {
 				Log.warn("userInfo is null!");
 				continue;
