@@ -99,6 +99,9 @@ public class ExcelUtils {
 					jsonList = new ArrayList<Map<String, Object>>();
 					rowIndex = 0;
 					sheet = wb.getSheetAt(i);
+					if(sheet.getSheetName().contains("_")) {
+						continue;
+					}
 					start = System.currentTimeMillis();
 					Iterator<Row> rowIter = sheet.rowIterator();
 					fileWriter = new FileWriter(
