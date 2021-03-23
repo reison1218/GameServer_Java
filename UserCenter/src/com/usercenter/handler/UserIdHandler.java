@@ -25,6 +25,7 @@ import com.utils.StringUtils;
 import com.utils.TimeUtil;
 
 public class UserIdHandler extends AbstractHandler {
+	
 	/**成功的状态码**/
 	public static int SUCCESS = 200;
 	/**一天的秒数**/
@@ -141,9 +142,22 @@ public class UserIdHandler extends AbstractHandler {
 				//校验玩家数据是否存在
 				String value = RedisPool.hgetWithIndex(RedisIndex.USERS,RedisKey.USERS, platformId);
 				if(StringUtils.isEmpty(value)) {
+					String nickNameLowerCase = nickName.toLowerCase();
+					//判断名字是否重复
+					String name_2_uid = RedisPool.hgetWithIndex(RedisIndex.USERS,RedisKey.NAME_2_UID, nickNameLowerCase);
+					//如果有名字了，不允许叫这个名字
+					if(StringUtils.isEmpty(name_2_uid)) {
+						response.setStatus(500);
+						jsObject.put("err_mess", "nick_name is repeated!");
+						jsObject.put("status", "fail!");
+						response.getOutputStream().write(jsObject.toJSONString().getBytes());
+						Log.error("game_id is invalid!");
+						return;
+					}
 					//代表新号,创建新号
 					AtomicInteger userId = UserCenterMgr.getMaxUserId(gameId,true);
 					resultUserId = userId.incrementAndGet();
+					String ruId = Integer.toString(resultUserId);
 					userInfo = new UserInfo();
 					Date date = TimeUtil.getSysteCurTime();
 					userInfo.setCreate_time(date);
@@ -156,14 +170,18 @@ public class UserIdHandler extends AbstractHandler {
 					userInfo.setRegister_platform(registerPlatform);
 					userInfo.setLast_login_time(date);
 					userInfo.setOn_line(false);
+					//异步保存玩家账号数据到db
 					ExecutorMgr.getOrderExecutor().enqueue(new SaveUserInfoAction(null, userInfo));
+					//序列化成json
 					value = JsonUtil.stringify(userInfo);
-					//int deleteTime = DAY_SEC*7;;
+					//持久化玩家数据
 					RedisPool.hsetWithIndex(RedisIndex.USERS,RedisKey.USERS,platformId, value,0);
-					String ruId = Integer.toString(resultUserId);
+					//持久化玩家id对应平台id
 					RedisPool.hsetWithIndex(RedisIndex.USERS,RedisKey.UID_2_PID, ruId, platformId,0);
+					//持久化名字对应玩家id
+					RedisPool.hsetWithIndex(RedisIndex.USERS,RedisKey.NAME_2_UID, nickNameLowerCase, ruId,0);
 				}
-				
+				//反序列化成UserInfo对象
 				userInfo = JsonUtil.parse(value, UserInfo.class);
 				//判断是否在线
 				if(userInfo.isOn_line()) {
@@ -175,6 +193,7 @@ public class UserIdHandler extends AbstractHandler {
 					return;
 				}
 			}
+			//记录日志已经返回客户端消息
 			Log.info("platformId:"+platformId);
 			jsObject.put("status", "OK");
 			jsObject.put("user_id", userInfo.getUser_id());
