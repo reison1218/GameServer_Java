@@ -56,6 +56,7 @@ public class SeasonMgr {
 			SeasonInfo si = seasonMap.get(gameId);
 			if (si == null) {
 				isInsert = true;
+
 			} else {
 				lastTime = TimeUtil.format(si.getLast_update_time_str());
 				nextTime = TimeUtil.format(si.getNext_update_time_str());
@@ -71,7 +72,8 @@ public class SeasonMgr {
 			}
 
 			if (isInsert) {
-				seasonMap.put(gameId, new SeasonInfo());
+				si = new SeasonInfo();
+				seasonMap.put(gameId, si);
 			}
 			si = seasonMap.get(gameId);
 			if (si.getSeason_id() == 0) {
@@ -85,6 +87,10 @@ public class SeasonMgr {
 
 			si.setLast_update_time(new Date());
 			si.setNext_update_time(getNextUpdateTime());
+			//新增或者更新轮次自增1
+			if(isInsert||update) {
+				si.addRound();
+			}
 			// 更新到redis
 			RedisPool.hsetWithIndex(RedisIndex.GAME_SEASON, RedisKey.GAME_SEASON, String.valueOf(si.getGame_id()),
 					JsonUtil.stringify(si), 0);
@@ -121,6 +127,7 @@ public class SeasonMgr {
 			si.setLast_update_time(now);
 			si.setNext_update_time(next_update_time);
 			si.setSeason_id(nextId);
+			si.addRound();
 			String jsonStr = JsonUtil.stringify(si);
 			// 持久化到redis
 			RedisPool.hsetWithIndex(RedisIndex.GAME_SEASON, RedisKey.GAME_SEASON, String.valueOf(si.getGame_id()),
@@ -128,7 +135,6 @@ public class SeasonMgr {
 			// 持久化到数据库
 			SeasonInfoDao.getInstance().updateSeasonInfo(si);
 			// 通知所有游戏服务器更新赛季信息
-
 			GameInfo gi = UserCenterMgr.getGameInfo(gameId);
 			if (gi == null) {
 				Log.warn("could not find GameInfo,gameId:" + gameId);
@@ -138,6 +144,7 @@ public class SeasonMgr {
 			sb = new StringBuffer();
 			sb.append(gi.getCenter_http());
 			map.put("season_id", si.getSeason_id());
+			map.put("round", si.getRound());
 			map.put("next_update_time", next_update_time.getTime());
 			String res = HttpUtil.doPost(sb.toString(), map, true);
 			System.out.println(res);
@@ -155,7 +162,7 @@ public class SeasonMgr {
 		calendar.set(year, month, day, 0, 0, 0);
 		return calendar.getTime();
 	}
-	
+
 	public static void main(String[] aa) {
 		String str = "2021-01-25 00:00:00";
 		Date date = TimeUtil.format(str);
@@ -163,7 +170,7 @@ public class SeasonMgr {
 		System.out.println(date.getTime());
 		System.out.println(date.getTimezoneOffset());
 		System.out.println(TimeUtil.getDateFormat(date));
-		
+
 		System.out.println(System.currentTimeMillis());
 	}
 }

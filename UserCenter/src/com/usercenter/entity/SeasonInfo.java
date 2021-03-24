@@ -1,7 +1,9 @@
 package com.usercenter.entity;
 
 import java.util.Date;
+import java.util.Map;
 
+import com.usercenter.mgr.UserCenterMgr;
 import com.utils.TimeUtil;
 
 /**
@@ -15,6 +17,8 @@ public class SeasonInfo {
 	private int game_id;
 	/** 赛季id **/
 	private int season_id;
+	/**轮次**/
+	private int round;
 	/** 上次更新赛季时间 **/
 	private Date last_update_time;
 	/** 上次更新赛季时间 **/
@@ -52,7 +56,19 @@ public class SeasonInfo {
 	public void setNext_update_time(Date next_update_time) {
 		this.next_update_time = next_update_time;
 	}
+	public int getRound() {		
+		return round;
+	}
+	public void setRound(int round) {
+		this.round = round;
+	}
 	
-
-	
+	public int addRound() {
+		Map<Integer, GameInfo> map = UserCenterMgr.getGameInfos();
+		GameInfo gi = map.get(101);
+		if(gi!=null&& gi.getDefault_season() == this.season_id) {
+			this.round+=1;	
+		}
+		return this.round;
+	}
 }

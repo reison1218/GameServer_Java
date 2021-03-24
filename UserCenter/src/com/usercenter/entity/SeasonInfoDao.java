@@ -34,11 +34,13 @@ public class SeasonInfoDao {
 			while (rs.next()) {
 				int gameId = rs.getInt("game_id");
 				int seasonId = rs.getInt("season_id");
+				int round = rs.getInt("round");
 				Date lastUpdateTime = TimeUtil.format(rs.getString("last_update_time"));
 				Date nextUpdateTime = TimeUtil.format(rs.getString("next_update_time"));
 				SeasonInfo si = new SeasonInfo();
 				si.setGame_id(gameId);
 				si.setSeason_id(seasonId);
+				si.setRound(round);
 				si.setLast_update_time(lastUpdateTime);
 				si.setNext_update_time(nextUpdateTime);
 				map.put(si.getGame_id(), si);
@@ -69,12 +71,13 @@ public class SeasonInfoDao {
 		PreparedStatement ps = null;
 		int result = 0;
 		try {
-			String sql = "update t_season set season_id=?,last_update_time=?,next_update_time=?  where game_id=?";
+			String sql = "update t_season set season_id=?,round=?,last_update_time=?,next_update_time=?  where game_id=?";
 			ps = conn.prepareStatement(sql);
 			ps.setObject(1, seasonInfo.getSeason_id());
-			ps.setObject(2, seasonInfo.getLast_update_time_str());
-			ps.setObject(3, seasonInfo.getNext_update_time_str());
-			ps.setObject(4, seasonInfo.getGame_id());
+			ps.setObject(2, seasonInfo.getRound());
+			ps.setObject(3, seasonInfo.getLast_update_time_str());
+			ps.setObject(4, seasonInfo.getNext_update_time_str());
+			ps.setObject(5, seasonInfo.getGame_id());
 			result = ps.executeUpdate();
 			return result;
 		} catch (Exception e) {
@@ -100,12 +103,13 @@ public class SeasonInfoDao {
 		PreparedStatement ps = null;
 		int result = 0;
 		try {
-			String sql = "insert into t_season(game_id,season_id,last_update_time,next_update_time) values(?,?,?,?)";
+			String sql = "insert into t_season(game_id,season_id,round,last_update_time,next_update_time) values(?,?,?,?,?)";
 			ps = conn.prepareStatement(sql);
 			ps.setObject(1, seasonInfo.getGame_id());
 			ps.setObject(2, seasonInfo.getSeason_id());
-			ps.setObject(3, seasonInfo.getLast_update_time_str());
-			ps.setObject(4, seasonInfo.getNext_update_time_str());
+			ps.setObject(3, seasonInfo.getRound());
+			ps.setObject(4, seasonInfo.getLast_update_time_str());
+			ps.setObject(5, seasonInfo.getNext_update_time_str());
 			result = ps.executeUpdate();
 			return result;
 		} catch (Exception e) {
