@@ -147,7 +147,7 @@ public class UserIdHandler extends AbstractHandler {
 					String name_2_uid = RedisPool.hgetWithIndex(RedisIndex.USERS, RedisKey.NAME_2_UID,
 							nickNameLowerCase);
 					// 如果有名字了，不允许叫这个名字
-					if (StringUtils.isEmpty(name_2_uid)) {
+					if (!StringUtils.isEmpty(name_2_uid)) {
 						response.setStatus(500);
 						jsObject.put("err_mess", "nick_name is repeated!");
 						jsObject.put("status", "fail!");
