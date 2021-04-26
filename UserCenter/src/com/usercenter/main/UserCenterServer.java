@@ -20,6 +20,7 @@ import com.usercenter.mgr.TimeTaskMgr;
 import com.usercenter.mgr.UserCenterMgr;
 import com.usercenter.redis.RedisPool;
 import com.usercenter.template.mgr.TemplateMgr;
+import com.utils.HttpUtil;
 import com.utils.Log;
 
 /**

@@ -152,7 +152,7 @@ public class UserIdHandler extends AbstractHandler {
 						jsObject.put("err_mess", "nick_name is repeated!");
 						jsObject.put("status", "fail!");
 						response.getOutputStream().write(jsObject.toJSONString().getBytes());
-						Log.error("game_id is invalid!");
+						Log.error("nick_name is repeated!");
 						return;
 					}
 					// 代表新号,创建新号
