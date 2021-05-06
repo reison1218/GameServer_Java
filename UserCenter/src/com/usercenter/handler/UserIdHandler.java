@@ -19,6 +19,7 @@ import com.usercenter.mgr.UserCenterMgr;
 import com.usercenter.redis.RedisIndex;
 import com.usercenter.redis.RedisKey;
 import com.usercenter.redis.RedisPool;
+import com.utils.HttpUtil;
 import com.utils.JsonUtil;
 import com.utils.Log;
 import com.utils.StringUtils;
@@ -37,7 +38,6 @@ public class UserIdHandler extends AbstractHandler {
 		if (!"/center/user_id".equals(target)) {
 			return;
 		}
-		String platformId = null;
 		Log.info("用户中心收得到登陆请求，查找用户id，信息:" + request);
 		JSONObject jsObject = new JSONObject();
 		int resultUserId = 0;
@@ -52,12 +52,16 @@ public class UserIdHandler extends AbstractHandler {
 					Log.error("参数为null!");
 					return;
 				}
-				platformId = request.getParameter("platform_id");
 			} else {
 				byte[] bytes = new byte[512];
 				request.getInputStream().read(bytes);
 				String str = new String(bytes);
 				JSONObject js = (JSONObject) JsonUtil.parse(str.trim());
+				String platformId;
+				String registerPlatform;
+				String nickName;
+				String phoneNo;
+				int gameId;
 				result = js.containsKey("platform_id");
 				if (!result) {
 					response.setStatus(500);
@@ -79,10 +83,10 @@ public class UserIdHandler extends AbstractHandler {
 				}
 
 				platformId = js.getString("platform_id");
-				int gameId = js.getInteger("game_id");
-				String registerPlatform = js.getString("register_platform");
-				String nickName = js.getString("nick_name");
-				String phoneNo = js.getString("phone_no");
+				gameId = js.getInteger("game_id");
+				registerPlatform = js.getString("register_platform");
+				nickName = js.getString("nick_name");
+				phoneNo = js.getString("phone_no");
 				// 校验platformId
 				if (StringUtils.isEmpty(platformId)) {
 					response.setStatus(500);
@@ -193,9 +197,9 @@ public class UserIdHandler extends AbstractHandler {
 					Log.error("repeat login for pid:" + platformId);
 					return;
 				}
+				// 记录日志已经返回客户端消息
+				Log.info("platformId:" + platformId);
 			}
-			// 记录日志已经返回客户端消息
-			Log.info("platformId:" + platformId);
 			jsObject.put("status", "OK");
 			jsObject.put("user_id", userInfo.getUser_id());
 			response.setStatus(SUCCESS);

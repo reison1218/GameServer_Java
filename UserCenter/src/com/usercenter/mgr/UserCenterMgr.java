@@ -13,6 +13,7 @@ import com.usercenter.entity.ServerInfo;
 import com.usercenter.entity.ServerInfoDao;
 import com.usercenter.entity.UserInfo;
 import com.usercenter.entity.UserInfoDao;
+import com.utils.HttpUtil;
 import com.utils.Log;
 
 /**
