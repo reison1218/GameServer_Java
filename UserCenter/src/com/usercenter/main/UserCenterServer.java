@@ -15,6 +15,7 @@ import com.usercenter.handler.ServerInfoListHandler;
 import com.usercenter.handler.StopHandler;
 import com.usercenter.handler.UserIdHandler;
 import com.usercenter.handler.UserStateHandler;
+import com.usercenter.mgr.AuthenticateMgr;
 import com.usercenter.mgr.SeasonMgr;
 import com.usercenter.mgr.TimeTaskMgr;
 import com.usercenter.mgr.UserCenterMgr;
@@ -78,6 +79,10 @@ public class UserCenterServer {
 		if (!SeasonMgr.init()) {
 			return false;
 		}
+//		// 验证管理器初始化
+//		if (!AuthenticateMgr.init()) {
+//			return false;
+//		}
 		// 初始化jetty
 		try {
 			ServerConnector connector = new ServerConnector(rs);
@@ -86,7 +91,7 @@ public class UserCenterServer {
 			rs.setConnectors(new Connector[] { connector });
 			HandlerList handlers = new HandlerList();
 			handlers.setHandlers(new Handler[] { new UserIdHandler(), new ServerInfoListHandler(),
-					new UserStateHandler(), new StopHandler(),new DefaultHandler()});
+					new UserStateHandler(), new StopHandler(), new DefaultHandler() });
 			rs.setHandler(handlers);
 			// 启动服务器
 			rs.start();

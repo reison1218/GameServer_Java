@@ -30,6 +30,14 @@ public class ConfigKey {
 	public final static String USER = "user";
 	public final static String DB_DATA = "db_data";
 	public final static String DB_LOG = "db_log";
+	
+	// ---------------------steam sdk配置--------------------------------------------//
+	public final static String STEAM_CONF = "steam";
+	public final static String WEB_API_KEY = "web_api_key";
+	public final static String URL = "url";
+	public final static String DEMO_APP_ID = "demo_app_id";
+	public final static String PLAYER_TEST_APP_ID = "player_test_app_id";
+	public final static String APP_ID = "app_id";
 
 	// ---------------------其他配置（暂时用不上）--------------------------------------------//
 	public final static String REDIS_CONF = "redis";
