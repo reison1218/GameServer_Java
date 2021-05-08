@@ -39,7 +39,8 @@ public class ConfigKey {
 	public final static String PLAYER_TEST_APP_ID = "player_test_app_id";
 	public final static String APP_ID = "app_id";
 
-	// ---------------------其他配置（暂时用不上）--------------------------------------------//
+	// ---------------------其他配置（有些暂时用不上）--------------------------------------------//
+	public final static String DEBUG = "debug";
 	public final static String REDIS_CONF = "redis";
 	public final static String WEB_SERVER = "web_server";
 	public final static String SERVER_ID = "server_id";// 本游戏服的唯一Id

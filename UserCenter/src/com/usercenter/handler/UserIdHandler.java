@@ -13,13 +13,16 @@ import org.eclipse.jetty.server.handler.AbstractHandler;
 
 import com.alibaba.fastjson.JSONObject;
 import com.usercenter.action.SaveUserInfoAction;
+import com.usercenter.authenticate.SteamAuthenticate;
+import com.usercenter.base.config.Config;
+import com.usercenter.base.config.ConfigKey;
 import com.usercenter.base.executor.ExecutorMgr;
 import com.usercenter.entity.UserInfo;
+import com.usercenter.mgr.AuthenticateMgr;
 import com.usercenter.mgr.UserCenterMgr;
 import com.usercenter.redis.RedisIndex;
 import com.usercenter.redis.RedisKey;
 import com.usercenter.redis.RedisPool;
-import com.utils.HttpUtil;
 import com.utils.JsonUtil;
 import com.utils.Log;
 import com.utils.StringUtils;
@@ -57,46 +60,23 @@ public class UserIdHandler extends AbstractHandler {
 				request.getInputStream().read(bytes);
 				String str = new String(bytes);
 				JSONObject js = (JSONObject) JsonUtil.parse(str.trim());
-				String platformId;
+				
 				String registerPlatform;
+				String platformValue;
 				String nickName;
 				String phoneNo;
 				int gameId;
-				result = js.containsKey("platform_id");
-				if (!result) {
-					response.setStatus(500);
-					jsObject.put("err_mess", "platform_id param not find!");
-					jsObject.put("status", "fail!");
-					response.getOutputStream().write(jsObject.toJSONString().getBytes());
-					Log.error("platform_id param not find!");
-					return;
-				}
-
-				result = js.containsKey("game_id");
-				if (!result) {
-					response.setStatus(500);
-					jsObject.put("err_mess", "game_id param not find!");
-					jsObject.put("status", "fail!");
-					response.getOutputStream().write(jsObject.toJSONString().getBytes());
-					Log.error("game_id param not find!");
-					return;
-				}
-
-				platformId = js.getString("platform_id");
-				gameId = js.getInteger("game_id");
+				String platformId;
+				
+				boolean isDebug = Config.getConfig(ConfigKey.DEBUG);
+				
 				registerPlatform = js.getString("register_platform");
+				platformValue = js.getString("platform_value");
+				gameId = js.getInteger("game_id");
 				nickName = js.getString("nick_name");
 				phoneNo = js.getString("phone_no");
-				// 校验platformId
-				if (StringUtils.isEmpty(platformId)) {
-					response.setStatus(500);
-					jsObject.put("err_mess", "platform_id is empty!");
-					jsObject.put("status", "fail!");
-					response.getOutputStream().write(jsObject.toJSONString().getBytes());
-					Log.error("platform_id is empty!");
-					return;
-				}
-
+				
+				//校验注册平台
 				if (StringUtils.isEmpty(registerPlatform)) {
 					response.setStatus(500);
 					jsObject.put("err_mess", "register_platform is empty!");
@@ -105,6 +85,51 @@ public class UserIdHandler extends AbstractHandler {
 					Log.error("register_platform is empty!");
 					return;
 				}
+				
+				// 校验平台参数
+				if (StringUtils.isEmpty(platformValue)) {
+					response.setStatus(500);
+					jsObject.put("err_mess", "platformValue is empty!");
+					jsObject.put("status", "fail!");
+					response.getOutputStream().write(jsObject.toJSONString().getBytes());
+					Log.error("platform_id is empty!");
+					return;
+				}
+				
+				
+				if(registerPlatform.equals(ConfigKey.STEAM_CONF)) {
+					SteamAuthenticate steamAuth = (SteamAuthenticate)AuthenticateMgr.getAuthenticate(ConfigKey.STEAM_CONF);
+					if(steamAuth == null) {
+						String errStr = StringUtils.format("register_platform's Authenticate is empty!register_platform:{0}", registerPlatform);
+						response.setStatus(500);
+						jsObject.put("err_mess", errStr);
+						jsObject.put("status", "fail!");
+						response.getOutputStream().write(jsObject.toJSONString().getBytes());
+						Log.error(errStr);
+						return;
+					}
+					String ticket = platformValue;
+					String res = steamAuth.authenticateUserTicket(ticket);
+					//拿到steamid
+					long steamId = 0;
+					
+					//校验玩家是有拥有此appid
+					res = steamAuth.checkAppOwnerShip(steamId);
+					int appIdTemp = 0;
+					int appId = Config.getConfig(ConfigKey.APP_ID);
+					
+					if (appIdTemp!=appId){
+						String errStr = "this player do not have this app!Authenticate is empty!register_platform:{0}";
+						response.setStatus(500);
+						jsObject.put("err_mess", errStr);
+						jsObject.put("status", "fail!");
+						response.getOutputStream().write(jsObject.toJSONString().getBytes());
+						Log.error(errStr);
+						return;
+					}
+					platformId = steamId+"";
+				}
+				
 
 				if (StringUtils.isEmpty(nickName)) {
 					response.setStatus(500);

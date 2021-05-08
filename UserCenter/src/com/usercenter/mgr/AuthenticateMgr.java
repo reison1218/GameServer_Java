@@ -26,4 +26,8 @@ public class AuthenticateMgr {
 	}
 	
 	
+	public static Authenticate getAuthenticate(String key) {
+		return authMap.get(key);
+	}
+	
 }

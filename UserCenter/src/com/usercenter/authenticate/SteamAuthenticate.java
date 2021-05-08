@@ -40,7 +40,7 @@ public class SteamAuthenticate extends Authenticate {
 	 * @param steamId
 	 * @return
 	 */
-	public String checkAppOwnerShip(int steamId) {
+	public String checkAppOwnerShip(long steamId) {
 		CheckAppOwnerShipAction auta = (CheckAppOwnerShipAction) this.authActionMap.get(CheckAppOwnershipMethodGet);
 		auta.steamId = steamId;
 		String res = auta.execute();
@@ -53,7 +53,7 @@ public class SteamAuthenticate extends Authenticate {
 		webApiKey = Config.getConfig(ConfigKey.STEAM_CONF, ConfigKey.WEB_API_KEY);
 		this.authActionMap.put(AuthenticateUserTicketMethodGet,
 				new AuthenticateUserTicketAction(appId, AuthenticateUserTicketMethodGet, webApiKey, null));
-		this.authActionMap.put(AuthenticateUserTicketMethodGet,
+		this.authActionMap.put(CheckAppOwnershipMethodGet,
 				new CheckAppOwnerShipAction(appId, CheckAppOwnershipMethodGet, webApiKey, 0));
 	}
 
