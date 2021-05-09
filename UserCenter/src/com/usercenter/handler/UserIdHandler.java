@@ -2,6 +2,8 @@ package com.usercenter.handler;
 
 import java.io.IOException;
 import java.util.Date;
+import java.util.HashMap;
+import java.util.Map;
 import java.util.concurrent.atomic.AtomicInteger;
 
 import javax.servlet.ServletException;
@@ -12,6 +14,7 @@ import org.eclipse.jetty.server.Request;
 import org.eclipse.jetty.server.handler.AbstractHandler;
 
 import com.alibaba.fastjson.JSONObject;
+import com.sun.tools.javac.tree.JCTree.LetExpr;
 import com.usercenter.action.SaveUserInfoAction;
 import com.usercenter.authenticate.SteamAuthenticate;
 import com.usercenter.base.config.Config;
@@ -60,118 +63,50 @@ public class UserIdHandler extends AbstractHandler {
 				request.getInputStream().read(bytes);
 				String str = new String(bytes);
 				JSONObject js = (JSONObject) JsonUtil.parse(str.trim());
-				
+
 				String registerPlatform;
 				String platformValue;
 				String nickName;
 				String phoneNo;
 				int gameId;
 				String platformId;
-				
+
 				boolean isDebug = Config.getConfig(ConfigKey.DEBUG);
-				
+
 				registerPlatform = js.getString("register_platform");
 				platformValue = js.getString("platform_value");
 				gameId = js.getInteger("game_id");
 				nickName = js.getString("nick_name");
 				phoneNo = js.getString("phone_no");
-				
-				//校验注册平台
-				if (StringUtils.isEmpty(registerPlatform)) {
-					response.setStatus(500);
-					jsObject.put("err_mess", "register_platform is empty!");
+
+				//校验参数
+				Result paramsResult=checkParams(gameId,registerPlatform,platformValue,nickName,phoneNo);
+				if(paramsResult.httpCode!=200) {
+					response.setStatus(paramsResult.httpCode);
+					jsObject.put("err_mess", paramsResult.errString);
 					jsObject.put("status", "fail!");
 					response.getOutputStream().write(jsObject.toJSONString().getBytes());
-					Log.error("register_platform is empty!");
+					Log.error(paramsResult.errString);
 					return;
 				}
-				
-				// 校验平台参数
-				if (StringUtils.isEmpty(platformValue)) {
-					response.setStatus(500);
-					jsObject.put("err_mess", "platformValue is empty!");
-					jsObject.put("status", "fail!");
-					response.getOutputStream().write(jsObject.toJSONString().getBytes());
-					Log.error("platform_id is empty!");
-					return;
-				}
-				
-				
-				if(registerPlatform.equals(ConfigKey.STEAM_CONF)) {
-					SteamAuthenticate steamAuth = (SteamAuthenticate)AuthenticateMgr.getAuthenticate(ConfigKey.STEAM_CONF);
-					if(steamAuth == null) {
-						String errStr = StringUtils.format("register_platform's Authenticate is empty!register_platform:{0}", registerPlatform);
-						response.setStatus(500);
-						jsObject.put("err_mess", errStr);
+				// 如果是steam
+				if (registerPlatform.equals(ConfigKey.STEAM_CONF)) {
+
+					Result authResult = authenticateSteam(registerPlatform, platformValue);
+					if (authResult.httpCode != 200) {
+						response.setStatus(authResult.httpCode);
+						jsObject.put("err_mess", authResult.errString);
 						jsObject.put("status", "fail!");
 						response.getOutputStream().write(jsObject.toJSONString().getBytes());
-						Log.error(errStr);
+						Log.error(authResult.errString);
 						return;
 					}
-					String ticket = platformValue;
-					String res = steamAuth.authenticateUserTicket(ticket);
-					//拿到steamid
-					long steamId = 0;
-					
-					//校验玩家是有拥有此appid
-					res = steamAuth.checkAppOwnerShip(steamId);
-					int appIdTemp = 0;
-					int appId = Config.getConfig(ConfigKey.APP_ID);
-					
-					if (appIdTemp!=appId){
-						String errStr = "this player do not have this app!Authenticate is empty!register_platform:{0}";
-						response.setStatus(500);
-						jsObject.put("err_mess", errStr);
-						jsObject.put("status", "fail!");
-						response.getOutputStream().write(jsObject.toJSONString().getBytes());
-						Log.error(errStr);
-						return;
-					}
-					platformId = steamId+"";
-				}
-				
-
-				if (StringUtils.isEmpty(nickName)) {
-					response.setStatus(500);
-					jsObject.put("err_mess", "nick_name is empty!");
-					jsObject.put("status", "fail!");
-					response.getOutputStream().write(jsObject.toJSONString().getBytes());
-					Log.error("nick_name is empty!");
-					return;
 				}
 
-				if (phoneNo == null) {
-					response.setStatus(500);
-					jsObject.put("err_mess", "phone_no is empty!");
-					jsObject.put("status", "fail!");
-					response.getOutputStream().write(jsObject.toJSONString().getBytes());
-					Log.error("phone_no is empty!");
-					return;
-				}
-
-				if (gameId <= 0) {
-					response.setStatus(500);
-					jsObject.put("err_mess", "game_id is invalid!");
-					jsObject.put("status", "fail!");
-					response.getOutputStream().write(jsObject.toJSONString().getBytes());
-					Log.error("game_id is invalid!");
-					return;
-				}
-				// 判断是否存在这个游戏
-				result = UserCenterMgr.hasGame(gameId);
-				if (!result) {
-					response.setStatus(500);
-					jsObject.put("err_mess", "this game is not exist for game_id:" + gameId);
-					jsObject.put("status", "fail!");
-					response.getOutputStream().write(jsObject.toJSONString().getBytes());
-					Log.error("this game is not exist for game_id:" + gameId);
-					return;
-				}
-
+				String nickNameLowerCase = nickName.toLowerCase();
 				// 校验玩家数据是否存在
 				String value = RedisPool.hgetWithIndex(RedisIndex.USERS, RedisKey.USERS, platformId);
 				if (StringUtils.isEmpty(value)) {
-					String nickNameLowerCase = nickName.toLowerCase();
 					// 判断名字是否重复
 					String name_2_uid = RedisPool.hgetWithIndex(RedisIndex.USERS, RedisKey.NAME_2_UID,
 							nickNameLowerCase);
@@ -222,6 +157,31 @@ public class UserIdHandler extends AbstractHandler {
 					Log.error("repeat login for pid:" + platformId);
 					return;
 				}
+				// 如果名字不一样，就改名字
+				if (!userInfo.getNick_name().toLowerCase().equals(nickName)) {
+
+					// 判断名字是否重复
+					String name_2_uid = RedisPool.hgetWithIndex(RedisIndex.USERS, RedisKey.NAME_2_UID,
+							nickNameLowerCase);
+					// 如果有名字了，不允许叫这个名字
+					if (!StringUtils.isEmpty(name_2_uid)) {
+						response.setStatus(500);
+						jsObject.put("err_mess", "nick_name is repeated!");
+						jsObject.put("status", "fail!");
+						response.getOutputStream().write(jsObject.toJSONString().getBytes());
+						Log.error("nick_name is repeated!");
+						return;
+					}
+					userInfo.setNick_name(nickName);
+					// 序列化成json
+					value = JsonUtil.stringify(userInfo);
+					// 持久化玩家数据
+					RedisPool.hsetWithIndex(RedisIndex.USERS, RedisKey.USERS, platformId, value, 0);
+					// 持久化名字对应玩家id
+					RedisPool.hsetWithIndex(RedisIndex.USERS, RedisKey.NAME_2_UID, nickNameLowerCase,
+							userInfo.getUser_id(), 0);
+				}
+
 				// 记录日志已经返回客户端消息
 				Log.info("platformId:" + platformId);
 			}
@@ -238,5 +198,93 @@ public class UserIdHandler extends AbstractHandler {
 			request.getInputStream().close();
 			response.getOutputStream().close();
 		}
+	}
+
+	/**
+	 * 验证steam玩家信息
+	 * 
+	 * @param registerPlatform
+	 * @param platformValue
+	 * @return
+	 */
+	private Result authenticateSteam(String registerPlatform, String platformValue) {
+		Result result = new Result();
+		SteamAuthenticate steamAuth = (SteamAuthenticate) AuthenticateMgr.getAuthenticate(ConfigKey.STEAM_CONF);
+		if (steamAuth == null) {
+			String errStr = StringUtils.format("register_platform's Authenticate is empty!register_platform:{0}",
+					registerPlatform);
+			result.errString = errStr;
+			result.httpCode = 500;
+			return result;
+		}
+		String ticket = platformValue;
+		String res = steamAuth.authenticateUserTicket(ticket);
+		// 拿到steamid
+		long steamId = 0;
+
+		// 校验玩家是有拥有此appid
+		res = steamAuth.checkAppOwnerShip(steamId);
+		int appIdTemp = 0;
+		int appId = Config.getConfig(ConfigKey.APP_ID);
+
+		if (appIdTemp != appId) {
+			String errStr = "this player do not have this app!Authenticate is empty!register_platform:{0}";
+			result.errString = errStr;
+			result.httpCode = 500;
+			return result;
+		}
+		result.value = steamId + "";
+		result.httpCode = 200;
+		return result;
+	}
+
+	private Result checkParams(int gameId, String registerPlatform, String platformValue, String nickName, String phoneNo) {
+		Result result = new Result();
+		// 校验注册平台
+		if (StringUtils.isEmpty(registerPlatform)) {
+			result.httpCode=500;
+			result.errString="register_platform is empty!";
+			return result;
+		}
+
+		// 校验平台参数
+		if (StringUtils.isEmpty(platformValue)) {
+			result.httpCode=500;
+			result.errString="platformValue is empty!";
+			return result;
+		}
+
+		if (StringUtils.isEmpty(nickName)) {
+			result.httpCode=500;
+			result.errString="nick_name is empty!";
+			return result;
+		}
+
+		if (phoneNo == null) {
+			result.httpCode=500;
+			result.errString="phone_no is empty!";
+			return result;
+		}
+
+		if (gameId <= 0) {
+			result.httpCode=500;
+			result.errString="game_id is invalid!";
+			return result;
+		}
+		// 判断是否存在这个游戏
+		boolean res = UserCenterMgr.hasGame(gameId);
+		if (!res) {
+			result.httpCode=500;
+			result.errString="this game is not exist for game_id:" + gameId;
+			return result;
+		}
+		result.httpCode = 200;
+		return result;
+	}
+
+	class Result {
+		public int httpCode;
+		public String errString;
+		public String value;
 	}
 }
