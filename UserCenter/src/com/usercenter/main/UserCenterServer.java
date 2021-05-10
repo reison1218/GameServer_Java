@@ -79,10 +79,11 @@ public class UserCenterServer {
 		if (!SeasonMgr.init()) {
 			return false;
 		}
-//		// 验证管理器初始化
-//		if (!AuthenticateMgr.init()) {
-//			return false;
-//		}
+		// 验证管理器初始化
+		if (!AuthenticateMgr.init()) {
+			return false;
+		}
+		
 		// 初始化jetty
 		try {
 			ServerConnector connector = new ServerConnector(rs);

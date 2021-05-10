@@ -9,7 +9,7 @@
 	"http":8888,
 	"redis":"reison",
 	"server_id": 1,
-	"debug":true,
+	"debug":false,
 	"steam":[
 		{
 			"web_api_key":"DC8AD15E088033860FD8C08C02591AFD",

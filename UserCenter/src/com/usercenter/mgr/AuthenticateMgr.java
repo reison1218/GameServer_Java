@@ -20,8 +20,6 @@ public class AuthenticateMgr {
 		SteamAuthenticate st = new SteamAuthenticate();
 		st.init();
 		authMap.put(ConfigKey.STEAM_CONF, st);
-		String res = st.authenticateUserTicket("test");
-		System.out.println(res);
 		return true;
 	}
 	

@@ -27,12 +27,12 @@ public class HttpUtil {
 	/**
 	 * 连接超时
 	 */
-	private static int CONNECT_TIME_OUT = 2000;
+	private static int CONNECT_TIME_OUT = 5000;
 
 	/**
 	 * 读取数据超时
 	 */
-	private static int READ_TIME_OUT = 2000;
+	private static int READ_TIME_OUT = 5000;
 
 	/**
 	 * 请求编码
@@ -109,11 +109,7 @@ public class HttpUtil {
 			URL url = null;
 			String fullUrl = reqUrl;
 			if (paramMap != null) {
-				if (reqMethod.equals(REQUEST_METHOD_GET)) {
-					params.append("?");
-					fullUrl  += params.toString();
-					
-				}
+				
 				if(isJson) {
 					params = new StringBuilder(JsonUtil.stringify(paramMap));
 				}else {
@@ -131,6 +127,11 @@ public class HttpUtil {
 					if (params.length() > 0) {
 						params = params.deleteCharAt(params.length() - 1);
 					}
+				}
+				if (reqMethod.equals(REQUEST_METHOD_GET)) {
+					fullUrl+="?";
+					fullUrl  += params.toString();
+					
 				}
 			}
 			url = new URL(fullUrl);
