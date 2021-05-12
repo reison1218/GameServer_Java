@@ -19,6 +19,27 @@ import java.util.regex.Pattern;
  */
 public class StringUtils {
 
+	/** 全字母规则 正整数规则 */
+	public static final String STR_ENG_PATTERN = "^[a-z0-9A-Z]+-*[a-z0-9A-Z]*-*";
+	
+	/**
+	 * 判断字符串是否全字母 并且全部是正数数字
+	 * 
+	 * @param str 字符串
+	 * @return boolean
+	 */
+	public static boolean validateStrEnglishAnaNum(final String str) {
+		if (isEmpty(str)) {
+			return Boolean.FALSE;
+		}
+		boolean matches = str.matches(STR_ENG_PATTERN);
+		if (matches) {
+			return Boolean.TRUE;
+		} else {
+			return Boolean.FALSE;
+		}
+	}
+
 	/**
 	 * <pre>
 	 * byte 转换成 字符串
@@ -171,7 +192,8 @@ public class StringUtils {
 
 	public final static void testFormat() {
 		final String str = "{0};{1};{2};{3};{4};{5};{6};{7};{8}";
-		String nStr = format(str, TimeUtil.getDateFormat(), "40025", "aiweiyou", "5683b0b9148c068951", "14.108.148.38", "190175", "黛绮丝灬", "CHA");
+		String nStr = format(str, TimeUtil.getDateFormat(), "40025", "aiweiyou", "5683b0b9148c068951", "14.108.148.38",
+				"190175", "黛绮丝灬", "CHA");
 		System.out.println(nStr);
 	}
 

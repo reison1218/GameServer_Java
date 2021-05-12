@@ -123,7 +123,7 @@ public class UserIdHandler extends AbstractHandler {
 							nickNameLowerCase);
 					// 如果有名字了，不允许叫这个名字
 					if (!StringUtils.isEmpty(name_2_uid)) {
-						response.setStatus(500);
+						response.setStatus(411);
 						jsObject.put("err_mess", "nick_name is repeated!");
 						jsObject.put("status", "fail!");
 						response.getOutputStream().write(jsObject.toJSONString().getBytes());
@@ -133,13 +133,13 @@ public class UserIdHandler extends AbstractHandler {
 					// 创建新玩家
 					userInfo = createUser(gameId, nickName, platformId, phoneNo, request.getRemoteAddr(),
 							registerPlatform);
-				}else {
+				} else {
 					// 反序列化成UserInfo对象
 					userInfo = JsonUtil.parse(value, UserInfo.class);
 				}
 				// 判断是否在线
 				if (userInfo.isOn_line()) {
-					response.setStatus(500);
+					response.setStatus(412);
 					jsObject.put("err_mess", "this account already login!");
 					jsObject.put("status", "fail!");
 					response.getOutputStream().write(jsObject.toJSONString().getBytes());
@@ -229,8 +229,9 @@ public class UserIdHandler extends AbstractHandler {
 	public Result checkNickName(UserInfo userInfo, String platformId, String nickName) {
 		Result result = new Result();
 		result.httpCode = 200;
+		String oldName= userInfo.getNick_name();
 		// 如果名字不一样，就改名字
-		if (userInfo.getNick_name().toLowerCase().equals(nickName)) {
+		if (oldName.equals(nickName)) {
 			return result;
 		}
 
@@ -239,7 +240,7 @@ public class UserIdHandler extends AbstractHandler {
 		String name_2_uid = RedisPool.hgetWithIndex(RedisIndex.USERS, RedisKey.NAME_2_UID, nickNameLowerCase);
 		// 如果有名字了，不允许叫这个名字
 		if (!StringUtils.isEmpty(name_2_uid)) {
-			result.httpCode = 500;
+			result.httpCode = 411;
 			result.errString = "nick_name is repeated!nickName:" + nickNameLowerCase;
 			return result;
 		}
@@ -248,6 +249,8 @@ public class UserIdHandler extends AbstractHandler {
 		String value = JsonUtil.stringify(userInfo);
 		// 持久化玩家数据
 		RedisPool.hsetWithIndex(RedisIndex.USERS, RedisKey.USERS, platformId, value, 0);
+		// 删除玩家老名字
+		RedisPool.hdel(RedisIndex.USERS,RedisKey.NAME_2_UID, oldName.toLowerCase());
 		// 持久化名字对应玩家id
 		RedisPool.hsetWithIndex(RedisIndex.USERS, RedisKey.NAME_2_UID, nickNameLowerCase,
 				Integer.toString(userInfo.getUser_id()), 0);
@@ -273,9 +276,8 @@ public class UserIdHandler extends AbstractHandler {
 		}
 		String ticket = platformValue;
 		String resJson = steamAuth.authenticateUserTicket(ticket);
-		if(resJson==null) {
-			String errStr = StringUtils.format("time out!",
-					registerPlatform);
+		if (resJson == null) {
+			String errStr = StringUtils.format("time out!", registerPlatform);
 			result.errString = errStr;
 			result.httpCode = 500;
 			return result;
@@ -287,7 +289,7 @@ public class UserIdHandler extends AbstractHandler {
 		if (jsParams == null) {
 			String errStr = "invalid ticket";
 			result.errString = errStr;
-			result.httpCode = 500;
+			result.httpCode = 409;
 			return result;
 		}
 
@@ -304,7 +306,7 @@ public class UserIdHandler extends AbstractHandler {
 		if (!ownsapp) {
 			String errStr = "this player do not have this app!ownsapp is false!register_platform:{0}";
 			result.errString = errStr;
-			result.httpCode = 500;
+			result.httpCode = 410;
 			return result;
 		}
 		result.successValue = steamId + "";
@@ -317,42 +319,57 @@ public class UserIdHandler extends AbstractHandler {
 		Result result = new Result();
 		// 校验注册平台
 		if (StringUtils.isEmpty(registerPlatform)) {
-			result.httpCode = 500;
+			result.httpCode = 400;
 			result.errString = "register_platform is empty!";
 			return result;
 		}
 
 		// 校验平台参数
 		if (StringUtils.isEmpty(platformValue)) {
-			result.httpCode = 500;
+			result.httpCode = 401;
 			result.errString = "platformValue is empty!";
 			return result;
 		}
 
 		if (StringUtils.isEmpty(nickName)) {
-			result.httpCode = 500;
+			result.httpCode = 402;
 			result.errString = "nick_name is empty!";
 			return result;
 		}
 
 		if (phoneNo == null) {
-			result.httpCode = 500;
+			result.httpCode = 403;
 			result.errString = "phone_no is empty!";
 			return result;
 		}
 
 		if (gameId <= 0) {
-			result.httpCode = 500;
+			result.httpCode = 405;
 			result.errString = "game_id is invalid!";
 			return result;
 		}
 		// 判断是否存在这个游戏
 		boolean res = UserCenterMgr.hasGame(gameId);
 		if (!res) {
-			result.httpCode = 500;
+			result.httpCode = 406;
 			result.errString = "this game is not exist for game_id:" + gameId;
 			return result;
 		}
+		// 校验名称格式合法性
+		boolean nickNameRes = StringUtils.validateStrEnglishAnaNum(nickName);
+		if (!nickNameRes) {
+			result.httpCode = 407;
+			result.errString = "this nickName is illegal!nickName:" + nickName;
+			return result;
+		}
+		int nickNameSize = nickName.length();
+		// 校验名称长度
+		if (nickNameSize < 3) {
+			result.httpCode = 408;
+			result.errString = "this size of nickName is error! size:" + nickNameSize;
+			return result;
+		}
+
 		result.httpCode = 200;
 		return result;
 	}

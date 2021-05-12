@@ -287,13 +287,15 @@ public class RedisPool {
 		}
 	}
 
-	public static void hdel(String key, String filed) {
+	public static void hdel(int index,String key, String filed) {
 		Jedis jedis = jedisPool.getResource();
 		try {
+			jedis.select(index);
 			jedis.hdel(key, filed);
 		} catch (Exception e) {
 			e.printStackTrace();
 		} finally {
+			jedis.select(0);
 			recyleClient(jedis);
 		}
 
