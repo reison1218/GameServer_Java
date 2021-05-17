@@ -49,7 +49,8 @@ public class ConfigKey {
 	public final static String GRP_CONF = "grpconf";// 活动分组配置的可以
 	public static int tver;// 登录服当前版本号
 
-	public final static String REDIS_PASS = "redis";
+	public final static String REDIS_PASS = "redis_pass";
+	public final static String REDIS_IP = "redis_ip";
 
 	public final static String HTTP = "http";
 

@@ -7,7 +7,8 @@
 	"room_port": "9092",
 	"gate_port": "16801",
 	"http":8888,
-	"redis":"reison",
+	"redis_ip":"127.0.0.1",
+	"redis_pass":"reison",
 	"server_id": 1,
 	"debug":true,
 	"steam":[

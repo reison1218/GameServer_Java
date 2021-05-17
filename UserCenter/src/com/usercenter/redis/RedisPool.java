@@ -185,8 +185,8 @@ public class RedisPool {
 
 		return tId;
 	}
-	
-	public static String hgetWithIndex(int index,String key, String filed) {
+
+	public static String hgetWithIndex(int index, String key, String filed) {
 		Jedis jedis = jedisPool.getResource();
 		String tId = null;
 		try {
@@ -201,9 +201,10 @@ public class RedisPool {
 
 		return tId;
 	}
-	
+
 	/**
 	 * 判断是否存在key
+	 * 
 	 * @param key
 	 * @return
 	 */
@@ -220,17 +221,18 @@ public class RedisPool {
 		}
 		return false;
 	}
-	
+
 	/**
 	 * 给key加上过期时间
+	 * 
 	 * @param key
 	 * @return
 	 */
-	public static long expire(String key,int lazyDropTime) {
+	public static long expire(String key, int lazyDropTime) {
 		Jedis jedis = jedisPool.getResource();
 		try {
 			boolean exist = jedis.exists(key);
-			if(!exist) {
+			if (!exist) {
 				return 0;
 			}
 			long result = jedis.expire(key, lazyDropTime);
@@ -244,18 +246,18 @@ public class RedisPool {
 		return 0;
 	}
 
-	public static void hset(String key, String filed, String value,int lazyDropTime) {
+	public static void hset(String key, String filed, String value, int lazyDropTime) {
 		Jedis jedis = jedisPool.getResource();
 		try {
 			boolean exist = jedis.exists(key);
 			jedis.hset(key, filed, value);
-			if(lazyDropTime <=0)
+			if (lazyDropTime <= 0)
 				return;
-			if(exist) {
+			if (exist) {
 				return;
 			}
 			long result = jedis.expire(key, lazyDropTime);
-			System.out.println("result:"+result);
+			System.out.println("result:" + result);
 		} catch (Exception e) {
 			e.printStackTrace();
 
@@ -263,21 +265,21 @@ public class RedisPool {
 			recyleClient(jedis);
 		}
 	}
-	
-	public static void hsetWithIndex(int index,String key, String filed, String value,int lazyDropTime) {
+
+	public static void hsetWithIndex(int index, String key, String filed, String value, int lazyDropTime) {
 		Jedis jedis = jedisPool.getResource();
 		try {
 			jedis.select(index);
 			boolean exist = jedis.exists(key);
 			jedis.hset(key, filed, value);
-			if(lazyDropTime <=0) {
+			if (lazyDropTime <= 0) {
 				return;
 			}
-			if(exist) {
+			if (exist) {
 				return;
 			}
 			long result = jedis.expire(key, lazyDropTime);
-			System.out.println("result:"+result);
+			System.out.println("result:" + result);
 		} catch (Exception e) {
 			e.printStackTrace();
 
@@ -287,7 +289,7 @@ public class RedisPool {
 		}
 	}
 
-	public static void hdel(int index,String key, String filed) {
+	public static void hdel(int index, String key, String filed) {
 		Jedis jedis = jedisPool.getResource();
 		try {
 			jedis.select(index);
@@ -367,9 +369,9 @@ public class RedisPool {
 		// 对象空闲多久后逐出, 当空闲时间>该值 且 空闲连接>最大空闲数 时直接逐出,不再根据MinEvictableIdleTimeMillis判断
 		// (默认逐出策略)
 		config.setSoftMinEvictableIdleTimeMillis(1800000);
-		// jedisPool = new JedisPool(config, "127.0.0.1", 6379);
+		String ip = Config.getConfig(ConfigKey.REDIS_IP);
 		String pass = Config.getConfig(ConfigKey.REDIS_PASS);
-		jedisPool = new JedisPool(config, "127.0.0.1", 6379, 5000, pass);
+		jedisPool = new JedisPool(config, ip, 6379, 5000, pass);
 	}
 
 	/**
