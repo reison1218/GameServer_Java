@@ -20,8 +20,7 @@ import java.util.regex.Pattern;
 public class StringUtils {
 
 	/** 全字母规则 正整数规则 */
-	public static final String STR_ENG_PATTERN = "^[a-z0-9A-Z]+-*[a-z0-9A-Z]*-*";
-	
+	public static final String STR_ENG_PATTERN = "^[a-z0-9A-Z]+-*[a-z0-9A-Z]*-*[a-z0-9A-Z]*";
 	/**
 	 * 判断字符串是否全字母 并且全部是正数数字
 	 * 
