@@ -138,7 +138,7 @@ public class UserIdHandler extends AbstractHandler {
 					userInfo = JsonUtil.parse(value, UserInfo.class);
 				}
 				// 判断是否在线
-				if (userInfo.isOn_line()) {
+				if (userInfo.isOn_line() && isDebug) {
 					response.setStatus(412);
 					jsObject.put("err_mess", "this account already login!");
 					jsObject.put("status", "fail!");
