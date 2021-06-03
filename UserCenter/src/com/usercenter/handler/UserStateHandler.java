@@ -32,7 +32,7 @@ public class UserStateHandler extends AbstractHandler {
 		if (!"/center/user_state".equals(target)) {
 			return;
 		}
-		Log.info("用户中心收得到状态请求，查找用户id，信息:" + request);
+		Log.info("用户中心收得到状态请求,信息:" + request);
 		JSONObject jsObject = new JSONObject();
 		int resultUserId = 0;
 		boolean result = false;

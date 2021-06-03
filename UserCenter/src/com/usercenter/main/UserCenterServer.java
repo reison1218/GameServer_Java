@@ -21,7 +21,6 @@ import com.usercenter.mgr.TimeTaskMgr;
 import com.usercenter.mgr.UserCenterMgr;
 import com.usercenter.redis.RedisPool;
 import com.usercenter.template.mgr.TemplateMgr;
-import com.utils.HttpUtil;
 import com.utils.Log;
 
 /**
@@ -145,6 +144,7 @@ public class UserCenterServer {
 		try {
 			if (!start()) {
 				Log.error("用户中心启动失败...");
+				stopServer();
 			}
 		} catch (Throwable e) {
 			e.printStackTrace();

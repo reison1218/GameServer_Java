@@ -28,7 +28,7 @@ public class ServerInfoListHandler  extends AbstractHandler {
 		if (!"/center/server_list".equals(target)) {
 			return;
 		}
-		Log.info("用户中心收得到状态请求，查找用户id，信息:" + request);
+		Log.info("用户中心收服务器列表请求,信息:" + request);
 		JSONObject jsObject = new JSONObject();
 		boolean result = false;
 		try {
