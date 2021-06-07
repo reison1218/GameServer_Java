@@ -162,15 +162,4 @@ public class SeasonMgr {
 		calendar.set(year, month, day, 0, 0, 0);
 		return calendar.getTime();
 	}
-
-	public static void main(String[] aa) {
-		String str = "2021-01-25 00:00:00";
-		Date date = TimeUtil.format(str);
-		date.UTC(2021, 1, 25, 0, 0, 0);
-		System.out.println(date.getTime());
-		System.out.println(date.getTimezoneOffset());
-		System.out.println(TimeUtil.getDateFormat(date));
-
-		System.out.println(System.currentTimeMillis());
-	}
 }

@@ -49,7 +49,7 @@ public class SteamAuthenticate extends Authenticate {
 
 	@Override
 	public void init() {
-		appId = Config.getConfig(ConfigKey.STEAM_CONF, ConfigKey.PLAYER_TEST_APP_ID);
+		appId = Config.getConfig(ConfigKey.STEAM_CONF, ConfigKey.DEMO_APP_ID);
 		webApiKey = Config.getConfig(ConfigKey.STEAM_CONF, ConfigKey.WEB_API_KEY);
 		this.authActionMap.put(AuthenticateUserTicketMethodGet,
 				new AuthenticateUserTicketAction(appId, AuthenticateUserTicketMethodGet, webApiKey, null));

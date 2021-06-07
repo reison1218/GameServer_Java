@@ -82,7 +82,7 @@ public class UserCenterServer {
 		if (!AuthenticateMgr.init()) {
 			return false;
 		}
-		
+
 		// 初始化jetty
 		try {
 			ServerConnector connector = new ServerConnector(rs);
@@ -95,7 +95,9 @@ public class UserCenterServer {
 			rs.setHandler(handlers);
 			// 启动服务器
 			rs.start();
-			Log.info("用户中心启动完成，耗时：" + (System.currentTimeMillis() - beginSecs) + "ms,监听端口：" + 8888);
+			long endSecs = System.currentTimeMillis();
+			long takeTime = endSecs - beginSecs;
+			Log.info("用户中心启动完成，耗时：" + takeTime + "ms,监听端口：" + 8888);
 			rs.join();
 		} catch (Exception e) {
 			e.printStackTrace();
@@ -130,6 +132,7 @@ public class UserCenterServer {
 	 */
 	public static boolean stopServer() {
 		HikariDBPool.stop();
+		RedisPool.stop();
 		Log.info(UserCenterServer.class.getSimpleName() + "停止成功，本次运行："
 				+ (int) Math.ceil((System.currentTimeMillis() / 1000 - getBeginSecs() / 1000) / 60 + 0.1f) + "分钟");
 		System.exit(0);

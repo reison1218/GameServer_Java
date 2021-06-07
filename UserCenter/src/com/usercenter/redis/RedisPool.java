@@ -44,6 +44,20 @@ public class RedisPool {
 		return true;
 	}
 
+	public static void stop() {
+		if (jedisPool != null) {
+			jedisPool.close();
+			jedisPool.destroy();
+		}
+		if (shardedJedis != null) {
+			shardedJedis.close();
+		}
+		if (shardedJedisPool != null) {
+			shardedJedisPool.close();
+			shardedJedisPool.destroy();
+		}
+	}
+
 	public static void zincrby(String key, double score, String playerIdKey) {
 		Jedis jedis = jedisPool.getResource();
 		try {

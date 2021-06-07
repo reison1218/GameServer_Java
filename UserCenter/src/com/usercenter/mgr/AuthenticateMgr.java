@@ -6,7 +6,6 @@ import org.apache.commons.collections4.map.HashedMap;
 
 import com.usercenter.authenticate.Authenticate;
 import com.usercenter.authenticate.SteamAuthenticate;
-import com.usercenter.base.config.Config;
 import com.usercenter.base.config.ConfigKey;
 
 public class AuthenticateMgr {
