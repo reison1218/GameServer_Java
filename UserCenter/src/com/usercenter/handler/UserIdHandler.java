@@ -2,6 +2,8 @@ package com.usercenter.handler;
 
 import java.io.IOException;
 import java.util.Date;
+import java.util.HashMap;
+import java.util.Map;
 import java.util.concurrent.atomic.AtomicInteger;
 
 import javax.servlet.ServletException;
@@ -23,6 +25,7 @@ import com.usercenter.mgr.UserCenterMgr;
 import com.usercenter.redis.RedisIndex;
 import com.usercenter.redis.RedisKey;
 import com.usercenter.redis.RedisPool;
+import com.utils.HttpUtil;
 import com.utils.JsonUtil;
 import com.utils.Log;
 import com.utils.StringUtils;
@@ -138,13 +141,17 @@ public class UserIdHandler extends AbstractHandler {
 					userInfo = JsonUtil.parse(value, UserInfo.class);
 				}
 				// 判断是否在线
-				if (userInfo.isOn_line() && isDebug) {
-					response.setStatus(412);
-					jsObject.put("err_mess", "this account already login!");
-					jsObject.put("status", "fail!");
-					response.getOutputStream().write(jsObject.toJSONString().getBytes());
-					Log.error("repeat login for pid:" + platformId);
-					return;
+				if (userInfo.isOn_line()) {
+//					response.setStatus(412);
+//					jsObject.put("err_mess", "this account already login!");
+//					jsObject.put("status", "fail!");
+//					response.getOutputStream().write(jsObject.toJSONString().getBytes());
+//					Log.error("repeat login for pid:" + platformId);
+//					return;
+					String url = Config.getConfig("game_center_http")+"/kick";
+					Map<String, Object> paramMap = new HashMap<String,Object>();
+					paramMap.put("user_id", userInfo.getUser_id());
+					HttpUtil.doPost(url, paramMap, true);
 				}
 				// 如果名字不一样，就改名字
 				paramsResult = checkNickName(userInfo, platformId, nickName);

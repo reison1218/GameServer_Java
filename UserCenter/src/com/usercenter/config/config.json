@@ -3,6 +3,7 @@
 	"login_port": "8108",
 	"game_server": "127.0.0.1",
 	"game_port": "9091",
+	"game_center_http": "http://localhost:9999",
 	"room_server": "127.0.0.1",
 	"room_port": "9092",
 	"gate_port": "16801",
