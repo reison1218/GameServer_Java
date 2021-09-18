@@ -174,6 +174,7 @@ public class UserIdHandler extends AbstractHandler {
 			response.setContentType("application/json");
 			response.setCharacterEncoding("utf-8");
 			response.getOutputStream().write(jsObject.toJSONString().getBytes());
+			System.out.println(jsObject.toJSONString());
 		} catch (Exception e) {
 			Log.error(e.getMessage());
 		} finally {

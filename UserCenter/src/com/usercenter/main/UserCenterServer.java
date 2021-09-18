@@ -16,7 +16,6 @@ import com.usercenter.handler.StopHandler;
 import com.usercenter.handler.UserIdHandler;
 import com.usercenter.handler.UserStateHandler;
 import com.usercenter.mgr.AuthenticateMgr;
-import com.usercenter.mgr.SeasonMgr;
 import com.usercenter.mgr.TimeTaskMgr;
 import com.usercenter.mgr.UserCenterMgr;
 import com.usercenter.redis.RedisPool;
@@ -72,10 +71,6 @@ public class UserCenterServer {
 		}
 		// 定时器初始化
 		if (!TimeTaskMgr.init()) {
-			return false;
-		}
-		// 初始化赛季
-		if (!SeasonMgr.init()) {
 			return false;
 		}
 		// 验证管理器初始化

@@ -42,8 +42,7 @@ public final class TimeTaskMgr {
 			resetTimer = new Timer("resetTimeer");
 			// 0点重置定时任务
 			resetTimer.scheduleAtFixedRate(new ZeroTask(), TimeUtil.getNextDate(), MINUTE * 60 * 24);
-			// 赛季定时任务
-			resetTimer.scheduleAtFixedRate(new SeasonTask(), 0, MINUTE * 60 * 24);
+			
 			// // 每天10:30定时任务
 			// SimpleDateFormat sdf1030 = new SimpleDateFormat("yyyy-MM-dd '10:30:00'");
 			// Date time1030 = new SimpleDateFormat("yyyy-MM-dd
@@ -143,36 +142,6 @@ class ZeroTask extends Task {
 			
 			//通知所有游戏服务器更新赛季
 			//Log.fatal("GameMgr_DayReset_CostTime：" + (t2 - t1) + "ms");
-		} catch (Throwable e) {
-			Log.error("", e);
-		} finally {
-			
-		}
-	}
-}
-
-class SeasonTask extends Task {
-
-	public SeasonTask() {
-	}
-
-	/**
-	 * 执行函数
-	 */
-	@Override
-	public void exec() {
-		try {
-			Log.info("开始执行SeasonTask定时器任务!");
-			int dayOfWeek = TimeUtil.getDayOfWeekIndex();
-			if (dayOfWeek != 1){
-				return;
-			}
-			long t1 = System.currentTimeMillis();
-			//更新赛季
-			SeasonMgr.updateSeason();
-			long t2 = System.currentTimeMillis();
-			//通知所有游戏服务器更新赛季
-			Log.fatal("GameMgr_UpdateSeason_CostTime：" + (t2 - t1) + "ms");
 		} catch (Throwable e) {
 			Log.error("", e);
 		} finally {
