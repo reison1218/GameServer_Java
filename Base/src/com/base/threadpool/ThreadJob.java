@@ -18,18 +18,15 @@ public class ThreadJob {
 	/**
 	 * 任务队列
 	 */
-	LinkedBlockingQueue<Task> taskQue;
+	LinkedBlockingQueue<Runnable> taskQue;
 
 	public ThreadJob(String name) {
 
 		// 初始化任务队列
-		taskQue = new LinkedBlockingQueue<Task>();
+		taskQue = new LinkedBlockingQueue<Runnable>();
 		// 初始化执行的单线程
-		thread = new Thread(new Runnable() {
-			@Override
-			public void run() {
-				work();
-			}
+		thread = new Thread(() -> {
+			work();
 		}, name);
 		thread.start();
 	}
@@ -40,7 +37,7 @@ public class ThreadJob {
 	public void work() {
 		try {
 			for (;;) {
-				Task task = taskQue.take();
+				Runnable task = taskQue.take();
 				task.run();
 			}
 		} catch (Exception e) {
@@ -53,7 +50,7 @@ public class ThreadJob {
 	 * 
 	 * @param task
 	 */
-	public void addTask(Task task) {
+	public void addTask(Runnable task) {
 		this.taskQue.offer(task);
 	}
 }
