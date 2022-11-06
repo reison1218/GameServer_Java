@@ -3,18 +3,30 @@
 	"login_port": "8108",
 	"game_server": "127.0.0.1",
 	"game_port": "9091",
+	"game_center_http": "http://localhost:9999",
 	"room_server": "127.0.0.1",
 	"room_port": "9092",
 	"gate_port": "16801",
 	"http":8888,
-	"redis":"reison",
+	"redis_ip":"127.0.0.1",
+	"redis_pass":"reison",
 	"server_id": 1,
+	"debug":true,
+	"steam":[
+		{
+			"web_api_key":"DC8AD15E088033860FD8C08C02591AFD",
+			"url":"https://partner.steam-api.com",
+			"demo_app_id":1608030,
+			"player_test_app_id":1604870,
+			"app_id":1493260
+		}
+	],
 	"mysql": [
 		{
 			"host": "127.0.0.1",
 			"port": 3306,
 			"user": "root",
-			"pass": "reison11",
+			"pass": "reison",
 			"db_data": "user_center",
 			"db_log": "reison"
 		}
