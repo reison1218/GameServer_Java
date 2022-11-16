@@ -1,0 +1,117 @@
+syntax = "proto2";
+package proto;
+
+option java_package = "game.protobuf";
+option java_outer_classname = "GPMsg";
+option optimize_for = SPEED;
+//指令类型
+enum CommandType
+{
+    CommandType_Unknow = 0; // 未知操作
+    CommandType_HandShake = 1; // 握手消息
+    CommandType_HandShakeResponse = 2; // 回应握手消息
+    CommandType_Keepalive = 3; // 心跳检查
+    CommandType_KeepaliveResponse = 4; // 回应心跳检查
+    CommandType_SendData = 5; // 数据发送
+    CommandType_ReportWorld = 6; // 上报游戏世界
+    CommandType_GMCommand = 7; // 发送GM指令
+    CommandType_GMCommandResponse = 8; // 回应GM指令
+    CommandType_HuoDongManager = 9; // 活动管理模块
+    CommandType_PortraitVerifyResult = 10; // 头像审核结果
+    CommandType_BroadcastMsg = 11; // 渠道广播
+    CommandType_OperationEmail = 12; // 通用运营邮件
+    CommandType_OperationEmailResponse = 13; // 通用运营邮件回发
+    CommandType_RunLuaScript = 14;		// 通知服务器执行一段LUA指令
+    CommandType_UdpateActorNameResponse = 15; //修改角色名回发
+    CommandType_OperationEmailResponseMultiple = 16; // 通用运营邮件回发（多角色）
+    CommandType_DBHttpSubAction_Notity_AlbumVerify = 17;//图片审核结果
+    CommandType_PushGameConfig = 18; // 通用运营推送游戏配置
+    CommandType_PushGameConfigResponse = 19; // 通用运营推送游戏配置回发
+	CommandType_PushGameConfigRequest= 20; // 通用运营推送游戏配置起服请求
+}
+
+//公共消息包头
+message TMSG_HEADER
+{
+    required uint32 gameID = 1; // 游戏ID
+    required uint32 worldID = 2; // 游戏世界ID
+    required CommandType Command = 3; //指令
+    optional uint32 SubCode = 4; //子类型
+}
+
+//握手请求 游戏 -> 平台
+message TMSG_HANDSHAKE_REQ
+{
+    required uint32 gameID = 1; // 游戏ID
+    repeated uint32 worldIDs = 2; // 游戏世界ID列表
+}
+
+//握手响应 平台 -> 游戏
+message TMSG_HANDSHAKE_RSP
+{
+    required uint32 gameID = 1; // 游戏ID
+    required uint32 sessionIndex = 2; // 连接流水号
+}
+
+//心跳请求 游戏 -> 平台
+//只发消息头即可
+
+//心跳响应 平台 -> 游戏
+message TMSG_KEEPALIVE_RSP
+{
+    required uint64 timestamp = 1; // Unix时间戳
+}
+
+
+/************* 通用运营邮件 CommandType_OperationEmailMsg ************/
+
+//发送邮件附件   平台 -> 游戏
+message TMSG_OPERATION_EMAIL_ATTACHMENT_PACKAGE
+{
+    required uint32 goodsId = 1; // 物品标识
+    required uint32 goodsNum = 2; // 物品数量
+}
+
+//发送邮件数据   平台 -> 游戏
+message TMSG_OPERATION_EMAIL_REQ
+{
+    required string emailId = 1; // 邮件标识
+    repeated uint32 channels = 2 ; // 渠道列表
+    required uint32 addresseeType = 3; // 收件人类型(1:所有角色,2:指定角色)
+    repeated uint64 addressees = 4 ; // 收件人列表(角色标识)
+    required string emailTopic = 5; // 邮件标题
+    required string emailText = 6; // 邮件内容
+    repeated TMSG_OPERATION_EMAIL_ATTACHMENT_PACKAGE attachments = 7 ; // 邮件附件
+    required uint32 persistDays = 8; // 保留天数
+    required string creator = 9; // 创建人
+    required uint64 createTime = 10; // 创建时间
+    optional uint64 expireTime = 11; // 发送截止时间
+}
+
+//发送邮件回发(单角色)   游戏 -> 平台
+message TMSG_OPERATION_EMAIL_RSP
+{
+    optional string emailId = 1; // 邮件标识
+    required uint64 actorId = 2; // 角色标识
+    required string actorName = 3; // 角色名称
+    required uint32 status = 4; // 邮件状态(8:发送成功,16:发送失败,32:已读,64:已领取附件,128:已删除)
+    optional string relationId = 5; // 关联标识（游戏内邮件ID）
+}
+
+
+//发送邮件回发同状态(多角色)   游戏 -> 平台
+message TMSG_OPERATION_EMAIL_RSP_MULTI
+{
+    optional string emailId = 1; // 邮件标识（如果游戏内回发发送成功/失败状态时传入了relationId关联游戏内邮件标识，那么回发其他状态时不一定要传入此参数）
+    required uint32 status = 2; // 邮件状态(8:发送成功,16:发送失败,32:已读,64:已领取附件,128:已删除)
+    repeated TMSG_OPERATION_EMAIL_RSP_ACTOR actors = 3; // 角色邮件信息
+}
+message TMSG_OPERATION_EMAIL_RSP_ACTOR
+{
+    required uint64 actorId = 1; // 角色标识
+    required string actorName = 2; // 角色名称
+    optional string relationId = 3; // 关联标识（游戏或游戏世界内邮件唯一ID，如果游戏内回发所有状态时不能都回发我方emailId，那么需要必传此参数）
+}
+
+
+
