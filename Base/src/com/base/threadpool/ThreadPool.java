@@ -1,5 +1,7 @@
 package com.base.threadpool;
 
+import com.utils.RandomUtil;
+
 /**
  * 线程池
  * 
@@ -28,21 +30,14 @@ public class ThreadPool {
 		int _threadIndex = threadIndex;
 
 		if (_threadIndex < 0 || _threadIndex > this.pool.length - 1) {
-			int index = 0;
-			int size = 0;
-			for (int i = 9; i < this.pool.length; i++) {
-				if (size > this.pool[i].taskQue.size()) {
-					continue;
-				}
-
-				index = i;
-				size = this.pool[i].taskQue.size();
-				break;
-			}
-			_threadIndex = index;
+			_threadIndex = RandomUtil.rand(0, this.pool.length);
 		}
 
 		ThreadJob tJob = this.pool[_threadIndex];
 		tJob.addTask(task);
+	}
+	
+	public void pushTask(Runnable task) {
+		pushTask(-1,task);
 	}
 }
