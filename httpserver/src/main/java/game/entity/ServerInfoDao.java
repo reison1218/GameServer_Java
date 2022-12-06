@@ -41,6 +41,7 @@ public class ServerInfoDao {
                 int targetServerId = rs.getInt("target_server_id");
                 int mergeTimes = rs.getInt("merge_times");
                 String type = rs.getString("type");
+                String rechargeHttpUrl = rs.getString("recharge_http_url");
                 ServerInfo gi = new ServerInfo();
                 gi.setServerId(serverId);
                 gi.setName(name);
@@ -52,6 +53,7 @@ public class ServerInfoDao {
                 gi.setTargetServerId(targetServerId);
                 gi.setMergeTimes(mergeTimes);
                 gi.setType(type);
+                gi.setRechargeHttpUrl(rechargeHttpUrl);
                 map.put(gi.getServerId(), gi);
             }
             return map;

@@ -3,14 +3,52 @@ package game.entity;
 
 import com.alibaba.fastjson.JSONObject;
 
+import java.util.ArrayList;
+import java.util.Date;
+import java.util.List;
+
+import game.utils.StringUtils;
 import game.utils.TimeUtil;
+import lombok.Getter;
+import lombok.Setter;
 
 /**
  * 服务器信息
- *
+ * 除了未到开服时间的不可见，其他都可见
  * @author tangjian
  */
 public class ServerInfo {
+
+    /**
+     * 开发服
+     **/
+    public static final int TYPE_DEV = 0;
+
+    /**
+     * 测试服
+     **/
+    public static final int TYPE_TEST = 1;
+
+    /**
+     * 内测服
+     **/
+    public static final int TYPE_INNER_TEST = 2;
+
+    /**
+     * 正式服
+     **/
+    public static final int TYPE_OFFICIAL = 10;
+
+    /**
+     * 停服维护
+     */
+    public static final int STATE_STOP = 4;
+
+    /**
+     * 运行状态
+     */
+    public static final int STATE_RUNNING = 0;
+
     /**
      * id
      **/
@@ -34,20 +72,26 @@ public class ServerInfo {
 
     private int mergeTimes;
 
-    private String type;
+    @Getter
+    private List<String> type = new ArrayList<>();
 
-    public JSONObject toJson(){
+    @Setter
+    @Getter
+    private String rechargeHttpUrl;
+
+    public JSONObject toJson(long lastLoginTime) {
         JSONObject js = new JSONObject();
-        js.put("server_id",this.serverId);
-        js.put("name",this.name);
-        js.put("ws_url",this.ws);
-        js.put("open_time",this.getOpenTimeLong());
-        js.put("register_state",this.registerState);
-        js.put("state",this.state);
-        js.put("letter",this.letter);
-        js.put("target_server_id",this.targetServerId);
-        js.put("merge_times",this.mergeTimes);
-        js.put("type",this.type);
+        js.put("server_id", this.serverId);
+        js.put("name", this.name);
+        js.put("ws_url", this.ws);
+        js.put("open_time", this.getOpenTimeLong());
+        js.put("register_state", this.registerState);
+        js.put("state", this.state);
+        js.put("letter", this.letter);
+        js.put("target_server_id", this.targetServerId);
+        js.put("merge_times", this.mergeTimes);
+        js.put("type", this.type);
+        js.put("last_login_time", lastLoginTime);
         return js;
     }
 
@@ -86,8 +130,12 @@ public class ServerInfo {
         return openTime;
     }
 
-    public long getOpenTimeLong(){
-        return TimeUtil.format(this.openTime).getTime();
+    public long getOpenTimeLong() {
+        Date date = TimeUtil.format(this.openTime);
+        if (date == null) {
+            return 0;
+        }
+        return date.getTime();
     }
 
     public void setOpenTime(String openTime) {
@@ -134,11 +182,34 @@ public class ServerInfo {
         this.mergeTimes = mergeTimes;
     }
 
-    public String getType() {
-        return type;
-    }
 
     public void setType(String type) {
-        this.type = type;
+        if (StringUtils.isEmpty(type)) {
+            return;
+        }
+        String[] types = type.split(",");
+        for (String s : types) {
+            this.type.add(s);
+        }
+    }
+
+    public boolean canShow(List<String> sources, long ctime) {
+        boolean isContains = isContains(sources);
+        if (!isContains) {
+            return false;
+        }
+        if (ctime < this.getOpenTimeLong()) {
+            return false;
+        }
+        return true;
+    }
+
+    private boolean isContains(List<String> sources) {
+        for (String s : this.type) {
+            if (sources.contains(s)) {
+                return true;
+            }
+        }
+        return false;
     }
 }

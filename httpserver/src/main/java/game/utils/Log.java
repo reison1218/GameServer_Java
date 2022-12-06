@@ -99,7 +99,15 @@ public class Log {
             final String className = stackTrace[i].getClassName();
             if (thisClazz.equals(className)) {
                 last = stackTrace[i + 1];
-                return last == null ? "no stack" : last.toString() + "-" + msg.toString();
+                if(last!=null && msg!=null){
+                    return last.toString() + "-" + msg.toString();
+                }else if(last!=null){
+                    return last.toString();
+                }else if(msg!=null){
+                    return msg.toString();
+                }else{
+                    return "no stack";
+                }
             }
         }
         return "";

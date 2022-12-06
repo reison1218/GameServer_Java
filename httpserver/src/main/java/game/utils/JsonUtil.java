@@ -113,7 +113,7 @@ public class JsonUtil {
     public final static Object parse(String str) {
         Object obj = null;
         try {
-            obj = JSON.parse(str, Feature.AllowISO8601DateFormat);
+            obj = JSON.parse(str, Feature.InitStringFieldAsEmpty);
         } catch (Exception e) {
             Log.error("集合反序列化错误,jsonStr：" + str, e);
         }

@@ -24,7 +24,6 @@ public class TestHandler extends BaseHandler {
     @Override
     public void doGet(String target, Request baseRequest, HttpServletRequest request, HttpServletResponse response) {
         if (request.getParameterMap() == null || request.getParameterMap().isEmpty()) {
-            Log.error("参数为null!");
             return;
         }
     }
@@ -40,7 +39,7 @@ public class TestHandler extends BaseHandler {
 
         result = js.containsKey("game_id");
         if (!result) {
-            sendErrorResponse(baseRequest,response,500,jsObject);
+            sendErrorResponse(500, jsObject.toJSONString());
             Log.error("game_id param not find!");
             return;
         }
@@ -49,15 +48,15 @@ public class TestHandler extends BaseHandler {
 
         if (gameId <= 0) {
             Log.error("game_id is invalid!");
-            sendErrorResponse(baseRequest,response,500,jsObject);
+            sendErrorResponse(500, jsObject.toJSONString());
             return;
         }
-        sendResponse(baseRequest,response,jsObject);
+        sendResponse(jsObject.toJSONString());
     }
 
     @Override
     public boolean checkUrl(String target) {
-        if (!"/slg/test".equals(target)) {
+        if (!"/slg/test.php".equals(target)) {
             return false;
         }
         return true;

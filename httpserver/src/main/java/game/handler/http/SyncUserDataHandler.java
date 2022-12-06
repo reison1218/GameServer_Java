@@ -9,10 +9,13 @@ import java.io.IOException;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 
+import game.base.executor.ExecutorMgr;
 import game.base.http.BaseHandler;
 import game.entity.UserInfo;
 import game.entity.UserInfoDao;
+import game.mgr.HttpServerMgr;
 import game.utils.JsonUtil;
+import game.utils.Log;
 
 /**
  * @author tangjian
@@ -20,6 +23,12 @@ import game.utils.JsonUtil;
  * desc
  */
 public class SyncUserDataHandler extends BaseHandler {
+
+    public static final int SYNC_HTTP_TYPE_CREATE = 1;
+
+    public static final int SYNC_HTTP_TYPE_LOGIN = 2;
+
+    public static final int SYNC_HTTP_TYPE_NAME = 3;
     /**
      * 成功的状态码
      **/
@@ -46,14 +55,23 @@ public class SyncUserDataHandler extends BaseHandler {
         int operatorId = params.getIntValue("operator_id");
         int serverId = params.getIntValue("server_id");
         String playerName = params.getString("player_name");
-        UserInfo info = UserInfo.newInstance(name, combineId, operatorId, serverId, playerName);
+        long loginTime = params.getLongValue("login_time");
+        ExecutorMgr.getUserSyncThreadPool().pushTask(1, () -> {
+            try {
+                //持久化数据库
+                UserInfo info = UserInfo.newInstance(name, combineId, operatorId, serverId, playerName, loginTime);
+                UserInfoDao.getInstance().insertUserInfo(info);
+                //同步撸到内存
+                HttpServerMgr.addUser2serverMap(name, serverId, loginTime);
 
-        UserInfoDao.getInstance().insertUserInfo(info);
-
+            } catch (Exception e) {
+                Log.error("{}", e);
+            }
+        });
+        //返回客户端消息
         JSONObject jsObject = new JSONObject();
         jsObject.put("status", "success");
-        //返回客户端消息
-        sendResponse(baseRequest, response, jsObject);
+        sendResponse(jsObject.toJSONString());
     }
 
     @Override

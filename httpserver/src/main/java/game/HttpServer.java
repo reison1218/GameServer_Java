@@ -1,6 +1,5 @@
 package game;
 
-import org.eclipse.jetty.server.Connector;
 import org.eclipse.jetty.server.Handler;
 import org.eclipse.jetty.server.Server;
 import org.eclipse.jetty.server.ServerConnector;
@@ -20,7 +19,6 @@ import game.base.tcp.SocketClientInitializer;
 import game.handler.http.TestHandler;
 import game.handler.tcp.SocketClientHandler;
 import game.mgr.HttpServerMgr;
-import game.mgr.TimeTaskMgr;
 import game.utils.ClassUtil;
 import game.utils.Log;
 import io.netty.channel.Channel;
@@ -72,16 +70,16 @@ public class HttpServer {
             return false;
         }
         // 定时器初始化
-        if (!TimeTaskMgr.init()) {
-            return false;
-        }
+        //        if (!TimeTaskMgr.init()) {
+        //            return false;
+        //        }
 
         // 初始化jetty
         try {
             ServerConnector connector = new ServerConnector(rs);
             int port = Config.getConfig(ConfigKey.HTTP);
             connector.setPort(port);
-            rs.setConnectors(new Connector[]{connector});
+            rs.addConnector(connector);
             HandlerList handlers = new HandlerList();
 
             Set<Class<?>> classSet = ClassUtil.getClasses(TestHandler.class.getPackage());
@@ -99,7 +97,7 @@ public class HttpServer {
             rs.start();
             long endSecs = System.currentTimeMillis();
             long takeTime = endSecs - beginSecs;
-            Log.info("用户中心启动完成，耗时：" + takeTime + "ms,监听端口：" + 8888);
+            Log.info("用户中心启动完成，耗时：" + takeTime + "ms,监听端口：" + port);
             rs.join();
         } catch (Exception e) {
             e.printStackTrace();

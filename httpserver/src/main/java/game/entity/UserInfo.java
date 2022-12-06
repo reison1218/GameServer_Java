@@ -10,13 +10,14 @@ import lombok.Setter;
  */
 public class UserInfo {
 
-    public static UserInfo newInstance(String name, long combineId, int operatorId, int serverId, String playerName) {
+    public static UserInfo newInstance(String name, long combineId, int operatorId, int serverId, String playerName,long loginTime) {
         UserInfo info = new UserInfo();
         info.setName(name);
         info.setCombineId(combineId);
         info.setOperatorId(operatorId);
         info.setServerId(serverId);
         info.setPlayerName(playerName);
+        info.setLastLoginTime(loginTime);
         return info;
     }
 
@@ -43,16 +44,21 @@ public class UserInfo {
     @Setter
     private String playerName;
 
+    @Getter
+    @Setter
+    private long lastLoginTime;
+
     /**
      * 转换成object数组
      */
     public Object[] toObjectArray() {
-        Object[] oj = new Object[5];
+        Object[] oj = new Object[6];
         oj[0] = name;
         oj[1] = combineId;
         oj[2] = operatorId;
         oj[3] = serverId;
         oj[4] = playerName;
+        oj[5] = lastLoginTime;
         return oj;
     }
 
