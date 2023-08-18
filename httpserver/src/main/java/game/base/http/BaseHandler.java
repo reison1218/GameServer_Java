@@ -19,11 +19,6 @@ import lombok.Getter;
  */
 public abstract class BaseHandler extends AbstractHandler {
 
-    //充值回调游戏发货接口key
-    public static final String recharge_callback_key = "b19cfd48a57b45d599c18a9dcf13b8f8";
-
-    public static final String debug_recharge_callback_key = "12345678";
-
     /**
      * 成功的状态码
      **/
@@ -60,7 +55,7 @@ public abstract class BaseHandler extends AbstractHandler {
         this.baseRequest = baseRequest;
         this.request = request;
         this.response = response;
-        Log.info("http-server收到请求,信息:" + request);
+
         try {
             response.setHeader("Content-Type", "text/html;charset=utf-8");
             response.setContentType("application/json");
@@ -73,7 +68,8 @@ public abstract class BaseHandler extends AbstractHandler {
             }
             baseRequest.setHandled(true);
         } catch (Exception e) {
-            Log.error(e.getMessage());
+//            Log.error(e.getMessage());
+            e.printStackTrace();
         } finally {
             close();
         }

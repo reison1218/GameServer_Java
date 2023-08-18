@@ -7,6 +7,7 @@ import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
 
+import game.mgr.HttpServerMgr;
 import game.utils.StringUtils;
 import game.utils.TimeUtil;
 import lombok.Getter;
@@ -15,39 +16,10 @@ import lombok.Setter;
 /**
  * 服务器信息
  * 除了未到开服时间的不可见，其他都可见
+ *
  * @author tangjian
  */
 public class ServerInfo {
-
-    /**
-     * 开发服
-     **/
-    public static final int TYPE_DEV = 0;
-
-    /**
-     * 测试服
-     **/
-    public static final int TYPE_TEST = 1;
-
-    /**
-     * 内测服
-     **/
-    public static final int TYPE_INNER_TEST = 2;
-
-    /**
-     * 正式服
-     **/
-    public static final int TYPE_OFFICIAL = 10;
-
-    /**
-     * 停服维护
-     */
-    public static final int STATE_STOP = 4;
-
-    /**
-     * 运行状态
-     */
-    public static final int STATE_RUNNING = 0;
 
     /**
      * id
@@ -75,9 +47,20 @@ public class ServerInfo {
     @Getter
     private List<String> type = new ArrayList<>();
 
+    @Getter
+    private String typeStr = null;
+
     @Setter
     @Getter
-    private String rechargeHttpUrl;
+    private String manager;
+
+    @Setter
+    @Getter
+    private String innerManager;
+
+    @Setter
+    @Getter
+    private int serverType;
 
     public JSONObject toJson(long lastLoginTime) {
         JSONObject js = new JSONObject();
@@ -92,6 +75,7 @@ public class ServerInfo {
         js.put("merge_times", this.mergeTimes);
         js.put("type", this.type);
         js.put("last_login_time", lastLoginTime);
+        js.put("questionnaire_http_url", getManager()+"/api/common/questionnaire");
         return js;
     }
 
@@ -99,7 +83,8 @@ public class ServerInfo {
     public String toString() {
         return "ServerInfo{" + "serverId=" + serverId + ", name='" + name + '\'' + ", ws='" + ws + '\'' + ", openTime='" + openTime + '\'' +
                 ", registerState=" + registerState + ", state=" + state + ", letter=" + letter + ", targetServerId=" + targetServerId +
-                ", mergeTimes=" + mergeTimes + ", type=" + type + '}';
+                ", mergeTimes=" + mergeTimes + ", type=" + type + ", typeStr='" + typeStr + '\'' + ", manager='" + manager + '\'' + ", serverType=" +
+                serverType +'}';
     }
 
     public int getServerId() {
@@ -187,18 +172,29 @@ public class ServerInfo {
         if (StringUtils.isEmpty(type)) {
             return;
         }
+        typeStr = type;
         String[] types = type.split(",");
         for (String s : types) {
             this.type.add(s);
         }
     }
 
-    public boolean canShow(List<String> sources, long ctime) {
+    public boolean canShow(String accName, List<String> sources, int serverType, long ctime) {
+        //校验审核服
+        if (this.serverType != serverType) {
+            return false;
+        }
+        //如果是白名单全部显示
+        boolean res = HttpServerMgr.getWhiteUserInfoMap().containsKey(accName);
+        if (res) {
+            return true;
+        }
         boolean isContains = isContains(sources);
         if (!isContains) {
             return false;
         }
-        if (ctime < this.getOpenTimeLong()) {
+        long openTime = this.getOpenTimeLong();
+        if (ctime < openTime) {
             return false;
         }
         return true;

@@ -13,7 +13,7 @@
         <maven.compiler.target>8</maven.compiler.target>
         <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
         <version.game-utils>2.0.1</version.game-utils>
-
+        <JAVA_HOME>D:\Program Files\Java\jdk1.8.0_151</JAVA_HOME>
         <!--linux-->
         <!--<os.detected.arch>x86_64</os.detected.arch>
         <os.detected.classifier>linux-x86_64</os.detected.classifier>-->
@@ -88,8 +88,6 @@
             <artifactId>log4j-core</artifactId>
             <version>2.1</version>
         </dependency>
-
-
 
         <!-- https://mvnrepository.com/artifact/org.apache.logging.log4j/log4j-api -->
         <dependency>
@@ -197,6 +195,11 @@
             <version>20.0</version>
         </dependency>
 
+        <dependency>
+            <groupId>com.sun</groupId>
+            <artifactId>tools</artifactId>
+            <version>1.8.0</version>
+        </dependency>
     </dependencies>
     <build>
         <plugins>
@@ -229,18 +232,19 @@
                     </execution>
                 </executions>
             </plugin>
-
             <plugin>
                 <groupId>org.apache.maven.plugins</groupId>
                 <artifactId>maven-shade-plugin</artifactId>
                 <version>2.4.3</version>
                 <executions>
                     <execution>
+                        <id>make-assembly</id>
                         <phase>package</phase>
                         <goals>
                             <goal>shade</goal>
                         </goals>
                         <configuration>
+                            <shadedArtifactAttached>true</shadedArtifactAttached>
                             <finalName>http-server</finalName>
                             <createDependencyReducedPom>false</createDependencyReducedPom>
                             <transformers>
@@ -276,6 +280,25 @@
                         </goals>
                     </execution>
                 </executions>
+            </plugin>
+            <plugin>
+                <groupId>org.apache.maven.plugins</groupId>
+                <artifactId>maven-jar-plugin</artifactId>
+                <version>2.3.1</version>
+                <configuration>
+                    <archive>
+                        <manifest>
+                            <addClasspath>true</addClasspath>
+                        </manifest>
+                        <manifestEntries>
+                            <Agent-Class>
+                                game.loader.AgentMainTraceAgent
+                            </Agent-Class>
+                            <Can-Redefine-Classes>true</Can-Redefine-Classes>
+                            <Can-Retransform-Classes>true</Can-Retransform-Classes>
+                        </manifestEntries>
+                    </archive>
+                </configuration>
             </plugin>
         </plugins>
     </build>

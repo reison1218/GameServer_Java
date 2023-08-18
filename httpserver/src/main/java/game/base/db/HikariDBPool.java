@@ -3,16 +3,29 @@
  */
 package game.base.db;
 
+import com.google.common.io.ByteStreams;
+
 import com.zaxxer.hikari.HikariConfig;
 import com.zaxxer.hikari.HikariDataSource;
 
+import java.io.IOException;
+import java.io.InputStream;
+import java.io.StringReader;
 import java.sql.Connection;
+import java.sql.DatabaseMetaData;
 import java.sql.PreparedStatement;
+import java.sql.ResultSet;
 import java.sql.SQLException;
+import java.sql.Statement;
 
 import game.base.config.Config;
 import game.base.config.ConfigKey;
+import game.utils.CommonUtils;
 import game.utils.Log;
+import game.utils.ScriptRunner;
+import game.utils.StringEncoder;
+
+import static com.google.common.base.Preconditions.checkArgument;
 
 /**
  * <pre>
@@ -55,6 +68,8 @@ public final class HikariDBPool {
             //			if (connLog != null) {
             //				Log.info("日志数据库连接池初始化成功~");
             //			}
+            //检查数据库
+            check();
             return true;
         } catch (Exception e) {
             Log.error("DB连接池初始化失败", e);
@@ -74,6 +89,100 @@ public final class HikariDBPool {
                     Log.error("", e);
                 }
             }
+        }
+    }
+
+    public static void check() {
+        try {
+            // 检查db_version表是否存在
+            if (isEmptyDataBase()) {
+                Log.info("数据库里不存在表, 重新创建所有的表");
+
+                createTables();
+
+                if (isEmptyDataBase()) {
+                    throw new RuntimeException("重新创建了表, 还是不存在任何表");
+                }
+
+            }
+            //检查db_version表是否存在，不存在就创建一个
+            checkDbVersionTable();
+            int currentDBVersion = getDBVersion();
+            Log.info("当前数据库版本: " + currentDBVersion);
+
+            if (currentDBVersion != DBUpgrade.DB_VERSION) {
+                if (currentDBVersion < DBUpgrade.DB_VERSION) {
+                    try (Connection conn = getDataConn()) {
+                        new DBUpgrade().upgradeDB(currentDBVersion, DBUpgrade.DB_VERSION, conn);
+                    }
+                } else {
+                    throw new RuntimeException("当前数据库版本" + currentDBVersion + ", 程序使用的版本太旧: " + DBUpgrade.DB_VERSION);
+                }
+            }
+        } catch (Exception e) {
+
+        }
+    }
+
+    public static void checkDbVersionTable() throws SQLException {
+        String sql = "SELECT * FROM information_schema.TABLES WHERE TABLE_NAME = 'db_version'";
+
+        String createSql = "CREATE TABLE `db_version` (`version` int NOT NULL DEFAULT 0,PRIMARY KEY (`version`)" +
+                ") ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci";
+        String insertSql = "insert into db_version(version) values(0)";
+
+        try (Connection conn = getDataConn(); Statement stmt = conn.createStatement()) {
+            ResultSet rs = stmt.executeQuery(sql);
+            if (rs.next()) {
+                return;
+            }
+
+            Log.info("不存在db_version表，现在开始创建");
+            stmt.execute(createSql);
+            stmt.execute(insertSql);
+        }
+    }
+
+    static int getDBVersion() throws SQLException {
+        try (Connection conn = getDataConn(); Statement stmt = conn.createStatement()) {
+            ResultSet rs = stmt.executeQuery("select * from db_version");
+            if (rs.next()) {
+                return rs.getInt(1);
+            }
+
+            return 0;
+        }
+    }
+
+    private static void createTables() throws IOException, SQLException {
+        InputStream is = CommonUtils.getInputStreamFromClassPath("db_schema.sql");
+        if (is == null) {
+            Log.error("jar包中没有找到db_schema.sql");
+            throw new RuntimeException();
+        }
+        try {
+            byte[] data = ByteStreams.toByteArray(is);
+            String sql = StringEncoder.encode(data);
+
+            checkArgument(!sql.contains("/*"), "db_schema中不能存在/*的注释");
+
+            checkArgument(!sql.contains("delimiter ;;"), "db_schema中不能有delimiter ;;");
+
+            try (Connection conn = HikariDBPool.getDataConn()) {
+                ScriptRunner runner = new ScriptRunner(conn, false, true);
+                runner.runScript(new StringReader(sql));
+            }
+        } finally {
+            is.close();
+        }
+    }
+
+    private static boolean isEmptyDataBase() throws SQLException {
+        try (Connection conn = HikariDBPool.getDataConn()) {
+            DatabaseMetaData metadata = conn.getMetaData();
+            ResultSet rs = metadata.getTables(conn.getCatalog(), null, null, new String[]{"TABLE"});
+            rs.next();
+            return !rs.next();
         }
     }
 
@@ -246,8 +355,6 @@ public final class HikariDBPool {
         Log.init(HikariDBPool.class);
         Config.init();
         init();
-        // System.out.println(dataPool.getJdbcUrl());
-        // System.out.println(getLogConn());
     }
 
 }

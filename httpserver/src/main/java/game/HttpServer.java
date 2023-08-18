@@ -12,13 +12,16 @@ import game.base.config.Config;
 import game.base.config.ConfigKey;
 import game.base.config.ThreadCount.GateWayThreadCount;
 import game.base.db.HikariDBPool;
+import game.base.executor.Action;
 import game.base.executor.ExecutorMgr;
 import game.base.tcp.BaseNettyClient;
 import game.base.tcp.SocketClient;
 import game.base.tcp.SocketClientInitializer;
 import game.handler.http.TestHandler;
 import game.handler.tcp.SocketClientHandler;
+import game.loader.Test;
 import game.mgr.HttpServerMgr;
+import game.mgr.TimeTaskMgr;
 import game.utils.ClassUtil;
 import game.utils.Log;
 import io.netty.channel.Channel;
@@ -69,11 +72,11 @@ public class HttpServer {
         if (!HttpServerMgr.init()) {
             return false;
         }
-        // 定时器初始化
-        //        if (!TimeTaskMgr.init()) {
-        //            return false;
-        //        }
 
+        //定时器初始化
+        if (!TimeTaskMgr.init()) {
+            return false;
+        }
         // 初始化jetty
         try {
             ServerConnector connector = new ServerConnector(rs);

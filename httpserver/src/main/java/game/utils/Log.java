@@ -20,7 +20,7 @@ public class Log {
         boolean isProduction = "production".equals(System.getenv("CUR_ENV"));
         logger = org.apache.log4j.Logger.getLogger("");
         // pro.put("log4j.rootLogger", "CONSOLE,DEBUG,INFO,ERROR,FATAL");
-        pro.put("log4j.rootLogger", "DEBUG,IC,I,E,F");
+        pro.put("log4j.rootLogger", "DEBUG,IC,I,E,F,C");
         pro.put("log4j.addivity.org.apache", "true");
         pro.put("log4j.appender.A2.BufferedIO", "true");
         pro.put("log4j.appender.A2.BufferSize", "10240");
@@ -30,6 +30,16 @@ public class Log {
         pro.put("log4j.appender.IC.Target", "System.out");
         pro.put("log4j.appender.IC.layout", "org.apache.log4j.PatternLayout");
         pro.put("log4j.appender.IC.layout.ConversionPattern", "[%-5p]:%d-%c-%-2r[%t]:%x%m %n");
+
+
+        pro.put("log4j.appender.C", "org.apache.log4j.FileAppender");
+        pro.put("log4j.appender.C.Target", "System.out");
+        pro.put("log4j.appender.C.File", "log/slg.log");
+        pro.put("log4j.appender.C.DatePattern", "'.'yyyyMMdd");
+        pro.put("log4j.appender.C.Append", "true");
+        pro.put("log4j.appender.C.layout", "org.apache.log4j.PatternLayout");
+        pro.put("log4j.appender.C.layout.ConversionPattern", "[%-5p]:%d-%c-%-2r[%t]%x%n%m %n");
+
         //
         // pro.put("log4j.appender.DEBUG", "org.apache.log4j.DailyRollingFileAppender");
         // pro.put("log4j.appender.DEBUG.Threshold", "DEBUG");

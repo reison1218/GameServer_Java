@@ -55,6 +55,18 @@ public class HttpUtil {
 
     /**
      * <pre>
+     * 发送带参数的GET的HTTP请求
+     * </pre>
+     *
+     * @param reqUrl HTTP请求URL
+     * @return HTTP响应的字符串
+     */
+    public static String doGet(String reqUrl, Map<String, Object> paramMap, byte[] bodyContent) {
+        return doRequest(reqUrl, paramMap, REQUEST_METHOD_GET, REQUEST_ENCODING, false, bodyContent);
+    }
+
+    /**
+     * <pre>
      * 发送带参数的POST的HTTP请求
      * </pre>
      *
@@ -143,6 +155,88 @@ public class HttpUtil {
                 urlCon.setRequestProperty("Content-Type", "application/x-www-form-urlencoded");
                 urlCon.setRequestProperty("Content-Length", String.valueOf(b.length));
                 urlCon.getOutputStream().write(b, 0, b.length);
+                urlCon.getOutputStream().flush();
+                urlCon.getOutputStream().close();
+            }
+
+            InputStream in = urlCon.getInputStream();
+            BufferedReader rd = new BufferedReader(new InputStreamReader(in, recvEncoding));
+            String tempLine = rd.readLine();
+            StringBuffer tempStr = new StringBuffer();
+            while (tempLine != null) {
+                tempStr.append(tempLine);
+                tempLine = rd.readLine();
+            }
+            responseContent = tempStr.toString();
+            rd.close();
+            in.close();
+            urlCon.getResponseMessage();
+        } catch (IOException e) {
+            Log.error("urlconnection error , url " + reqUrl, e);
+        } finally {
+            if (urlCon != null) {
+                urlCon.disconnect();
+            }
+        }
+        return responseContent;
+    }
+
+    private static String doRequest(String reqUrl, Map<String, Object> paramMap, String reqMethod, String recvEncoding, boolean isJson,
+            byte[] bodyContent) {
+        HttpURLConnection urlCon = null;
+        String responseContent = null;
+        try {
+            StringBuilder params = new StringBuilder();
+            URL url = null;
+            String fullUrl = reqUrl;
+            if (paramMap != null) {
+
+                if (isJson) {
+                    params = new StringBuilder(JsonUtil.stringify(paramMap));
+                } else {
+                    for (Entry<String, Object> element : paramMap.entrySet()) {
+                        params.append(element.getKey());
+                        params.append("=");
+                        Object obj = element.getValue();
+                        if (obj == null) {
+                            obj = "0";
+                        }
+                        params.append(URLEncoder.encode(obj.toString(), REQUEST_ENCODING));
+                        params.append("&");
+                    }
+
+                    if (params.length() > 0) {
+                        params = params.deleteCharAt(params.length() - 1);
+                    }
+                }
+                if (reqMethod.equals(REQUEST_METHOD_GET)) {
+                    fullUrl += "?";
+                    fullUrl += params.toString();
+
+                }
+            }
+            url = new URL(fullUrl);
+            urlCon = (HttpURLConnection) url.openConnection();
+            urlCon.setRequestMethod(reqMethod);
+            urlCon.setConnectTimeout(CONNECT_TIME_OUT);
+            urlCon.setReadTimeout(READ_TIME_OUT);
+            int off = 0;
+            if (reqMethod.equals(REQUEST_METHOD_POST)) {
+                urlCon.setDoOutput(true);
+                byte[] b = params.toString().getBytes();
+                urlCon.setRequestProperty("Content-Type", "application/x-www-form-urlencoded");
+                urlCon.setRequestProperty("Content-Length", String.valueOf(b.length));
+                urlCon.getOutputStream().write(b, 0, b.length);
+                urlCon.getOutputStream().flush();
+                urlCon.getOutputStream().close();
+                off = b.length;
+            }
+
+            if (bodyContent != null && bodyContent.length > 0) {
+                urlCon.setDoOutput(true);
+                urlCon.setRequestProperty("Content-Type", "application/x-www-form-urlencoded");
+                urlCon.setRequestProperty("Content-Length", String.valueOf(bodyContent.length));
+                urlCon.getOutputStream().write(bodyContent, off, bodyContent.length);
                 urlCon.getOutputStream().flush();
                 urlCon.getOutputStream().close();
             }

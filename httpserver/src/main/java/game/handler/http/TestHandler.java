@@ -5,10 +5,16 @@ import com.alibaba.fastjson.JSONObject;
 import org.eclipse.jetty.server.Request;
 
 import java.io.IOException;
+import java.util.ArrayList;
+import java.util.HashSet;
+import java.util.List;
+import java.util.Set;
 
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 
+import game.base.executor.Action;
+import game.base.executor.ExecutorMgr;
 import game.base.http.BaseHandler;
 import game.utils.JsonUtil;
 import game.utils.Log;
@@ -22,10 +28,10 @@ public class TestHandler extends BaseHandler {
 
 
     @Override
-    public void doGet(String target, Request baseRequest, HttpServletRequest request, HttpServletResponse response) {
-        if (request.getParameterMap() == null || request.getParameterMap().isEmpty()) {
-            return;
-        }
+    public void doGet(String target, Request baseRequest, HttpServletRequest request, HttpServletResponse response) throws IOException {
+        JSONObject jsonObject = new JSONObject();
+        jsonObject.put("res", "hello");
+        sendResponse(jsonObject.toJSONString());
     }
 
     @Override
@@ -56,7 +62,7 @@ public class TestHandler extends BaseHandler {
 
     @Override
     public boolean checkUrl(String target) {
-        if (!"/slg/test.php".equals(target)) {
+        if (!"/slg/test".equals(target)) {
             return false;
         }
         return true;

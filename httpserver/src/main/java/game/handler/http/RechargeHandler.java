@@ -9,6 +9,7 @@ import java.io.IOException;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 
+import game.base.config.Config;
 import game.base.http.BaseHandler;
 import game.entity.ServerInfo;
 import game.mgr.HttpServerMgr;
@@ -20,7 +21,7 @@ import game.utils.StringUtils;
 /**
  * @author tangjian
  * @date 2022-10-25 11:41
- * desc
+ * desc //todo 充值回调接口后续要根据不同平台单独一个url，不同平台参数不一样
  */
 public class RechargeHandler extends BaseHandler {
     public static final int MAX_SERVER_ID = (1 << 14) - 1;
@@ -36,7 +37,7 @@ public class RechargeHandler extends BaseHandler {
 
     @Override
     public void doGet(String target, Request baseRequest, HttpServletRequest request, HttpServletResponse response) throws IOException {
-
+        Log.info("http-server收到请求,信息:" + request);
         try {
             if (request.getParameterMap().isEmpty()) {
                 Log.error("q1充值回调没有参数？！");
@@ -92,7 +93,9 @@ public class RechargeHandler extends BaseHandler {
             }
 
             JSONObject jsonParams = buildGameServerParams(params);
-            String res = HttpUtil.doPost(serverInfo.getRechargeHttpUrl(), jsonParams);
+            String path = Config.getConfig("recharge_call_back_url");
+            String url = serverInfo.getInnerManager() + path;
+            String res = HttpUtil.doPost(url, jsonParams);
             Log.info("充值回调，游戏服返回:" + res);
             sendResponse(res);
         } catch (Exception e) {
@@ -164,6 +167,11 @@ public class RechargeHandler extends BaseHandler {
 
     public static int getOperatorID(long combine) {
         return (int) (combine >>> 46);
+    }
+
+    public  static void main(String[] args){
+        String res = HttpUtil.doPost("https://access.skaa5.com/1002/manager/api/common/recharge", new JSONObject());
+        System.out.println(res);
     }
 }
 

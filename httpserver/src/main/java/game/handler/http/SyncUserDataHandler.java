@@ -24,20 +24,6 @@ import game.utils.Log;
  */
 public class SyncUserDataHandler extends BaseHandler {
 
-    public static final int SYNC_HTTP_TYPE_CREATE = 1;
-
-    public static final int SYNC_HTTP_TYPE_LOGIN = 2;
-
-    public static final int SYNC_HTTP_TYPE_NAME = 3;
-    /**
-     * 成功的状态码
-     **/
-    public static int SUCCESS = 200;
-    /**
-     * 一天的秒数
-     **/
-    public static final int DAY_SEC = 604800;
-
     @Override
     public void doGet(String target, Request baseRequest, HttpServletRequest request, HttpServletResponse response) throws IOException {
 
@@ -56,14 +42,14 @@ public class SyncUserDataHandler extends BaseHandler {
         int serverId = params.getIntValue("server_id");
         String playerName = params.getString("player_name");
         long loginTime = params.getLongValue("login_time");
-        ExecutorMgr.getUserSyncThreadPool().pushTask(1, () -> {
+        int level = params.getIntValue("level");
+        ExecutorMgr.getUserSyncThreadPool().pushTask(0, () -> {
             try {
                 //持久化数据库
-                UserInfo info = UserInfo.newInstance(name, combineId, operatorId, serverId, playerName, loginTime);
+                UserInfo info = UserInfo.newInstance(name, combineId, operatorId, serverId, level, playerName, loginTime);
                 UserInfoDao.getInstance().insertUserInfo(info);
                 //同步撸到内存
-                HttpServerMgr.addUser2serverMap(name, serverId, loginTime);
-
+                HttpServerMgr.addUser2serverMap(name, playerName, serverId, loginTime,level);
             } catch (Exception e) {
                 Log.error("{}", e);
             }

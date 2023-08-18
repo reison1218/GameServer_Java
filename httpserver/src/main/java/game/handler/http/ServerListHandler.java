@@ -37,6 +37,7 @@ public class ServerListHandler extends BaseHandler {
         JSONObject params = (JSONObject) JsonUtil.parse(str.trim());
         String accountName = params.getString("acc");
         String typeStr = params.getString("type");
+        int serverType = params.getIntValue("server_type");
 
         JSONObject jsObject = new JSONObject();
 
@@ -62,20 +63,30 @@ public class ServerListHandler extends BaseHandler {
         long lastLoginTime;
         JSONObject userLoginJson = HttpServerMgr.getUserLoginInfo(accountName);
         String serverIdStr;
+        String playerName;
+        int level;
         for (ServerInfo si : HttpServerMgr.getServerMap().values()) {
+            playerName = null;
+            level = 0;
             //是否可以显示
-            if (!si.canShow(types, ctime)) {
+            if (!si.canShow(accountName, types, serverType, ctime)) {
                 continue;
             }
             lastLoginTime = 0;
 
             serverIdStr = String.valueOf(si.getServerId());
             if (userLoginJson.containsKey(serverIdStr)) {
-                lastLoginTime = userLoginJson.getLongValue(serverIdStr);
+                playerName = userLoginJson.getJSONObject(serverIdStr).getString("player_name");
+                lastLoginTime = userLoginJson.getJSONObject(serverIdStr).getLongValue("login_time");
+                level = userLoginJson.getJSONObject(serverIdStr).getIntValue("level");
             }
-
             //如果这个服有角色就添加属性
-            array.add(si.toJson(lastLoginTime));
+            JSONObject clientJson = si.toJson(lastLoginTime);
+            if (playerName != null) {
+                clientJson.put("player_name", playerName);
+                clientJson.put("level", level);
+            }
+            array.add(clientJson);
         }
         jsObject.put("data", array);
         jsObject.put("status", "OK");

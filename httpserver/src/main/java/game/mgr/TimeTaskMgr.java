@@ -44,7 +44,7 @@ public final class TimeTaskMgr {
     public final static boolean init() {
         int intMin = (int) MINUTE;
         saveUserDataTimer = new Timer("SaveUserDataTimer");
-        saveUserDataTimer.schedule(new SaveUserDataTask(), MINUTE * 2, MINUTE * 5 + RandomUtil.rand(-2 * intMin, 1 * intMin));
+        saveUserDataTimer.schedule(new CheckMergeTask(), MINUTE * 2, MINUTE * 5 + RandomUtil.rand(-2 * intMin, 1 * intMin));
 
         // =======重置类逻辑start================///
         try {
@@ -117,9 +117,9 @@ abstract class Task extends TimerTask {
 
 }
 
-class SaveUserDataTask extends Task {
+class CheckMergeTask extends Task {
 
-    public SaveUserDataTask() {
+    public CheckMergeTask() {
     }
 
     /**
@@ -127,12 +127,8 @@ class SaveUserDataTask extends Task {
      */
     @Override
     public void exec() {
-        // 错开0点重置的高峰期
-        if (TimeUtil.during0ResetTime()) {
-            return;
-        }
-        int size = HttpServerMgr.save();
-        Log.info("定时器:SaveUserDataTask执行完毕!save玩家size:" + size);
+        boolean isReload = HttpServerMgr.checkReload();
+        Log.info("定时器:CheckMergeTask执行完毕!isReload:" + isReload);
     }
 
 }

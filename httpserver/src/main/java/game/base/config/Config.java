@@ -48,6 +48,7 @@ public final class Config {
         return init("");
     }
 
+
     public final static boolean init(String configPost) {
         String appPath = System.getenv("PWD");
         if (SystemEnv.isProduction() && appPath == null) {
